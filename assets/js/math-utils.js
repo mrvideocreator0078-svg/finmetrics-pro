@@ -16,7 +16,7 @@
       const monthlyContribution = Math.max(0, Number(params.monthlyContribution) || 0);
       const annualRate = Math.max(0, Number(params.annualRate) || 0) / 100;
       const years = Math.max(1, Math.min(60, Number(params.years) || 10));
-      const compoundFreq = Number(params.compoundFreq) || 12; // 12 = monthly, 1 = annually, 4 = quarterly
+      const compoundFreq = Number(params.compoundFreq) || 12;
       const inflationRate = (Number(params.inflationRate) || 0) / 100;
 
       let currentBalance = principal;
@@ -85,14 +85,14 @@
      * MORTGAGE AMORTIZATION & EXTRA PAYMENT PAYOFF ENGINE
      */
     calculateMortgage: function (params) {
-      const homePrice = Math.max(0, Number(params.homePrice) || 400000);
-      const downPayment = Math.max(0, Number(params.downPayment) || 80000);
-      const interestRate = Math.max(0.1, Number(params.interestRate) || 6.5) / 100;
+      const homePrice = Math.max(0, Number(params.homePrice) || 450000);
+      const downPayment = Math.max(0, Number(params.downPayment) || 90000);
+      const interestRate = Math.max(0.1, Number(params.interestRate) || 6.75) / 100;
       const loanTermYears = Number(params.loanTermYears) || 30;
       const extraMonthly = Math.max(0, Number(params.extraMonthly) || 0);
 
-      const propertyTaxAnnual = Number(params.propertyTaxAnnual) || (homePrice * 0.012);
-      const homeInsuranceAnnual = Number(params.homeInsuranceAnnual) || 1200;
+      const propertyTaxAnnual = Number(params.propertyTaxAnnual) || 5400;
+      const homeInsuranceAnnual = Number(params.homeInsuranceAnnual) || 1400;
       const hoaMonthly = Number(params.hoaMonthly) || 0;
 
       const principal = Math.max(0, homePrice - downPayment);
@@ -188,7 +188,9 @@
         monthlyInsurance,
         hoaMonthly,
         totalInterestStandard: baselineInterest,
+        standardTotalInterest: baselineInterest, // Alias for backward compatibility
         totalInterestAccelerated: totalInterestWithExtra,
+        totalInterest: totalInterestWithExtra, // Alias for backward compatibility
         interestSaved,
         monthsToPayoff,
         monthsSaved,
@@ -203,7 +205,7 @@
      */
     calculateDebtPayoff: function (params) {
       const balance = Math.max(0, Number(params.balance) || 12000);
-      const apr = Math.max(0.1, Number(params.apr) || 24.99) / 100;
+      const apr = Math.max(0.1, Number(params.apr) || 22.9) / 100;
       const targetMonthly = Math.max(10, Number(params.monthlyPayment) || 450);
 
       const monthlyRate = apr / 12;
@@ -220,7 +222,7 @@
         minTotalInterest += interest;
         const requiredMin = Math.max(minPaymentFloor, minBal * minPaymentPct);
         const princ = Math.min(minBal, requiredMin - interest);
-        if (princ <= 0) break; // Negative amortization loop prevention
+        if (princ <= 0) break;
         minBal -= princ;
       }
 
@@ -234,8 +236,7 @@
         targetMonths++;
         const interest = targetBal * monthlyRate;
         if (targetMonthly <= interest) {
-          // Payment too low to cover interest
-          return { error: 'Payment is too low to cover monthly interest. Balance will grow infinitely.' };
+          return { error: 'Monthly payment must exceed monthly interest charges ($' + Math.ceil(interest) + ').' };
         }
         const princ = Math.min(targetBal, targetMonthly - interest);
         targetTotalInterest += interest;
@@ -273,17 +274,17 @@
      * AUTO LOAN VS LEASE DECISION ENGINE
      */
     calculateAutoLoanVsLease: function (params) {
-      const carPrice = Math.max(1000, Number(params.carPrice) || 38000);
-      const downPayment = Math.max(0, Number(params.downPayment) || 4000);
-      const loanRate = Math.max(0, Number(params.loanRate) || 6.0) / 100;
-      const loanTermMonths = Number(params.loanTermMonths) || 60; // 5 years
-      const residualValuePct = Math.max(10, Math.min(90, Number(params.residualValuePct) || 52)) / 100;
-      const leaseTermMonths = Number(params.leaseTermMonths) || 36; // 3 years
-      const moneyFactor = Number(params.moneyFactor) || 0.0025; // Equivalent to ~6% APR (MF * 2400)
-      const leaseDown = Math.max(0, Number(params.leaseDown) || 2000);
+      const carPrice = Math.max(1000, Number(params.carPrice) || 42000);
+      const downPayment = Math.max(0, Number(params.downPayment) || 5000);
+      const loanRate = Math.max(0, Number(params.loanRate) || 6.25) / 100;
+      const loanTermMonths = Number(params.loanTermMonths) || 60;
+      const residualValuePct = Math.max(10, Math.min(90, Number(params.residualValuePct) || 54)) / 100;
+      const leaseTermMonths = Number(params.leaseTermMonths) || 36;
+      const moneyFactor = Number(params.moneyFactor) || 0.0026;
+      const leaseDown = Math.max(0, Number(params.leaseDown) || 2500);
 
       // 1. Buy Loan Calculation
-      const loanAmount = carPrice - downPayment;
+      const loanAmount = Math.max(0, carPrice - downPayment);
       const r = loanRate / 12;
       let monthlyLoanPayment = 0;
       if (r > 0) {
@@ -295,10 +296,8 @@
       const totalLoanPaid = downPayment + (monthlyLoanPayment * loanTermMonths);
       const totalLoanInterest = totalLoanPaid - carPrice;
 
-      // Estimated car value after 3 years (assuming standard 45% depreciation)
-      const valueAfter3Years = carPrice * 0.55;
-      // Net cost to own after 3 years (payments made minus remaining equity)
-      // Balance after 36 months of 60 month loan
+      // Estimated car value after 3 years (assuming standard 46% residual)
+      const valueAfter3Years = carPrice * residualValuePct;
       let bal36 = loanAmount;
       for (let i = 1; i <= 36; i++) {
         const intP = bal36 * r;
@@ -335,4 +334,3 @@
   window.FinMath = MathUtils;
 
 })();
-

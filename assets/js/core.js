@@ -1,7 +1,7 @@
 /**
  * FINMETRICS PRO — INSTITUTIONAL CORE RUNTIME
  * Theme Switcher, Multi-Currency Engine, Global Search, Live Stats,
- * Milestone Celebrations & Partner Affiliate Comparison Matrix
+ * Slider Dynamic Fills, Mobile Drawer & Partner Affiliate Comparison Matrix
  */
 
 (function () {
@@ -236,10 +236,8 @@
   }
 
   function triggerMilestoneAnimation(label, currentVal) {
-    // Show toast celebration
     showToast(`🎉 Congratulations! You reached ${label}!`);
 
-    // Confetti burst
     const container = document.createElement('div');
     container.style.cssText = `
       position: fixed;
@@ -366,17 +364,21 @@
      9. SEARCH MODAL ENGINE (CTRL + K)
      ══════════════════════════════════════════════════════════════ */
   const CALCULATOR_CATALOG = [
-    { title: 'Compound Interest & SIP Wealth Engine', path: '/calculators/compound-interest/index.html', cat: 'Investing', desc: 'Simulate compounding returns, inflation impact, and milestone timeline.' },
-    { title: 'Mortgage Payoff with Extra Payments', path: '/calculators/mortgage-payoff/index.html', cat: 'Real Estate', desc: 'See how extra principal payments slash interest and shave years off your loan.' },
-    { title: 'Credit Card Debt Avalanche / Snowball', path: '/calculators/debt-payoff/index.html', cat: 'Debt Elimination', desc: 'Compare payoff strategies and get a debt-free target date.' },
-    { title: 'Auto Loan vs Lease Decision Engine', path: '/calculators/auto-loan-lease/index.html', cat: 'Automotive', desc: 'Determine the exact true cost of buying vs leasing over 3 to 5 years.' }
+    { title: 'Compound Interest & SIP Wealth Engine', path: 'calculators/compound-interest/index.html', cat: 'Investing', desc: 'Simulate compounding returns, inflation impact, and milestone timeline.' },
+    { title: 'Mortgage Payoff with Extra Payments', path: 'calculators/mortgage-payoff/index.html', cat: 'Real Estate', desc: 'See how extra principal payments slash interest and shave years off your loan.' },
+    { title: 'Credit Card Debt Avalanche / Snowball', path: 'calculators/debt-payoff/index.html', cat: 'Debt Elimination', desc: 'Compare payoff strategies and get a debt-free target date.' },
+    { title: 'Auto Loan vs Lease Decision Engine', path: 'calculators/auto-loan-lease/index.html', cat: 'Automotive', desc: 'Determine the exact true cost of buying vs leasing over 3 to 5 years.' }
   ];
+
+  function getCatalogUrl(relPath) {
+    const isSubdir = window.location.pathname.includes('/calculators/');
+    return isSubdir ? `../../${relPath}` : relPath;
+  }
 
   function setupSearchModal() {
     const trigger = document.querySelector('.search-trigger-btn');
     if (!trigger) return;
 
-    // Create modal DOM if not present
     let modal = document.getElementById('searchModal');
     if (!modal) {
       modal = document.createElement('div');
@@ -419,12 +421,12 @@
       );
 
       if (filtered.length === 0) {
-        results.innerHTML = `<div class="search-empty">No matching calculators found for "${query}"</div>`;
+        results.innerHTML = `<div class="search-empty" style="padding:16px;color:var(--text-muted);text-align:center;">No matching calculators found for "${query}"</div>`;
         return;
       }
 
       results.innerHTML = filtered.map(c => `
-        <a href="${c.path}" class="search-item">
+        <a href="${getCatalogUrl(c.path)}" class="search-item">
           <div class="search-item-cat">${c.cat}</div>
           <div class="search-item-title">${c.title}</div>
           <div class="search-item-desc">${c.desc}</div>
@@ -459,7 +461,73 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     10. PRINT / PDF REPORT GENERATOR
+     10. SLIDER TRACK DYNAMIC FILL (NATIVE TOUCH FEEL)
+     ══════════════════════════════════════════════════════════════ */
+  function updateSliderFill(slider) {
+    const min = Number(slider.min) || 0;
+    const max = Number(slider.max) || 100;
+    const val = Number(slider.value) || 0;
+    const pct = Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+    slider.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${pct}%, var(--border-subtle) ${pct}%, var(--border-subtle) 100%)`;
+  }
+
+  function initSliderFills() {
+    document.querySelectorAll('.calc-range-slider').forEach(slider => {
+      updateSliderFill(slider);
+      slider.addEventListener('input', () => updateSliderFill(slider));
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     11. MOBILE NAVIGATION DRAWER
+     ══════════════════════════════════════════════════════════════ */
+  function setupMobileDrawer() {
+    const navCluster = document.querySelector('.nav-actions-cluster');
+    if (!navCluster) return;
+
+    // Check if toggle exists
+    let toggle = document.querySelector('.mobile-menu-toggle');
+    if (!toggle) {
+      toggle = document.createElement('button');
+      toggle.className = 'mobile-menu-toggle';
+      toggle.setAttribute('aria-label', 'Toggle Navigation Menu');
+      toggle.innerHTML = '☰';
+      navCluster.appendChild(toggle);
+    }
+
+    let drawer = document.getElementById('mobileNavDrawer');
+    if (!drawer) {
+      drawer = document.createElement('div');
+      drawer.id = 'mobileNavDrawer';
+      drawer.className = 'mobile-nav-drawer';
+      const isSubdir = window.location.pathname.includes('/calculators/');
+      const rootPrefix = isSubdir ? '../../' : '';
+
+      drawer.innerHTML = `
+        <a href="${rootPrefix}index.html#investing">📈 Investing Calculators</a>
+        <a href="${rootPrefix}index.html#real-estate">🏡 Real Estate & Mortgage</a>
+        <a href="${rootPrefix}index.html#debt">🛡️ Debt & Loans</a>
+        <a href="${rootPrefix}about.html">About FinMetrics</a>
+        <a href="${rootPrefix}methodology.html">Math Methodology</a>
+      `;
+      document.body.appendChild(drawer);
+    }
+
+    toggle.addEventListener('click', () => {
+      const isOpen = drawer.classList.toggle('active');
+      toggle.innerHTML = isOpen ? '✕' : '☰';
+    });
+
+    drawer.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        drawer.classList.remove('active');
+        toggle.innerHTML = '☰';
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     12. PRINT / PDF REPORT GENERATOR
      ══════════════════════════════════════════════════════════════ */
   function generatePrintReport(title = 'FinMetrics Pro Financial Audit') {
     document.title = `${title} — FinMetrics Report`;
@@ -467,7 +535,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     11. SMOOTH SCROLL FOR MOBILE
+     13. SMOOTH SCROLL FOR MOBILE
      ══════════════════════════════════════════════════════════════ */
   function smoothScrollToResults(targetId = 'resultsPane') {
     if (window.innerWidth <= 768) {
@@ -479,37 +547,32 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     12. INITIALIZATION
+     14. INITIALIZATION
      ══════════════════════════════════════════════════════════════ */
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Theme init
     applyTheme(getPreferredTheme());
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) {
       themeBtn.addEventListener('click', toggleTheme);
     }
 
-    // 2. Currency init
     updateCurrencyAffixes();
     const curSelect = document.getElementById('currencySelect');
     if (curSelect) {
       curSelect.addEventListener('change', (e) => setCurrency(e.target.value));
     }
 
-    // 3. Search modal
     setupSearchModal();
-
-    // 4. Live Counter
     updateLiveCounters();
+    initSliderFills();
+    setupMobileDrawer();
 
-    // 5. Auto affiliate injection if page has data-calc-key
     const calcKey = document.body.dataset.calcKey;
     if (calcKey) {
       injectAffiliateCards(calcKey);
     }
   });
 
-  // Global Export
   window.FinMetrics = {
     getCurrency,
     setCurrency,
@@ -526,6 +589,7 @@
     triggerMilestoneAnimation,
     injectAffiliateCards,
     generatePrintReport,
-    smoothScrollToResults
+    smoothScrollToResults,
+    updateSliderFill
   };
 })();
