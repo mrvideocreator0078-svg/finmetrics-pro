@@ -1,5 +1,6 @@
 /**
  * DEBT PAYOFF CALCULATOR INTERACTIVE LOGIC
+ * Dynamic Sliders, Animated Metrics, Freedom Milestones & Comparison Matrix
  */
 
 (function () {
@@ -24,12 +25,22 @@
   const insTime = document.getElementById('insTime');
   const insSavings = document.getElementById('insSavings');
   const scheduleBody = document.getElementById('scheduleBody');
+  const debtMilestones = document.getElementById('debtMilestones');
 
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const copyShareBtn = document.getElementById('copyShareBtn');
   const resetBtn = document.getElementById('resetBtn');
 
+  // Scenario & Comparison
+  const scenarioNameInput = document.getElementById('scenarioName');
+  const comparisonModeBtn = document.getElementById('comparisonModeBtn');
+  const comparisonPanel = document.getElementById('comparisonPanel');
+  const cmpValA = document.getElementById('cmpValA');
+  const cmpValB = document.getElementById('cmpValB');
+  const cmpDiff = document.getElementById('cmpDiff');
+
   let chartInstance = null;
+  let isComparisonActive = false;
 
   // Bind inputs and sliders
   function bindSliderInputPair(input, slider, isFloat = false) {
@@ -46,6 +57,12 @@
   bindSliderInputPair(balanceInput, balanceSlider);
   bindSliderInputPair(aprInput, aprSlider, true);
   bindSliderInputPair(monthlyPaymentInput, monthlyPaymentSlider);
+
+  if (scenarioNameInput) {
+    scenarioNameInput.addEventListener('input', () => {
+      updateChartTitle();
+    });
+  }
 
   // Target Payment Chips
   if (targetPaymentChips) {
@@ -78,18 +95,35 @@
       return;
     }
 
-    // Update Output Cards
+    // Animated Key Metrics
+    const curSymbol = FinMetrics.getCurrency().symbol;
     resPayoffDate.textContent = res.payoffDate;
     resTotalMonths.textContent = `In ${res.targetMonths} Months (${(res.targetMonths / 12).toFixed(1)} yrs)`;
 
-    resInterestSaved.textContent = FinMetrics.formatMoney(res.interestSaved);
-    resTotalInterest.textContent = FinMetrics.formatMoney(res.targetTotalInterest);
+    if (window.FinCounter) {
+      FinCounter.animate(resInterestSaved, Math.round(res.interestSaved), { prefix: curSymbol, duration: 400 });
+      FinCounter.animate(resTotalInterest, Math.round(res.targetTotalInterest), { prefix: curSymbol, duration: 400 });
+    } else {
+      resInterestSaved.textContent = FinMetrics.formatMoney(res.interestSaved);
+      resTotalInterest.textContent = FinMetrics.formatMoney(res.targetTotalInterest);
+    }
+
     resTotalPaid.textContent = `Total paid: ${FinMetrics.formatMoney(params.balance + res.targetTotalInterest)}`;
 
     // Smart Insight
     insPayment.textContent = `${FinMetrics.formatMoney(params.monthlyPayment)}/mo`;
     insTime.textContent = `${res.targetMonths} months`;
     insSavings.textContent = FinMetrics.formatMoney(res.interestSaved);
+
+    // Milestones Timeline
+    renderDebtMilestones(res, params);
+
+    // Comparison Mode
+    if (isComparisonActive) {
+      cmpValA.textContent = FinMetrics.formatMoney(res.targetTotalInterest);
+      cmpValB.textContent = FinMetrics.formatMoney(res.minTotalInterest);
+      cmpDiff.textContent = `+${FinMetrics.formatMoney(res.interestSaved)}`;
+    }
 
     // Schedule Table
     renderScheduleTable(res.schedule);
@@ -105,9 +139,37 @@
     });
   }
 
+  function renderDebtMilestones(res, params) {
+    if (!debtMilestones) return;
+    const initial = params.balance;
+    const targets = [
+      { pct: 0.25, label: '25% Paid' },
+      { pct: 0.50, label: '50% Halfway' },
+      { pct: 0.75, label: '75% Crushed' },
+      { pct: 1.00, label: '100% Free' }
+    ];
+
+    let html = '';
+    targets.forEach(t => {
+      const remainingTarget = initial * (1 - t.pct);
+      const row = res.schedule.find(r => r.balance <= remainingTarget);
+      const isAchieved = !!row;
+      const monthText = isAchieved ? `Month ${row.month}` : `${res.targetMonths} Mo`;
+
+      html += `
+        <div class="milestone-step ${isAchieved ? 'achieved' : ''}">
+          <div class="milestone-dot">${isAchieved ? '✓' : '○'}</div>
+          <div class="milestone-val">${t.label}</div>
+          <div class="milestone-sub">${monthText}</div>
+        </div>
+      `;
+    });
+
+    debtMilestones.innerHTML = html;
+  }
+
   function renderScheduleTable(schedule) {
     if (!scheduleBody) return;
-    // Show up to first 120 months to keep DOM fast
     const rows = schedule.slice(0, 120);
     scheduleBody.innerHTML = rows.map(r => `
       <tr>
@@ -148,7 +210,7 @@
           backgroundColor: isDark ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.2)',
           fill: true,
           tension: 0.25,
-          pointRadius: data.length > 30 ? 0 : 2
+          pointRadius: data.length > 36 ? 0 : 3
         }]
       },
       options: {
@@ -156,13 +218,18 @@
         maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
+          title: {
+            display: scenarioNameInput && !!scenarioNameInput.value,
+            text: scenarioNameInput ? scenarioNameInput.value : '',
+            color: isDark ? '#f8fafc' : '#0f172a',
+            font: { size: 14, weight: 'bold' }
+          },
           tooltip: {
             backgroundColor: isDark ? '#0c1222' : '#ffffff',
             titleColor: isDark ? '#f8fafc' : '#0f172a',
             bodyColor: isDark ? '#94a3b8' : '#475569',
             borderColor: isDark ? '#1c2742' : '#e2e8f0',
             borderWidth: 1,
-            padding: 12,
             callbacks: {
               label: function (ctx) {
                 return `Balance: ${FinMetrics.formatMoney(ctx.parsed.y)}`;
@@ -189,12 +256,36 @@
     });
   }
 
+  function updateChartTitle() {
+    if (chartInstance && scenarioNameInput) {
+      chartInstance.options.plugins.title = {
+        display: !!scenarioNameInput.value,
+        text: scenarioNameInput.value,
+        color: document.documentElement.getAttribute('data-theme') !== 'light' ? '#f8fafc' : '#0f172a',
+        font: { size: 14, weight: 'bold' }
+      };
+      chartInstance.update();
+    }
+  }
+
+  // Comparison Toggle
+  if (comparisonModeBtn && comparisonPanel) {
+    comparisonModeBtn.addEventListener('click', () => {
+      isComparisonActive = !isComparisonActive;
+      comparisonPanel.classList.toggle('active', isComparisonActive);
+      comparisonModeBtn.classList.toggle('active', isComparisonActive);
+      if (isComparisonActive) {
+        recalculate();
+      }
+    });
+  }
+
   // Export CSV
   exportCsvBtn.addEventListener('click', () => {
     FinMetrics.exportTableToCSV('debtTable', 'debt-payoff-schedule.csv');
   });
 
-  // Share
+  // Copy link
   copyShareBtn.addEventListener('click', () => {
     FinMetrics.copyShareLink();
   });
@@ -213,7 +304,7 @@
   window.addEventListener('finmetrics:currencyChanged', recalculate);
   window.addEventListener('finmetrics:themeChanged', recalculate);
 
-  // Read URL params
+  // URL Params
   const urlParams = FinMetrics.getUrlParams();
   if (urlParams.balance) { balanceInput.value = urlParams.balance; balanceSlider.value = urlParams.balance; }
   if (urlParams.apr) { aprInput.value = urlParams.apr; aprSlider.value = urlParams.apr; }

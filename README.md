@@ -92,3 +92,4 @@ This application requires **no build step** and **no package manager**.
    - **Vignette Ad:** Triggered when users navigate between calculators.
 4. **Financial Affiliate Partnerships:**
    - **High-Yield Savings / Brokerages:** Add comparison cards (e.g., Robinhood, eToro, Zerodha, Wise) yielding \$40 – \$150 per qualified referral.
+

@@ -1,5 +1,6 @@
 /**
  * MORTGAGE PAYOFF CALCULATOR INTERACTIVE LOGIC
+ * Dynamic Sliders, Animated Counters, Equity Milestones & Comparison Matrix
  */
 
 (function () {
@@ -29,12 +30,22 @@
   const insYears = document.getElementById('insYears');
   const insSavings = document.getElementById('insSavings');
   const scheduleBody = document.getElementById('scheduleBody');
+  const mortgageMilestones = document.getElementById('mortgageMilestones');
 
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const copyShareBtn = document.getElementById('copyShareBtn');
   const resetBtn = document.getElementById('resetBtn');
 
+  // Scenario & Comparison
+  const scenarioNameInput = document.getElementById('scenarioName');
+  const comparisonModeBtn = document.getElementById('comparisonModeBtn');
+  const comparisonPanel = document.getElementById('comparisonPanel');
+  const cmpValA = document.getElementById('cmpValA');
+  const cmpValB = document.getElementById('cmpValB');
+  const cmpDiff = document.getElementById('cmpDiff');
+
   let chartInstance = null;
+  let isComparisonActive = false;
 
   // Sync inputs & sliders
   function bindSliderInputPair(input, slider, isFloat = false) {
@@ -64,6 +75,12 @@
   propTaxInput.addEventListener('input', recalculate);
   homeInsInput.addEventListener('input', recalculate);
   hoaInput.addEventListener('input', recalculate);
+
+  if (scenarioNameInput) {
+    scenarioNameInput.addEventListener('input', () => {
+      updateChartTitle();
+    });
+  }
 
   function updateDownPaymentPct() {
     const price = Number(homePriceInput.value) || 1;
@@ -101,23 +118,40 @@
     const params = getInputs();
     const res = FinMath.calculateMortgage(params);
 
-    // Update Output Cards
-    resInterestSaved.textContent = FinMetrics.formatMoney(res.interestSaved);
+    // Animated Key Metrics
+    const curSymbol = FinMetrics.getCurrency().symbol;
+    if (window.FinCounter) {
+      FinCounter.animate(resInterestSaved, Math.round(res.interestSaved), { prefix: curSymbol, duration: 400 });
+      FinCounter.animate(resMonthlyPayment, Math.round(res.totalMonthlyPayment), { prefix: curSymbol, duration: 400 });
+      FinCounter.animate(resLoanAmount, Math.round(res.loanAmount), { prefix: curSymbol, duration: 400 });
+    } else {
+      resInterestSaved.textContent = FinMetrics.formatMoney(res.interestSaved);
+      resMonthlyPayment.textContent = FinMetrics.formatMoney(res.totalMonthlyPayment);
+      resLoanAmount.textContent = FinMetrics.formatMoney(res.loanAmount);
+    }
+
     resTimeSaved.textContent = res.yearsSaved > 0 
       ? `Pay off ${res.yearsSaved} years earlier`
       : 'Standard loan schedule';
 
-    resMonthlyPayment.textContent = FinMetrics.formatMoney(res.totalMonthlyPayment);
     const escrowTotal = (res.monthlyTax + res.monthlyInsurance + res.hoaMonthly);
     resPISplit.textContent = `P&I: ${FinMetrics.formatMoney(res.monthlyPI + params.extraMonthly)} | Escrow: ${FinMetrics.formatMoney(escrowTotal)}`;
-
-    resLoanAmount.textContent = FinMetrics.formatMoney(res.loanAmount);
 
     // Smart Insight Text
     insExtra.textContent = `${FinMetrics.formatMoney(params.extraMonthly)}/mo`;
     const payoffYears = (res.monthsToPayoff / 12).toFixed(1);
     insYears.textContent = `${payoffYears} years`;
     insSavings.textContent = FinMetrics.formatMoney(res.interestSaved);
+
+    // Milestones Timeline
+    renderMortgageMilestones(res, params);
+
+    // Comparison Mode
+    if (isComparisonActive) {
+      cmpValA.textContent = FinMetrics.formatMoney(res.totalInterest);
+      cmpValB.textContent = FinMetrics.formatMoney(res.standardTotalInterest);
+      cmpDiff.textContent = `+${FinMetrics.formatMoney(res.interestSaved)}`;
+    }
 
     // Schedule Table
     renderScheduleTable(res.yearlySummary);
@@ -133,6 +167,35 @@
       rate: params.interestRate,
       extra: params.extraMonthly
     });
+  }
+
+  function renderMortgageMilestones(res, params) {
+    if (!mortgageMilestones) return;
+    const loan = res.loanAmount;
+    const targets = [
+      { pct: 0.25, label: '25% Equity' },
+      { pct: 0.50, label: '50% Halfway' },
+      { pct: 0.75, label: '75% Equity' },
+      { pct: 1.00, label: '100% Debt-Free' }
+    ];
+
+    let html = '';
+    targets.forEach(t => {
+      const targetBalance = loan * (1 - t.pct);
+      const row = res.yearlySummary.find(r => r.endBalance <= targetBalance);
+      const isAchieved = !!row;
+      const yearText = isAchieved ? `Year ${row.yearNum}` : `${(res.monthsToPayoff / 12).toFixed(1)} Yrs`;
+
+      html += `
+        <div class="milestone-step ${isAchieved ? 'achieved' : ''}">
+          <div class="milestone-dot">${isAchieved ? '✓' : '○'}</div>
+          <div class="milestone-val">${t.label}</div>
+          <div class="milestone-sub">${yearText}</div>
+        </div>
+      `;
+    });
+
+    mortgageMilestones.innerHTML = html;
   }
 
   function renderScheduleTable(summary) {
@@ -168,33 +231,53 @@
         labels: ['Standard Loan', 'Accelerated (With Extra)'],
         datasets: [
           {
-            label: 'Principal',
+            label: 'Original Principal',
             data: [res.loanAmount, res.loanAmount],
             backgroundColor: '#3b82f6',
-            borderRadius: 6
+            stack: 'Stack 0'
           },
           {
-            label: 'Interest Paid',
-            data: [res.totalInterestStandard, res.totalInterestAccelerated],
+            label: 'Total Interest Paid',
+            data: [res.standardTotalInterest, res.totalInterest],
             backgroundColor: '#ef4444',
-            borderRadius: 6
+            stack: 'Stack 0'
           },
           {
             label: 'Interest Saved',
             data: [0, res.interestSaved],
             backgroundColor: '#10b981',
-            borderRadius: 6
+            stack: 'Stack 0'
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: scenarioNameInput && !!scenarioNameInput.value,
+            text: scenarioNameInput ? scenarioNameInput.value : '',
+            color: isDark ? '#f8fafc' : '#0f172a',
+            font: { size: 14, weight: 'bold' }
+          },
+          tooltip: {
+            backgroundColor: isDark ? '#0c1222' : '#ffffff',
+            titleColor: isDark ? '#f8fafc' : '#0f172a',
+            bodyColor: isDark ? '#94a3b8' : '#475569',
+            borderColor: isDark ? '#1c2742' : '#e2e8f0',
+            borderWidth: 1,
+            callbacks: {
+              label: function (ctx) {
+                return `${ctx.dataset.label}: ${FinMetrics.formatMoney(ctx.parsed.y)}`;
+              }
+            }
+          }
+        },
         scales: {
           x: {
-            stacked: true,
             grid: { display: false },
-            ticks: { color: textColor, font: { weight: '600' } }
+            ticks: { color: textColor }
           },
           y: {
             stacked: true,
@@ -206,23 +289,31 @@
               }
             }
           }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: isDark ? '#0c1222' : '#ffffff',
-            titleColor: isDark ? '#f8fafc' : '#0f172a',
-            bodyColor: isDark ? '#94a3b8' : '#475569',
-            borderColor: isDark ? '#1c2742' : '#e2e8f0',
-            borderWidth: 1,
-            padding: 12,
-            callbacks: {
-              label: function (ctx) {
-                return `${ctx.dataset.label}: ${FinMetrics.formatMoney(ctx.parsed.y)}`;
-              }
-            }
-          }
         }
+      }
+    });
+  }
+
+  function updateChartTitle() {
+    if (chartInstance && scenarioNameInput) {
+      chartInstance.options.plugins.title = {
+        display: !!scenarioNameInput.value,
+        text: scenarioNameInput.value,
+        color: document.documentElement.getAttribute('data-theme') !== 'light' ? '#f8fafc' : '#0f172a',
+        font: { size: 14, weight: 'bold' }
+      };
+      chartInstance.update();
+    }
+  }
+
+  // Comparison Toggle
+  if (comparisonModeBtn && comparisonPanel) {
+    comparisonModeBtn.addEventListener('click', () => {
+      isComparisonActive = !isComparisonActive;
+      comparisonPanel.classList.toggle('active', isComparisonActive);
+      comparisonModeBtn.classList.toggle('active', isComparisonActive);
+      if (isComparisonActive) {
+        recalculate();
       }
     });
   }
@@ -232,7 +323,7 @@
     FinMetrics.exportTableToCSV('mortgageTable', 'mortgage-payoff-schedule.csv');
   });
 
-  // Share
+  // Copy link
   copyShareBtn.addEventListener('click', () => {
     FinMetrics.copyShareLink();
   });
@@ -245,6 +336,11 @@
     interestRateSlider.value = 6.75;
     extraMonthlyInput.value = 250;
     extraMonthlySlider.value = 250;
+    loanTermYearsInput.value = 30;
+    if (loanTermChips) {
+      loanTermChips.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+      loanTermChips.querySelector('[data-years="30"]').classList.add('active');
+    }
     updateDownPaymentPct();
     recalculate();
   });
@@ -252,7 +348,7 @@
   window.addEventListener('finmetrics:currencyChanged', recalculate);
   window.addEventListener('finmetrics:themeChanged', recalculate);
 
-  // Read URL params
+  // URL Params
   const urlParams = FinMetrics.getUrlParams();
   if (urlParams.price) homePriceInput.value = urlParams.price;
   if (urlParams.down) downPaymentInput.value = urlParams.down;

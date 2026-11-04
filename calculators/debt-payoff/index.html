@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Credit Card & Debt Payoff Calculator — FinMetrics Pro</title>
+  <title>Credit Card &amp; Debt Avalanche Payoff Calculator — FinMetrics Pro</title>
   <meta name="description" content="Calculate your exact debt-free date and see how much interest you can save by beating the credit card minimum payment trap. Free monthly schedule and chart.">
   <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/debt-payoff/">
   
@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/calculator.css">
+  <link rel="stylesheet" href="../../assets/css/premium-animations.css">
 
   <script type="application/ld+json">
   {
@@ -26,7 +27,7 @@
   }
   </script>
 </head>
-<body>
+<body data-calc-key="debt-payoff">
 
   <!-- HEADER -->
   <header class="site-header">
@@ -40,8 +41,8 @@
         <ul class="nav-center-links">
           <li><a href="../../index.html#investing" class="nav-link">Investing</a></li>
           <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
-          <li><a href="../../index.html#debt" class="nav-link active">Debt & Loans</a></li>
-          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+          <li><a href="../../index.html#debt" class="nav-link active">Debt &amp; Loans</a></li>
+          <li><a href="../../index.html#editorial" class="nav-link">Guides</a></li>
         </ul>
       </nav>
 
@@ -68,25 +69,68 @@
     </div>
   </header>
 
+  <!-- ADSENSE LEADERBOARD UNIT -->
+  <div class="shell" style="margin-top:20px;">
+    <div class="adsense-unit adsense-leaderboard" id="adUnit-debt-top">
+      <!-- Google AdSense 728x90 Top Leaderboard -->
+    </div>
+  </div>
+
   <!-- MAIN -->
   <main class="shell" id="mainContent">
 
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-      <ol class="breadcrumbs">
-        <li><a href="../../index.html">Home</a></li>
-        <li class="sep">/</li>
-        <li><a href="../../index.html#debt">Debt & Loans</a></li>
-        <li class="sep">/</li>
-        <li class="current">Debt Payoff Calculator</li>
-      </ol>
-    </nav>
+    <!-- Breadcrumb & Scenario Naming Bar -->
+    <div class="breadcrumb-scenario-bar">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumbs">
+          <li><a href="../../index.html">Home</a></li>
+          <li class="sep">/</li>
+          <li><a href="../../index.html#debt">Debt &amp; Loans</a></li>
+          <li class="sep">/</li>
+          <li class="current">Debt Payoff Calculator</li>
+        </ol>
+      </nav>
+
+      <div class="scenario-name-wrap">
+        <span class="scenario-name-label">Payoff Goal:</span>
+        <input type="text" id="scenarioName" class="scenario-name-input" value="Credit Card Elimination Plan" aria-label="Scenario Plan Name">
+      </div>
+    </div>
 
     <div class="calc-header-wrap">
-      <span class="calc-title-badge" style="background:rgba(244,63,94,0.12);color:var(--rose-500);border-color:rgba(244,63,94,0.25);">🛡️ Debt Elimination Engine</span>
-      <h1 class="calc-main-title">Credit Card & Debt Payoff Calculator</h1>
+      <span class="calc-title-badge" style="background:rgba(244,63,94,0.12);color:var(--rose-400);border-color:rgba(244,63,94,0.25);">🛡️ Debt Elimination Engine</span>
+      <h1 class="calc-main-title">Credit Card &amp; Debt Avalanche Payoff Calculator</h1>
       <p class="calc-lead-desc">
-        Break free from compound debt. See your exact debt-free calendar date and calculate the thousands of dollars saved in interest by increasing your monthly payment above the minimum trap.
+        Break free from compounding interest. See your exact debt-free calendar date and calculate the thousands of dollars saved in interest by increasing your monthly payment above the minimum payment trap.
       </p>
+    </div>
+
+    <!-- Comparison Toggle Bar -->
+    <div class="comparison-toggle-bar">
+      <div class="toggle-info">
+        <span class="new-badge">NEW</span>
+        <span>Payment Strategy Comparison: Compare your target plan against the minimum payment trap</span>
+      </div>
+      <button id="comparisonModeBtn" class="btn-compare-toggle">
+        <span>⇄</span> <span>Compare vs Minimum Payments</span>
+      </button>
+    </div>
+
+    <div id="comparisonPanel" class="comparison-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:var(--emerald-400);">Accelerated Plan Interest:</strong>
+          <span id="cmpValA" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$4,210</span>
+        </div>
+        <div>
+          <strong style="color:var(--rose-400);">Minimum Payment Interest:</strong>
+          <span id="cmpValB" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$15,690</span>
+        </div>
+        <div>
+          <strong style="color:var(--cyan-400);">Total Interest Saved:</strong>
+          <span id="cmpDiff" style="font-family:var(--font-mono);font-weight:700;margin-left:8px;" class="tnum">+$11,480</span>
+        </div>
+      </div>
     </div>
 
     <!-- WORKBENCH -->
@@ -146,7 +190,7 @@
 
         <!-- Quick Strategy Chips -->
         <div class="form-field">
-          <label class="field-label">Suggested Monthly Targets</label>
+          <label class="field-label">Quick Accelerated Targets</label>
           <div class="segmented-chips" id="targetPaymentChips">
             <button class="chip-btn" data-add="50">+$50/mo</button>
             <button class="chip-btn active" data-add="100">+$100/mo</button>
@@ -168,7 +212,7 @@
       </section>
 
       <!-- RIGHT: Visuals & Metrics -->
-      <section class="calc-results-pane" aria-labelledby="debtResultsHeading">
+      <section class="calc-results-pane" id="resultsPane" aria-labelledby="debtResultsHeading">
         <h2 id="debtResultsHeading" class="sr-only">Debt Payoff Results</h2>
 
         <div class="primary-metrics-row">
@@ -177,7 +221,7 @@
               <span>Debt-Free Date</span>
               <span>🎉</span>
             </div>
-            <div class="metric-val" id="resPayoffDate">November 2029</div>
+            <div class="metric-val tnum" id="resPayoffDate">November 2029</div>
             <div class="metric-sub" id="resTotalMonths">In 36 Months</div>
           </div>
 
@@ -186,7 +230,7 @@
               <span>Interest Saved</span>
               <span>💰</span>
             </div>
-            <div class="metric-val" id="resInterestSaved">$11,480</div>
+            <div class="metric-val tnum" id="resInterestSaved">$11,480</div>
             <div class="metric-sub">Vs. paying minimums</div>
           </div>
 
@@ -195,7 +239,7 @@
               <span>Total Interest Paid</span>
               <span>📉</span>
             </div>
-            <div class="metric-val" id="resTotalInterest">$4,210</div>
+            <div class="metric-val tnum" id="resTotalInterest">$4,210</div>
             <div class="metric-sub" id="resTotalPaid">Total paid: $16,210</div>
           </div>
         </div>
@@ -205,6 +249,17 @@
           <div class="insight-pulse-dot" aria-hidden="true"></div>
           <div class="insight-content-text" id="insightText">
             By paying <b id="insPayment">$450/month</b>, you become completely debt-free in <b id="insTime">36 months</b> and save <b id="insSavings">$11,480</b> compared to the 22-year minimum payment trap!
+          </div>
+        </div>
+
+        <!-- Debt Payoff Milestones Timeline -->
+        <div class="milestone-timeline-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:1.05rem;font-weight:700;">🎯 Freedom Milestones</h3>
+            <span style="font-size:0.75rem;color:var(--emerald-400);font-weight:600;">Paydown Progress</span>
+          </div>
+          <div class="milestone-track" id="debtMilestones">
+            <!-- Populated dynamically by app.js -->
           </div>
         </div>
 
@@ -229,6 +284,14 @@
       </section>
     </div>
 
+    <!-- ADSENSE MID RECTANGLE UNIT -->
+    <div class="adsense-unit adsense-rectangle" id="adUnit-debt-mid">
+      <!-- Google AdSense 300x250 Mid Content -->
+    </div>
+
+    <!-- AFFILIATE BALANCE TRANSFER CARDS (AUTO INJECTED BY CORE.JS) -->
+    <section id="affiliateCardsContainer" aria-label="Best Balance Transfer Credit Cards"></section>
+
     <!-- Monthly Breakdown Table -->
     <section class="schedule-table-card" aria-labelledby="scheduleHeading">
       <div class="table-head-cluster">
@@ -241,7 +304,7 @@
             <span>📥</span>
             <span>Export CSV</span>
           </button>
-          <button class="btn-calc-secondary" onclick="window.print()">
+          <button class="btn-calc-secondary" onclick="FinMetrics.generatePrintReport('Debt Elimination Audit')">
             <span>🖨️</span>
             <span>Print Report</span>
           </button>
@@ -266,7 +329,7 @@
       </div>
     </section>
 
-    <!-- Editorial Guide (E-E-A-T AdSense Proof) -->
+    <!-- Editorial Guide -->
     <section class="editorial-content-section" aria-labelledby="guideHeading">
       <article class="editorial-article">
         <h2 id="guideHeading">The Mathematics of the Credit Card Minimum Payment Trap</h2>
@@ -305,6 +368,30 @@
       </article>
     </section>
 
+    <!-- RELATED TOOLS -->
+    <section class="related-tools-section">
+      <h3 class="related-tools-title">Explore Related Financial Engines</h3>
+      <div class="related-tools-grid">
+        <a href="../compound-interest/index.html" class="related-tool-card">
+          <div class="related-tool-name">📈 Compound Interest Wealth Engine</div>
+          <div class="related-tool-desc">Once debt-free, put your monthly savings to work generating compounding investment wealth.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../mortgage-payoff/index.html" class="related-tool-card">
+          <div class="related-tool-name">🏡 Mortgage Payoff Acceleration</div>
+          <div class="related-tool-desc">See how an extra monthly payment eliminates thousands in interest and shaves years off your mortgage.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../auto-loan-lease/index.html" class="related-tool-card">
+          <div class="related-tool-name">🚗 Auto Loan vs. Lease Matrix</div>
+          <div class="related-tool-desc">Compare the true 3 to 5-year cost of buying versus leasing factoring in depreciation curves.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -325,7 +412,7 @@
           <h4 class="footer-col-title">Calculators</h4>
           <ul class="footer-links">
             <li><a href="../compound-interest/index.html">Compound Interest</a></li>
-            <li><a href="../mortgage-payoff/index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="../mortgage-payoff/index.html">Mortgage &amp; Extra Payoff</a></li>
             <li><a href="index.html">Credit Card Debt Snowball</a></li>
             <li><a href="../auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
           </ul>
@@ -334,14 +421,14 @@
         <div>
           <h4 class="footer-col-title">Methodology</h4>
           <ul class="footer-links">
-            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../methodology.html">Formulas &amp; Mathematical Audits</a></li>
             <li><a href="../../about.html">About FinMetrics</a></li>
             <li><a href="../../contact.html">Institutional Inquiries</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="footer-col-title">Legal & Trust</h4>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
           <ul class="footer-links">
             <li><a href="../../privacy.html">Privacy Policy</a></li>
             <li><a href="../../terms.html">Terms of Service</a></li>
@@ -359,6 +446,7 @@
 
   <script src="../../assets/js/chart.min.js"></script>
   <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/animated-counter.js"></script>
   <script src="../../assets/js/math-utils.js"></script>
   <script src="app.js"></script>
 </body>

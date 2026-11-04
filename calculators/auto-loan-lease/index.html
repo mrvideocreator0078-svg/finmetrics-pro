@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto Loan vs. Lease Decision Calculator — FinMetrics Pro</title>
-  <meta name="description" content="Should you buy or lease a car? Calculate true net cost of vehicle ownership versus leasing over 3 to 5 years, factoring in depreciation and residual equity.">
+  <title>Auto Loan vs. Lease Decision Engine — FinMetrics Pro</title>
+  <meta name="description" content="Determine the true mathematical cost of buying versus leasing a car over 3 to 5 years, factoring in depreciation curves and retained equity. Free visual chart.">
   <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/auto-loan-lease/">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,20 +13,21 @@
   
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/calculator.css">
+  <link rel="stylesheet" href="../../assets/css/premium-animations.css">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Auto Loan vs. Lease Comparison Calculator",
+    "name": "Auto Loan vs Lease Decision Engine",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "All",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": "Calculate and compare total net financial cost between purchasing a vehicle with an auto loan versus leasing."
+    "description": "Calculate and compare total net wealth costs between purchasing and leasing an automobile over 3 to 5 years."
   }
   </script>
 </head>
-<body>
+<body data-calc-key="auto-loan-lease">
 
   <!-- HEADER -->
   <header class="site-header">
@@ -40,8 +41,8 @@
         <ul class="nav-center-links">
           <li><a href="../../index.html#investing" class="nav-link">Investing</a></li>
           <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
-          <li><a href="../../index.html#debt" class="nav-link active">Debt & Loans</a></li>
-          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+          <li><a href="../../index.html#debt" class="nav-link active">Debt &amp; Loans</a></li>
+          <li><a href="../../index.html#editorial" class="nav-link">Guides</a></li>
         </ul>
       </nav>
 
@@ -68,25 +69,68 @@
     </div>
   </header>
 
+  <!-- ADSENSE LEADERBOARD UNIT -->
+  <div class="shell" style="margin-top:20px;">
+    <div class="adsense-unit adsense-leaderboard" id="adUnit-auto-top">
+      <!-- Google AdSense 728x90 Top Leaderboard -->
+    </div>
+  </div>
+
   <!-- MAIN -->
   <main class="shell" id="mainContent">
 
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-      <ol class="breadcrumbs">
-        <li><a href="../../index.html">Home</a></li>
-        <li class="sep">/</li>
-        <li><a href="../../index.html#debt">Debt & Loans</a></li>
-        <li class="sep">/</li>
-        <li class="current">Auto Loan vs. Lease</li>
-      </ol>
-    </nav>
+    <!-- Breadcrumb & Scenario Naming Bar -->
+    <div class="breadcrumb-scenario-bar">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumbs">
+          <li><a href="../../index.html">Home</a></li>
+          <li class="sep">/</li>
+          <li><a href="../../index.html#debt">Debt &amp; Loans</a></li>
+          <li class="sep">/</li>
+          <li class="current">Auto Loan vs. Lease</li>
+        </ol>
+      </nav>
+
+      <div class="scenario-name-wrap">
+        <span class="scenario-name-label">Vehicle Target:</span>
+        <input type="text" id="scenarioName" class="scenario-name-input" value="Electric SUV Decision Matrix" aria-label="Scenario Plan Name">
+      </div>
+    </div>
 
     <div class="calc-header-wrap">
       <span class="calc-title-badge" style="background:rgba(99,102,241,0.12);color:var(--indigo-400);border-color:rgba(99,102,241,0.25);">🚗 Automotive Finance</span>
-      <h1 class="calc-main-title">Auto Loan vs. Lease Comparison Calculator</h1>
+      <h1 class="calc-main-title">Auto Loan vs. Lease Decision Engine</h1>
       <p class="calc-lead-desc">
         Determine the true mathematical cost of buying versus leasing a car. We factor in monthly outflows, interest charges, depreciation curves, and residual vehicle equity.
       </p>
+    </div>
+
+    <!-- Comparison Toggle Bar -->
+    <div class="comparison-toggle-bar">
+      <div class="toggle-info">
+        <span class="new-badge">NEW</span>
+        <span>Net Wealth Comparison: 3-Year Out-of-Pocket Outflow vs Retained Asset Value</span>
+      </div>
+      <button id="comparisonModeBtn" class="btn-compare-toggle">
+        <span>⇄</span> <span>Compare 3-Year True Cost</span>
+      </button>
+    </div>
+
+    <div id="comparisonPanel" class="comparison-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:var(--emerald-400);">Buy Net Cost (Payments − Equity):</strong>
+          <span id="cmpValA" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$8,204</span>
+        </div>
+        <div>
+          <strong style="color:var(--indigo-400);">Lease Net Cost (Zero Equity):</strong>
+          <span id="cmpValB" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$12,324</span>
+        </div>
+        <div>
+          <strong style="color:var(--cyan-400);">Buying Wealth Advantage:</strong>
+          <span id="cmpDiff" style="font-family:var(--font-mono);font-weight:700;margin-left:8px;" class="tnum">+$4,120</span>
+        </div>
+      </div>
     </div>
 
     <!-- WORKBENCH -->
@@ -94,7 +138,7 @@
 
       <!-- LEFT: Inputs -->
       <section class="calc-inputs-pane" aria-labelledby="autoInputsHeading">
-        <h2 id="autoInputsHeading" class="input-group-title">Vehicle & Financing Options</h2>
+        <h2 id="autoInputsHeading" class="input-group-title">Vehicle &amp; Financing Options</h2>
 
         <!-- Vehicle Price -->
         <div class="form-field">
@@ -179,7 +223,7 @@
       </section>
 
       <!-- RIGHT: Visuals & Metrics -->
-      <section class="calc-results-pane" aria-labelledby="autoResultsHeading">
+      <section class="calc-results-pane" id="resultsPane" aria-labelledby="autoResultsHeading">
         <h2 id="autoResultsHeading" class="sr-only">Auto Loan vs Lease Results</h2>
 
         <div class="primary-metrics-row">
@@ -188,7 +232,7 @@
               <span>Financial Verdict</span>
               <span>⭐</span>
             </div>
-            <div class="metric-val" id="resVerdict" style="color:var(--emerald-400);">BUY CAR</div>
+            <div class="metric-val" id="resVerdict" style="color:var(--emerald-400);">BUY VEHICLE</div>
             <div class="metric-sub" id="resVerdictSub">Saves $4,120 over 3 years</div>
           </div>
 
@@ -197,7 +241,7 @@
               <span>Monthly Payment</span>
               <span>💳</span>
             </div>
-            <div class="metric-val" id="resMonthlyBuy">$719</div>
+            <div class="metric-val tnum" id="resMonthlyBuy">$719</div>
             <div class="metric-sub" id="resMonthlyLeaseSub">Lease: $498/mo</div>
           </div>
 
@@ -206,7 +250,7 @@
               <span>Retained Equity</span>
               <span>🚗</span>
             </div>
-            <div class="metric-val" id="resRetainedEquity">$22,680</div>
+            <div class="metric-val tnum" id="resRetainedEquity">$22,680</div>
             <div class="metric-sub">Asset value at month 36</div>
           </div>
         </div>
@@ -216,6 +260,17 @@
           <div class="insight-pulse-dot" aria-hidden="true"></div>
           <div class="insight-content-text" id="insightText">
             While leasing offers a lower monthly outflow (<b id="insLeaseMonthly">$498</b> vs <b id="insBuyMonthly">$719</b>), <strong>Buying</strong> builds <b id="insEquity">$22,680</b> in retained vehicle equity, making it <b id="insNetSavings">$4,120 cheaper</b> in true net wealth after 3 years.
+          </div>
+        </div>
+
+        <!-- Auto Equity Milestones -->
+        <div class="milestone-timeline-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:1.05rem;font-weight:700;">🎯 Ownership Milestones (36 Months)</h3>
+            <span style="font-size:0.75rem;color:var(--emerald-400);font-weight:600;">Depreciation vs Equity Curve</span>
+          </div>
+          <div class="milestone-track" id="autoMilestones">
+            <!-- Populated dynamically by app.js -->
           </div>
         </div>
 
@@ -244,7 +299,15 @@
       </section>
     </div>
 
-    <!-- Editorial Guide (E-E-A-T AdSense Proof) -->
+    <!-- ADSENSE MID RECTANGLE UNIT -->
+    <div class="adsense-unit adsense-rectangle" id="adUnit-auto-mid">
+      <!-- Google AdSense 300x250 Mid Content -->
+    </div>
+
+    <!-- AFFILIATE AUTO LENDERS (AUTO INJECTED BY CORE.JS) -->
+    <section id="affiliateCardsContainer" aria-label="Best Auto Loan Rates"></section>
+
+    <!-- Editorial Guide -->
     <section class="editorial-content-section" aria-labelledby="guideHeading">
       <article class="editorial-article">
         <h2 id="guideHeading">Buying vs. Leasing: The True Financial Economics</h2>
@@ -254,7 +317,7 @@
 
         <h2>When Leasing Makes Sense</h2>
         <ul>
-          <li><strong>Business & Tax Deductions:</strong> If you use the vehicle for business (over 50% business use), the IRS permits significant lease payment deductions that often exceed standard depreciation write-offs.</li>
+          <li><strong>Business &amp; Tax Deductions:</strong> If you use the vehicle for business (over 50% business use), the IRS permits significant lease payment deductions that often exceed standard depreciation write-offs.</li>
           <li><strong>Predictable Warranty Coverage:</strong> 36-month leases align perfectly with manufacturer bumper-to-bumper warranties, shielding you from out-of-warranty mechanical breakdowns.</li>
           <li><strong>Rapid Tech Obsolescence:</strong> For electric vehicles (EVs) where battery technology and range improve rapidly every 3 years, leasing protects you from severe resale depreciation risk.</li>
         </ul>
@@ -284,6 +347,30 @@
       </article>
     </section>
 
+    <!-- RELATED TOOLS -->
+    <section class="related-tools-section">
+      <h3 class="related-tools-title">Explore Related Financial Engines</h3>
+      <div class="related-tools-grid">
+        <a href="../compound-interest/index.html" class="related-tool-card">
+          <div class="related-tool-name">📈 Compound Interest Wealth Engine</div>
+          <div class="related-tool-desc">See the exponential wealth you accumulate if you invest the difference saved on an auto purchase.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../mortgage-payoff/index.html" class="related-tool-card">
+          <div class="related-tool-name">🏡 Mortgage Payoff Acceleration</div>
+          <div class="related-tool-desc">See how an extra monthly payment eliminates thousands in interest and shaves years off your mortgage.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../debt-payoff/index.html" class="related-tool-card">
+          <div class="related-tool-name">🛡️ Debt Avalanche Elimination</div>
+          <div class="related-tool-desc">Calculate your exact debt-free calendar date and escape the credit card minimum payment trap.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -304,7 +391,7 @@
           <h4 class="footer-col-title">Calculators</h4>
           <ul class="footer-links">
             <li><a href="../compound-interest/index.html">Compound Interest</a></li>
-            <li><a href="../mortgage-payoff/index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="../mortgage-payoff/index.html">Mortgage &amp; Extra Payoff</a></li>
             <li><a href="../debt-payoff/index.html">Credit Card Debt Snowball</a></li>
             <li><a href="index.html">Auto Loan vs Lease</a></li>
           </ul>
@@ -313,14 +400,14 @@
         <div>
           <h4 class="footer-col-title">Methodology</h4>
           <ul class="footer-links">
-            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../methodology.html">Formulas &amp; Mathematical Audits</a></li>
             <li><a href="../../about.html">About FinMetrics</a></li>
             <li><a href="../../contact.html">Institutional Inquiries</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="footer-col-title">Legal & Trust</h4>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
           <ul class="footer-links">
             <li><a href="../../privacy.html">Privacy Policy</a></li>
             <li><a href="../../terms.html">Terms of Service</a></li>
@@ -338,6 +425,7 @@
 
   <script src="../../assets/js/chart.min.js"></script>
   <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/animated-counter.js"></script>
   <script src="../../assets/js/math-utils.js"></script>
   <script src="app.js"></script>
 </body>

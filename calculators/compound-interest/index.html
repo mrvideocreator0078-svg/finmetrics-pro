@@ -3,38 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compound Interest & SIP Calculator — FinMetrics Pro</title>
-  <meta name="description" content="Calculate compound interest with regular monthly deposits, inflation adjustments, and visual charts. See your milestone timeline and export yearly schedules.">
+  <title>Compound Interest &amp; SIP Wealth Engine — FinMetrics Pro</title>
+  <meta name="description" content="Simulate portfolio growth with monthly deposits, compounding frequency, inflation-adjusted purchasing power, and annual schedule exports. 100% private.">
   <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/compound-interest/">
   
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/calculator.css">
+  <link rel="stylesheet" href="../../assets/css/premium-animations.css">
 
-  <!-- Schema.org JSON-LD for Google Rich Results -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Compound Interest & SIP Wealth Calculator",
+    "name": "Compound Interest & SIP Wealth Engine",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "All",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "description": "Institutional-grade compound interest calculator with dynamic chart visualizer, inflation adjustments, and annual amortization table."
   }
   </script>
 </head>
-<body>
+<body data-calc-key="compound-interest">
 
-  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <!-- HEADER -->
   <header class="site-header">
     <div class="shell nav-container">
       <a href="../../index.html" class="brand-link" aria-label="FinMetrics Pro Home">
@@ -46,8 +41,8 @@
         <ul class="nav-center-links">
           <li><a href="../../index.html#investing" class="nav-link active">Investing</a></li>
           <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
-          <li><a href="../../index.html#debt" class="nav-link">Debt & Loans</a></li>
-          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+          <li><a href="../../index.html#debt" class="nav-link">Debt &amp; Loans</a></li>
+          <li><a href="../../index.html#editorial" class="nav-link">Guides</a></li>
         </ul>
       </nav>
 
@@ -74,30 +69,72 @@
     </div>
   </header>
 
-  <!-- ═══════════════════════════ MAIN CONTENT ═══════════════════════════ -->
+  <!-- ADSENSE LEADERBOARD UNIT -->
+  <div class="shell" style="margin-top:20px;">
+    <div class="adsense-unit adsense-leaderboard" id="adUnit-calc-top">
+      <!-- Google AdSense 728x90 Top Leaderboard -->
+    </div>
+  </div>
+
+  <!-- MAIN -->
   <main class="shell" id="mainContent">
 
-    <!-- Breadcrumb Bar -->
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-      <ol class="breadcrumbs">
-        <li><a href="../../index.html">Home</a></li>
-        <li class="sep">/</li>
-        <li><a href="../../index.html#investing">Investing</a></li>
-        <li class="sep">/</li>
-        <li class="current">Compound Interest Calculator</li>
-      </ol>
-    </nav>
+    <!-- Breadcrumb & Scenario Naming Bar -->
+    <div class="breadcrumb-scenario-bar">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumbs">
+          <li><a href="../../index.html">Home</a></li>
+          <li class="sep">/</li>
+          <li><a href="../../index.html#investing">Investing</a></li>
+          <li class="sep">/</li>
+          <li class="current">Compound Interest Calculator</li>
+        </ol>
+      </nav>
 
-    <!-- Calculator Title Header -->
+      <div class="scenario-name-wrap">
+        <span class="scenario-name-label">Portfolio Scenario:</span>
+        <input type="text" id="scenarioName" class="scenario-name-input" value="My Retirement Growth Plan" aria-label="Scenario Plan Name">
+      </div>
+    </div>
+
+    <!-- Header Wrap -->
     <div class="calc-header-wrap">
       <span class="calc-title-badge">📈 Wealth Engine</span>
-      <h1 class="calc-main-title">Compound Interest & Investment Calculator</h1>
+      <h1 class="calc-main-title">Compound Interest &amp; SIP Wealth Engine</h1>
       <p class="calc-lead-desc">
-        Project your long-term wealth accumulation through the power of compounding. Adjust monthly contributions, expected annual rate of return, and inflation to view exact purchasing power.
+        Project your long-term wealth accumulation through exponential compounding. Adjust monthly contributions, expected annual rate of return, and inflation to view exact purchasing power.
       </p>
     </div>
 
-    <!-- Workbench Grid -->
+    <!-- Scenario Comparison Toggle Bar -->
+    <div class="comparison-toggle-bar">
+      <div class="toggle-info">
+        <span class="new-badge">NEW</span>
+        <span>Benchmark Comparison: Compare your current plan against a conservative 6% index benchmark</span>
+      </div>
+      <button id="comparisonModeBtn" class="btn-compare-toggle">
+        <span>⇄</span> <span>Compare Scenarios</span>
+      </button>
+    </div>
+
+    <div id="comparisonPanel" class="comparison-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:var(--emerald-400);">Scenario A (Your Custom Plan):</strong>
+          <span id="cmpValA" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$416,589</span>
+        </div>
+        <div>
+          <strong style="color:var(--text-muted);">Scenario B (Conservative 6.0% Return):</strong>
+          <span id="cmpValB" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$254,120</span>
+        </div>
+        <div>
+          <strong style="color:var(--cyan-400);">Alpha Advantage:</strong>
+          <span id="cmpDiff" style="font-family:var(--font-mono);font-weight:700;margin-left:8px;" class="tnum">+$162,469</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKBENCH -->
     <div class="calc-workbench-grid">
 
       <!-- LEFT: Inputs Workbench -->
@@ -140,7 +177,7 @@
         <div class="form-field">
           <div class="field-label-row">
             <label for="years" class="field-label">Investment Horizon</label>
-            <span class="tnum" id="yearsDisplay">20 Years</span>
+            <span class="tnum" id="yearsDisplay" style="color:var(--emerald-400);font-weight:700;">20 Years</span>
           </div>
           <div class="input-control-box">
             <input type="number" id="years" class="calc-number-input no-prefix" value="20" min="1" max="50" step="1">
@@ -156,7 +193,7 @@
         <div class="form-field">
           <div class="field-label-row">
             <label for="rate" class="field-label">Expected Annual Return</label>
-            <span class="field-help-icon" title="S&P 500 historic average is ~10% (nominal)">?</span>
+            <span class="field-help-icon" title="S&amp;P 500 historic average is ~10% (nominal)">?</span>
           </div>
           <div class="input-control-box">
             <input type="number" id="rate" class="calc-number-input no-prefix" value="9.5" min="0.1" max="30" step="0.1">
@@ -180,11 +217,11 @@
           </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Actions -->
         <div class="calc-quick-actions">
           <button class="btn-calc-secondary" id="copyShareBtn">
             <span>🔗</span>
-            <span>Share Calculation</span>
+            <span>Share</span>
           </button>
           <button class="btn-calc-secondary" id="resetBtn">
             <span>↺</span>
@@ -194,7 +231,7 @@
       </section>
 
       <!-- RIGHT: Visual Insights & Chart -->
-      <section class="calc-results-pane" aria-labelledby="resultsHeading">
+      <section class="calc-results-pane" id="resultsPane" aria-labelledby="resultsHeading">
         <h2 id="resultsHeading" class="sr-only">Calculation Results</h2>
 
         <!-- Key Metrics Cards -->
@@ -204,7 +241,7 @@
               <span>Ending Balance</span>
               <span>💰</span>
             </div>
-            <div class="metric-val" id="resEndingBalance">$416,589</div>
+            <div class="metric-val tnum" id="resEndingBalance">$416,589</div>
             <div class="metric-sub">Nominal future value</div>
           </div>
 
@@ -213,7 +250,7 @@
               <span>Total Interest</span>
               <span>📈</span>
             </div>
-            <div class="metric-val" id="resTotalInterest">$286,589</div>
+            <div class="metric-val tnum" id="resTotalInterest">$286,589</div>
             <div class="metric-sub" id="resInterestRatio">68.8% of portfolio</div>
           </div>
 
@@ -222,8 +259,8 @@
               <span>Purchasing Power</span>
               <span>🛡️</span>
             </div>
-            <div class="metric-val" id="resRealBalance">$240,115</div>
-            <div class="metric-sub">Adjusted for 2.8% inflation</div>
+            <div class="metric-val tnum" id="resRealBalance">$240,115</div>
+            <div class="metric-sub">Adjusted for inflation</div>
           </div>
         </div>
 
@@ -232,6 +269,17 @@
           <div class="insight-pulse-dot" aria-hidden="true"></div>
           <div class="insight-content-text" id="insightText">
             Over 20 years, your money earns <b id="insInterest">$286,589</b> in compound growth — which is more than double your actual out-of-pocket deposits (<b id="insDeposits">$130,000</b>)!
+          </div>
+        </div>
+
+        <!-- Wealth Milestone Timeline Tracker -->
+        <div class="milestone-timeline-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:1.05rem;font-weight:700;">🎯 Portfolio Milestone Timeline</h3>
+            <span style="font-size:0.75rem;color:var(--emerald-400);font-weight:600;">Track Your Wealth Milestones</span>
+          </div>
+          <div class="milestone-track" id="milestoneTrack">
+            <!-- Populated dynamically by app.js -->
           </div>
         </div>
 
@@ -264,6 +312,14 @@
       </section>
     </div>
 
+    <!-- ADSENSE MID RECTANGLE UNIT -->
+    <div class="adsense-unit adsense-rectangle" id="adUnit-calc-mid">
+      <!-- Google AdSense 300x250 Mid Content -->
+    </div>
+
+    <!-- AFFILIATE PARTNER OFFERS (AUTO INJECTED BY CORE.JS) -->
+    <section id="affiliateCardsContainer" aria-label="High-Yield Account Comparison"></section>
+
     <!-- Amortization / Year-by-Year Schedule -->
     <section class="schedule-table-card" aria-labelledby="scheduleHeading">
       <div class="table-head-cluster">
@@ -276,7 +332,7 @@
             <span>📥</span>
             <span>Export CSV</span>
           </button>
-          <button class="btn-calc-secondary" onclick="window.print()">
+          <button class="btn-calc-secondary" onclick="FinMetrics.generatePrintReport('Compound Interest Growth Audit')">
             <span>🖨️</span>
             <span>Print Report</span>
           </button>
@@ -302,7 +358,7 @@
       </div>
     </section>
 
-    <!-- Comprehensive Editorial & Financial Guide (E-E-A-T AdSense Proof) -->
+    <!-- Comprehensive Editorial & Financial Guide -->
     <section class="editorial-content-section" aria-labelledby="guideHeading">
       <article class="editorial-article">
         <h2 id="guideHeading">The Mathematics of Compounding: How Long-Term Wealth Accumulates</h2>
@@ -318,25 +374,12 @@
           </div>
         </div>
 
-        <h2>The Crucial Inflection Point: When Returns Exceed Contributions</h2>
-        <p>
-          In the early years of any investment strategy, the vast majority of your portfolio growth comes from direct out-of-pocket contributions. However, between years 7 and 12 (depending on your rate of return), a mathematical milestone occurs: the annual interest generated by your portfolio exceeds the total annual contributions you make.
-        </p>
-        <p>
-          From this inflection point forward, your money works significantly harder than you do. As demonstrated in the chart above, doubling your investment horizon from 10 to 20 years does not merely double your returns — it quadruples them due to exponential compounding.
-        </p>
-
-        <h2>Nominal vs. Real Returns: Factoring in Inflation</h2>
-        <p>
-          While seeing a large future nominal figure provides emotional satisfaction, real wealth is defined by <strong>purchasing power</strong>. A portfolio worth $1,000,000 in 30 years will not buy the same basket of goods as $1,000,000 today. Assuming an average historical inflation rate of 2.5% to 3.0%, this calculator discounts future cash flows to show what your future balance can actually buy in today's terms.
-        </p>
-
         <h2>Frequently Asked Questions</h2>
         <div class="faq-accordion-wrap">
           <details class="faq-item" open>
             <summary class="faq-question">What is a realistic annual rate of return to assume?</summary>
             <div class="faq-answer">
-              Historically, the S&P 500 index has generated an average annualized nominal return of approximately 10% over the last 90 years (before inflation). When adjusted for inflation, real returns have averaged between 6.5% and 7.0%. For conservative financial planning, most advisors recommend modeling returns between 7% and 9%.
+              Historically, the S&amp;P 500 index has generated an average annualized nominal return of approximately 10% over the last 90 years (before inflation). When adjusted for inflation, real returns have averaged between 6.5% and 7.0%. For conservative financial planning, most advisors recommend modeling returns between 7% and 9%.
             </div>
           </details>
 
@@ -357,9 +400,33 @@
       </article>
     </section>
 
+    <!-- RELATED TOOLS SECTION -->
+    <section class="related-tools-section">
+      <h3 class="related-tools-title">Explore Related Financial Engines</h3>
+      <div class="related-tools-grid">
+        <a href="../mortgage-payoff/index.html" class="related-tool-card">
+          <div class="related-tool-name">🏡 Mortgage Payoff Acceleration</div>
+          <div class="related-tool-desc">See how an extra monthly payment eliminates thousands in interest and shaves years off your mortgage.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../debt-payoff/index.html" class="related-tool-card">
+          <div class="related-tool-name">🛡️ Debt Avalanche Elimination</div>
+          <div class="related-tool-desc">Calculate your exact debt-free calendar date and escape the credit card minimum payment trap.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+
+        <a href="../auto-loan-lease/index.html" class="related-tool-card">
+          <div class="related-tool-name">🚗 Auto Loan vs. Lease Matrix</div>
+          <div class="related-tool-desc">Compare the true 3 to 5-year cost of buying versus leasing factoring in depreciation curves.</div>
+          <span class="related-tool-link">Launch Calculator →</span>
+        </a>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="shell">
       <div class="footer-top-grid">
@@ -377,7 +444,7 @@
           <h4 class="footer-col-title">Calculators</h4>
           <ul class="footer-links">
             <li><a href="index.html">Compound Interest</a></li>
-            <li><a href="../mortgage-payoff/index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="../mortgage-payoff/index.html">Mortgage &amp; Extra Payoff</a></li>
             <li><a href="../debt-payoff/index.html">Credit Card Debt Snowball</a></li>
             <li><a href="../auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
           </ul>
@@ -386,14 +453,14 @@
         <div>
           <h4 class="footer-col-title">Methodology</h4>
           <ul class="footer-links">
-            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../methodology.html">Formulas &amp; Mathematical Audits</a></li>
             <li><a href="../../about.html">About FinMetrics</a></li>
             <li><a href="../../contact.html">Institutional Inquiries</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="footer-col-title">Legal & Trust</h4>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
           <ul class="footer-links">
             <li><a href="../../privacy.html">Privacy Policy</a></li>
             <li><a href="../../terms.html">Terms of Service</a></li>
@@ -406,16 +473,13 @@
         <div>© 2026 FinMetrics Pro. All rights reserved. Zero cookies tracked.</div>
         <div>Built for high-precision financial literacy.</div>
       </div>
-
-      <div class="footer-disclaimer-box">
-        <strong>Disclaimer:</strong> FinMetrics Pro provides mathematical calculations and educational models for informational purposes only. It does not provide personalized legal, accounting, tax, or investment advice. Always consult a licensed Certified Financial Planner (CFP) or CPA before making significant financial commitments.
-      </div>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="../../assets/js/chart.min.js"></script>
   <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/animated-counter.js"></script>
   <script src="../../assets/js/math-utils.js"></script>
   <script src="app.js"></script>
 </body>

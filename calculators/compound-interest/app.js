@@ -1,5 +1,6 @@
 /**
  * COMPOUND INTEREST CALCULATOR INTERACTIVE LOGIC
+ * Dynamic Sliders, Animated Metrics, Milestone Timeline & Comparison Engine
  */
 
 (function () {
@@ -24,6 +25,7 @@
   const insInterest = document.getElementById('insInterest');
   const insDeposits = document.getElementById('insDeposits');
   const scheduleBody = document.getElementById('scheduleBody');
+  const milestoneTrack = document.getElementById('milestoneTrack');
 
   const btnChartArea = document.getElementById('btnChartArea');
   const btnChartBar = document.getElementById('btnChartBar');
@@ -31,8 +33,18 @@
   const copyShareBtn = document.getElementById('copyShareBtn');
   const resetBtn = document.getElementById('resetBtn');
 
-  let currentChartType = 'line'; // 'line' (area) or 'bar'
+  // Scenario & Comparison
+  const scenarioNameInput = document.getElementById('scenarioName');
+  const comparisonModeBtn = document.getElementById('comparisonModeBtn');
+  const comparisonPanel = document.getElementById('comparisonPanel');
+  const cmpValA = document.getElementById('cmpValA');
+  const cmpValB = document.getElementById('cmpValB');
+  const cmpDiff = document.getElementById('cmpDiff');
+
+  let currentChartType = 'line';
   let chartInstance = null;
+  let previousFinalBalance = 0;
+  let isComparisonActive = false;
 
   // Sync inputs & sliders
   function bindSliderInputPair(input, slider, isFloat = false) {
@@ -51,6 +63,11 @@
   bindSliderInputPair(yearsInput, yearsSlider);
   bindSliderInputPair(rateInput, rateSlider, true);
   inflationInput.addEventListener('input', recalculate);
+  if (scenarioNameInput) {
+    scenarioNameInput.addEventListener('input', () => {
+      updateChartTitle();
+    });
+  }
 
   function getInputs() {
     return {
@@ -69,17 +86,37 @@
 
     const res = FinMath.calculateCompoundInterest(params);
 
-    // Update Output Cards
-    resEndingBalance.textContent = FinMetrics.formatMoney(res.finalBalance);
-    resTotalInterest.textContent = FinMetrics.formatMoney(res.totalInterest);
-    
+    // Animated Key Metrics
+    const curSymbol = FinMetrics.getCurrency().symbol;
+    if (window.FinCounter) {
+      FinCounter.animate(resEndingBalance, Math.round(res.finalBalance), { prefix: curSymbol, duration: 400 });
+      FinCounter.animate(resTotalInterest, Math.round(res.totalInterest), { prefix: curSymbol, duration: 400 });
+      FinCounter.animate(resRealBalance, Math.round(res.inflationAdjustedBalance), { prefix: curSymbol, duration: 400 });
+    } else {
+      resEndingBalance.textContent = FinMetrics.formatMoney(res.finalBalance);
+      resTotalInterest.textContent = FinMetrics.formatMoney(res.totalInterest);
+      resRealBalance.textContent = FinMetrics.formatMoney(res.inflationAdjustedBalance);
+    }
+
     const intRatio = res.finalBalance > 0 ? ((res.totalInterest / res.finalBalance) * 100).toFixed(1) : 0;
     resInterestRatio.textContent = `${intRatio}% of portfolio`;
 
-    resRealBalance.textContent = FinMetrics.formatMoney(res.inflationAdjustedBalance);
-
     insInterest.textContent = FinMetrics.formatMoney(res.totalInterest);
     insDeposits.textContent = FinMetrics.formatMoney(res.totalDeposited);
+
+    // Check Milestones ($100K, $500K, $1M)
+    if (FinMetrics.checkMilestone) {
+      FinMetrics.checkMilestone(res.finalBalance, previousFinalBalance);
+      previousFinalBalance = res.finalBalance;
+    }
+
+    // Render Milestone Tracker Timeline
+    renderMilestones(res.schedule);
+
+    // Comparison Mode Calculations (Benchmark: 6% conservative return)
+    if (isComparisonActive) {
+      calculateComparison(params, res.finalBalance);
+    }
 
     // Update Schedule Table
     renderScheduleTable(res.schedule);
@@ -95,6 +132,45 @@
       r: params.annualRate,
       inf: params.inflationRate
     });
+  }
+
+  function renderMilestones(schedule) {
+    if (!milestoneTrack) return;
+    const targets = [
+      { val: 50000, label: '$50K' },
+      { val: 100000, label: '$100K' },
+      { val: 250000, label: '$250K' },
+      { val: 500000, label: '$500K' },
+      { val: 1000000, label: '$1M' }
+    ];
+
+    let html = '';
+    targets.forEach(t => {
+      const reachedRow = schedule.find(r => r.endBalance >= t.val);
+      const isAchieved = !!reachedRow;
+      const yearText = isAchieved ? `Year ${reachedRow.year}` : 'Not Reached';
+
+      html += `
+        <div class="milestone-step ${isAchieved ? 'achieved' : ''}">
+          <div class="milestone-dot">${isAchieved ? '✓' : '○'}</div>
+          <div class="milestone-val">${t.label}</div>
+          <div class="milestone-sub">${yearText}</div>
+        </div>
+      `;
+    });
+
+    milestoneTrack.innerHTML = html;
+  }
+
+  function calculateComparison(params, currentFinalBalance) {
+    const benchmarkParams = Object.assign({}, params, { annualRate: 6.0 });
+    const resBenchmark = FinMath.calculateCompoundInterest(benchmarkParams);
+
+    const diff = currentFinalBalance - resBenchmark.finalBalance;
+    cmpValA.textContent = FinMetrics.formatMoney(currentFinalBalance);
+    cmpValB.textContent = FinMetrics.formatMoney(resBenchmark.finalBalance);
+    cmpDiff.textContent = `${diff >= 0 ? '+' : ''}${FinMetrics.formatMoney(diff)}`;
+    cmpDiff.style.color = diff >= 0 ? 'var(--emerald-400)' : 'var(--rose-400)';
   }
 
   function renderScheduleTable(schedule) {
@@ -174,6 +250,12 @@
         },
         plugins: {
           legend: { display: false },
+          title: {
+            display: scenarioNameInput && !!scenarioNameInput.value,
+            text: scenarioNameInput ? scenarioNameInput.value : '',
+            color: isDark ? '#f8fafc' : '#0f172a',
+            font: { size: 14, weight: 'bold' }
+          },
           tooltip: {
             backgroundColor: isDark ? '#0c1222' : '#ffffff',
             titleColor: isDark ? '#f8fafc' : '#0f172a',
@@ -204,6 +286,30 @@
             }
           }
         }
+      }
+    });
+  }
+
+  function updateChartTitle() {
+    if (chartInstance && scenarioNameInput) {
+      chartInstance.options.plugins.title = {
+        display: !!scenarioNameInput.value,
+        text: scenarioNameInput.value,
+        color: document.documentElement.getAttribute('data-theme') !== 'light' ? '#f8fafc' : '#0f172a',
+        font: { size: 14, weight: 'bold' }
+      };
+      chartInstance.update();
+    }
+  }
+
+  // Toggle Comparison Mode
+  if (comparisonModeBtn && comparisonPanel) {
+    comparisonModeBtn.addEventListener('click', () => {
+      isComparisonActive = !isComparisonActive;
+      comparisonPanel.classList.toggle('active', isComparisonActive);
+      comparisonModeBtn.classList.toggle('active', isComparisonActive);
+      if (isComparisonActive) {
+        recalculate();
       }
     });
   }
