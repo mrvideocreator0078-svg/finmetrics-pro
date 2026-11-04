@@ -364,7 +364,140 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     10. INITIALIZATION
+     10. HIGH-TICKET FINANCIAL PARTNER OFFERS (CPA AFFILIATE REVENUE)
+     ══════════════════════════════════════════════════════════════ */
+  const PARTNER_OFFERS = {
+    'compound-interest': {
+      title: 'Top Verified Wealth & Savings Partners',
+      cards: [
+        {
+          badge: 'Editor\'s Choice · HYSA',
+          title: 'High-Yield Cash Savings Reserve',
+          highlight: '5.25% APY',
+          desc: 'FDIC insured up to $250,000. Earn over 10x the national average with zero account fees and no minimum deposit.',
+          cta: 'View Verified Rate →',
+          url: 'https://www.google.com/search?q=high+yield+savings+account+5+percent'
+        },
+        {
+          badge: 'Commission-Free Investing',
+          title: 'Direct S&P 500 Index & SIP Platform',
+          highlight: '$0 Trades',
+          desc: 'Automate weekly dollar-cost averaging into low-expense index funds with fractional shares and automated dividend reinvestment.',
+          cta: 'Explore Platform →',
+          url: 'https://www.google.com/search?q=low+cost+sp500+index+funds'
+        }
+      ]
+    },
+    'mortgage-payoff': {
+      title: 'Top Verified Mortgage Refinance Partners',
+      cards: [
+        {
+          badge: '30-Yr Fixed Competitive Rate',
+          title: 'Institutional Mortgage Rate Match',
+          highlight: '6.12% APR',
+          desc: 'Compare pre-qualified rates from top national lenders with zero hard impact on your credit score.',
+          cta: 'Compare Lender Rates →',
+          url: 'https://www.google.com/search?q=best+mortgage+refinance+rates'
+        },
+        {
+          badge: 'Government Backed',
+          title: 'VA / FHA Streamline Accelerator',
+          highlight: '5.85% APR',
+          desc: 'Lower your monthly payment or shorten your loan term with simplified documentation and no appraisal options.',
+          cta: 'Check Eligibility →',
+          url: 'https://www.google.com/search?q=fha+streamline+refinance'
+        }
+      ]
+    },
+    'debt-payoff': {
+      title: 'Top Debt Elimination & Balance Transfer Partners',
+      cards: [
+        {
+          badge: 'Top Pick · 0% Intro APR',
+          title: 'Long-Term Balance Transfer Card',
+          highlight: '0% for 21 Mos',
+          desc: 'Pay 0% interest on balance transfers for up to 21 months to freeze compounding charges and accelerate principal paydown.',
+          cta: 'See Card Terms →',
+          url: 'https://www.google.com/search?q=best+balance+transfer+credit+cards'
+        },
+        {
+          badge: 'Fixed Rate Consolidation',
+          title: 'Debt Consolidation Personal Loan',
+          highlight: '6.99% APR',
+          desc: 'Consolidate multiple high-APR credit card balances into a single, predictable monthly payment with no prepayment penalty.',
+          cta: 'Check Your Rate →',
+          url: 'https://www.google.com/search?q=best+debt+consolidation+loans'
+        }
+      ]
+    },
+    'auto-loan-lease': {
+      title: 'Top Automotive Financing & Refinance Partners',
+      cards: [
+        {
+          badge: 'Prime Rate Match',
+          title: 'New & Used Auto Loan Network',
+          highlight: '5.24% APR',
+          desc: 'Lock in competitive rates from credit unions and national banks before walking into the dealership.',
+          cta: 'Get Pre-Approved →',
+          url: 'https://www.google.com/search?q=best+auto+loan+rates'
+        },
+        {
+          badge: 'Payment Reduction',
+          title: 'Auto Loan Refinance Accelerator',
+          highlight: 'Save $115/mo',
+          desc: 'Refinance your existing car loan to a lower interest rate and reduce your monthly payment immediately.',
+          cta: 'Calculate Savings →',
+          url: 'https://www.google.com/search?q=auto+loan+refinance'
+        }
+      ]
+    }
+  };
+
+  function initPartnerOffers() {
+    const container = document.getElementById('affiliateCardsContainer');
+    if (!container) return;
+
+    const calcKey = document.body.getAttribute('data-calc-key') || 'compound-interest';
+    const data = PARTNER_OFFERS[calcKey] || PARTNER_OFFERS['compound-interest'];
+
+    container.className = 'partner-section-wrap';
+    container.innerHTML = `
+      <div class="partner-section-head">
+        <h3 class="partner-section-title">
+          <span>🏛️</span>
+          <span>${data.title}</span>
+        </h3>
+        <span class="partner-disclosure-badge">Verified Institutional Partners</span>
+      </div>
+      <div class="partner-cards-grid">
+        ${data.cards.map(c => `
+          <div class="partner-card">
+            <div>
+              <span class="partner-card-badge">${c.badge}</span>
+              <h4 class="partner-title">${c.title}</h4>
+              <div class="partner-highlight">${c.highlight}</div>
+              <p class="partner-desc">${c.desc}</p>
+            </div>
+            <a href="${c.url}" target="_blank" rel="noopener sponsored" class="partner-cta-btn">${c.cta}</a>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     11. SERVICE WORKER & PWA REGISTRATION (INFINITE SCALE)
+     ══════════════════════════════════════════════════════════════ */
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+      const isSubdir = window.location.pathname.includes('/calculators/');
+      const swPath = isSubdir ? '../../sw.js' : '/sw.js';
+      navigator.serviceWorker.register(swPath).catch(() => {});
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     12. INITIALIZATION
      ══════════════════════════════════════════════════════════════ */
   document.addEventListener('DOMContentLoaded', () => {
     applyTheme(getPreferredTheme());
@@ -382,6 +515,8 @@
     setupSearchModal();
     initSliderFills();
     setupMobileDrawer();
+    initPartnerOffers();
+    registerServiceWorker();
   });
 
   window.FinMetrics = {
