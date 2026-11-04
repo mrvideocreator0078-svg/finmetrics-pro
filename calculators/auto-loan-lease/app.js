@@ -38,6 +38,12 @@
   const cmpValB = document.getElementById('cmpValB');
   const cmpDiff = document.getElementById('cmpDiff');
 
+  const btnAutoBar = document.getElementById('btnAutoBar');
+  const btnAutoDonut = document.getElementById('btnAutoDonut');
+  const autoExecSummary = document.getElementById('autoExecSummary');
+  const autoSensitivityTable = document.getElementById('autoSensitivityTable');
+
+  let currentChartType = 'bar';
   let chartInstance = null;
   let isComparisonActive = false;
 
@@ -117,6 +123,10 @@
       cmpDiff.textContent = `+${FinMetrics.formatMoney(res.netDifference)}`;
     }
 
+    // Executive Summary & Sensitivity Matrix
+    renderAutoExecutiveSummary(res, params, buyPayments36, leaseNetCost);
+    renderAutoSensitivityMatrix(params);
+
     // Chart
     updateChart(res, params, buyPayments36, leaseNetCost);
 
@@ -154,6 +164,66 @@
     autoMilestones.innerHTML = html;
   }
 
+  function renderAutoExecutiveSummary(res, params, buyPayments36, leaseNetCost) {
+    if (!autoExecSummary) return;
+    const isBuy = res.recommendedOption === 'BUY';
+    const netSavings = res.netDifference;
+
+    autoExecSummary.innerHTML = `
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div><strong>Strategic Verdict:</strong> ${isBuy ? 'Purchasing (Buying)' : 'Leasing'} is the mathematically superior choice, generating <strong>${FinMetrics.formatMoney(netSavings)}</strong> in net wealth advantage over 36 months.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Retained Residual Equity: At month 36, buying leaves you with an estimated <strong>${FinMetrics.formatMoney(res.residualValue)}</strong> in real tangible vehicle equity, whereas a lease leaves you with $0.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Monthly Cashflow Delta: Leasing requires <strong>${FinMetrics.formatMoney(res.monthlyLoanPayment - res.monthlyLeasePayment)}/mo less</strong> in immediate cashflow, making it optimal only for business tax deductions or rapid EV turnover.</div>
+      </li>
+    `;
+  }
+
+  function renderAutoSensitivityMatrix(params) {
+    if (!autoSensitivityTable) return;
+    const terms = [36, 48, 60, 72];
+
+    let headerHtml = `
+      <thead>
+        <tr>
+          <th>Loan Term Horizon</th>
+          <th>Monthly Loan Payment</th>
+          <th>Total Interest Paid</th>
+          <th>Retained Year-3 Equity</th>
+          <th>3-Year Net Cost</th>
+        </tr>
+      </thead>
+    `;
+
+    let bodyHtml = '<tbody>';
+    terms.forEach(termMonths => {
+      const pCopy = Object.assign({}, params, { loanTermMonths: termMonths });
+      const aRes = FinMath.calculateAutoLoanVsLease(pCopy);
+      const isSelected = params.loanTermMonths === termMonths;
+      const payments36 = params.downPayment + (aRes.monthlyLoanPayment * 36);
+      const netCost36 = Math.max(0, payments36 - aRes.residualValue);
+
+      bodyHtml += `
+        <tr class="${isSelected ? 'matrix-cell-highlight' : ''}">
+          <td><strong>${termMonths} Months (${termMonths / 12} yrs)</strong></td>
+          <td>${FinMetrics.formatMoney(aRes.monthlyLoanPayment)}/mo</td>
+          <td style="color:#ef4444;">${FinMetrics.formatMoney(aRes.totalLoanInterest)}</td>
+          <td style="color:var(--emerald-600);font-weight:700;">${FinMetrics.formatMoney(aRes.residualValue)}</td>
+          <td><strong>${FinMetrics.formatMoney(netCost36)}</strong></td>
+        </tr>
+      `;
+    });
+    bodyHtml += '</tbody>';
+
+    autoSensitivityTable.innerHTML = headerHtml + bodyHtml;
+  }
+
   function updateChart(res, params, buyPayments36, leasePayments36) {
     const canvas = document.getElementById('autoChart');
     if (!canvas || !window.Chart) return;
@@ -167,6 +237,42 @@
     }
 
     const ctx = canvas.getContext('2d');
+
+    if (currentChartType === 'doughnut') {
+      const netBuy = Math.max(0, buyPayments36 - res.residualValue);
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Buy Net Cost (Payments − Equity)', 'Retained Car Equity', 'Lease Net Outflow (Zero Equity)'],
+          datasets: [{
+            data: [netBuy, res.residualValue, leasePayments36],
+            backgroundColor: ['#2563eb', '#059669', '#6366f1'],
+            borderWidth: 2,
+            borderColor: isDark ? '#111c33' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: textColor, font: { weight: '600' } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return `${ctx.label}: ${FinMetrics.formatMoney(ctx.parsed)}`;
+                }
+              }
+            }
+          }
+        }
+      });
+      return;
+    }
 
     chartInstance = new Chart(ctx, {
       type: 'bar',
@@ -254,6 +360,56 @@
       }
     });
   }
+
+  // Chart View Toggle
+  if (btnAutoBar) {
+    btnAutoBar.addEventListener('click', () => {
+      currentChartType = 'bar';
+      btnAutoBar.classList.add('active');
+      if (btnAutoDonut) btnAutoDonut.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  if (btnAutoDonut) {
+    btnAutoDonut.addEventListener('click', () => {
+      currentChartType = 'doughnut';
+      btnAutoDonut.classList.add('active');
+      if (btnAutoBar) btnAutoBar.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  // Presets
+  const AUTO_PRESETS = {
+    sedan: { price: 32000, loanDown: 4000, rate: 5.9, months: 60, leaseDown: 2000, res: 55 },
+    suv: { price: 48000, loanDown: 6000, rate: 6.25, months: 60, leaseDown: 3000, res: 52 },
+    luxury: { price: 65000, loanDown: 8000, rate: 6.5, months: 60, leaseDown: 4500, res: 49 },
+    compact: { price: 22000, loanDown: 2500, rate: 5.5, months: 48, leaseDown: 1500, res: 58 }
+  };
+
+  document.querySelectorAll('.preset-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preset-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = AUTO_PRESETS[btn.getAttribute('data-preset')];
+      if (p) {
+        carPriceInput.value = p.price;
+        loanDownInput.value = p.loanDown;
+        loanRateInput.value = p.rate;
+        loanTermMonthsInput.value = p.months;
+        leaseDownInput.value = p.leaseDown;
+        residualPctInput.value = p.res;
+        if (loanTermChips) {
+          loanTermChips.querySelectorAll('.chip-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-months') === String(p.months));
+          });
+        }
+        recalculate();
+        FinMetrics.showToast(`Loaded: ${btn.textContent.trim()} scenario`);
+      }
+    });
+  });
 
   // Copy link
   copyShareBtn.addEventListener('click', () => {

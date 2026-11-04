@@ -106,6 +106,15 @@
       </p>
     </div>
 
+    <!-- Curated Scenarios / Presets Bar -->
+    <div class="preset-pills-bar" aria-label="Curated Debt Payoff Presets">
+      <span class="preset-pill-label">⚡ Debt Presets:</span>
+      <button class="preset-pill-btn active" data-preset="creditCard">💳 High-APR Card ($8.5k @ 24.9%)</button>
+      <button class="preset-pill-btn" data-preset="avalanche">📉 Multi-Balance ($18k @ 21.5%)</button>
+      <button class="preset-pill-btn" data-preset="student">🎓 Student Debt ($35k @ 6.8%)</button>
+      <button class="preset-pill-btn" data-preset="personal">🛡️ Consolidation ($12k @ 14.5%)</button>
+    </div>
+
     <!-- Comparison Toggle Bar -->
     <div class="comparison-toggle-bar">
       <div class="toggle-info">
@@ -267,19 +276,34 @@
         <!-- Chart Card -->
         <div class="chart-container-card">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Balance Paydown Trajectory</h3>
+            <h3 class="chart-card-title">Balance Paydown &amp; Interest Split</h3>
+            <div class="chart-view-toggle">
+              <button class="chart-toggle-btn active" id="btnDebtLine">📈 Payoff Curve</button>
+              <button class="chart-toggle-btn" id="btnDebtDonut">🍩 Principal vs Interest</button>
+            </div>
           </div>
 
           <div class="chart-canvas-wrap">
             <canvas id="debtChart" role="img" aria-label="Chart showing remaining debt balance declining to zero over time"></canvas>
           </div>
 
-          <div class="chart-legend-row">
+          <div class="chart-legend-row" id="debtLegendRow">
             <div class="legend-item">
-              <span class="legend-dot" style="background:#10b981;"></span>
+              <span class="legend-dot" style="background:#059669;"></span>
               <span>Remaining Balance</span>
             </div>
           </div>
+        </div>
+
+        <!-- Executive Actionable Summary Card -->
+        <div class="executive-summary-card">
+          <div class="exec-summary-title">
+            <span>💡</span>
+            <span>Debt Freedom Actionable Takeaways</span>
+          </div>
+          <ul class="exec-summary-list" id="debtExecSummary">
+            <!-- Populated dynamically by app.js -->
+          </ul>
         </div>
 
       </section>
@@ -326,6 +350,21 @@
           <tbody id="scheduleBody">
             <!-- Rendered by app.js -->
           </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Payment Velocity Sensitivity Matrix ("What-If" Analysis) -->
+    <section class="sensitivity-matrix-card" aria-labelledby="matrixHeading">
+      <div class="matrix-title-row">
+        <div>
+          <h2 id="matrixHeading" class="matrix-title">Monthly Payment Velocity Sensitivity Matrix</h2>
+          <p class="matrix-sub">See how increasing your monthly payment dramatically reduces your time in debt and total interest paid.</p>
+        </div>
+      </div>
+      <div class="table-responsive-box">
+        <table class="matrix-table" id="debtSensitivityTable">
+          <!-- Populated dynamically by app.js -->
         </table>
       </div>
     </section>

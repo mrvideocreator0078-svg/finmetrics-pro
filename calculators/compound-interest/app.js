@@ -28,10 +28,13 @@
   const milestoneTrack = document.getElementById('milestoneTrack');
 
   const btnChartArea = document.getElementById('btnChartArea');
+  const btnChartDonut = document.getElementById('btnChartDonut');
   const btnChartBar = document.getElementById('btnChartBar');
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const copyShareBtn = document.getElementById('copyShareBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const execSummaryList = document.getElementById('execSummaryList');
+  const sensitivityTable = document.getElementById('sensitivityTable');
 
   // Scenario & Comparison
   const scenarioNameInput = document.getElementById('scenarioName');
@@ -121,6 +124,10 @@
     // Update Schedule Table
     renderScheduleTable(res.schedule);
 
+    // Update Executive Summary & Sensitivity Matrix
+    renderExecutiveSummary(res, params);
+    renderSensitivityMatrix(params);
+
     // Update Chart
     updateChart(res);
 
@@ -187,6 +194,67 @@
     `).join('');
   }
 
+  function renderExecutiveSummary(res, params) {
+    if (!execSummaryList) return;
+    const intPct = res.finalBalance > 0 ? ((res.totalInterest / res.finalBalance) * 100).toFixed(1) : '0';
+    const totalDeposited = res.totalDeposited;
+    const benchmarkRes = FinMath.calculateCompoundInterest(Object.assign({}, params, { annualRate: 6.0 }));
+    const alphaGain = res.finalBalance - benchmarkRes.finalBalance;
+
+    execSummaryList.innerHTML = `
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Total Capital Outlay: <strong>${FinMetrics.formatMoney(totalDeposited)}</strong> generated <strong>${FinMetrics.formatMoney(res.totalInterest)}</strong> in pure exponential interest.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Interest Multiplier: Compound interest represents <strong>${intPct}%</strong> of your final wealth portfolio.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Inflation Purchasing Power: At ${params.inflationRate}% annual inflation, your real future purchasing power equals <strong>${FinMetrics.formatMoney(res.inflationAdjustedBalance)}</strong> in current currency terms.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Benchmark Alpha Spread: Your portfolio strategy achieves <strong>${alphaGain >= 0 ? '+' : ''}${FinMetrics.formatMoney(alphaGain)}</strong> in excess wealth compared to a standard 6.0% baseline market index.</div>
+      </li>
+    `;
+  }
+
+  function renderSensitivityMatrix(params) {
+    if (!sensitivityTable) return;
+    const rates = [6.0, 8.0, 10.0, 12.0];
+    const horizons = [5, 10, 15, 20, 25, 30];
+
+    let headerHtml = '<thead><tr><th>Holding Horizon</th>';
+    rates.forEach(r => {
+      headerHtml += `<th>@ ${r.toFixed(1)}% Return</th>`;
+    });
+    headerHtml += '</tr></thead>';
+
+    let bodyHtml = '<tbody>';
+    horizons.forEach(h => {
+      const isCurrentH = Math.round(params.years) === h;
+      bodyHtml += `<tr><td>${h} Years</td>`;
+      rates.forEach(r => {
+        const matrixRes = FinMath.calculateCompoundInterest({
+          principal: params.principal,
+          monthlyContribution: params.monthlyContribution,
+          years: h,
+          annualRate: r,
+          inflationRate: params.inflationRate,
+          compoundFreq: 12
+        });
+        const isSelected = isCurrentH && Math.abs(params.annualRate - r) < 1.0;
+        bodyHtml += `<td class="${isSelected ? 'matrix-cell-highlight' : ''}">${FinMetrics.formatMoney(matrixRes.finalBalance)}</td>`;
+      });
+      bodyHtml += '</tr>';
+    });
+    bodyHtml += '</tbody>';
+
+    sensitivityTable.innerHTML = headerHtml + bodyHtml;
+  }
+
   function updateChart(res) {
     const canvas = document.getElementById('growthChart');
     if (!canvas || !window.Chart) return;
@@ -200,6 +268,43 @@
     }
 
     const ctx = canvas.getContext('2d');
+
+    if (currentChartType === 'doughnut') {
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal Contributed', 'Compound Interest Earned'],
+          datasets: [{
+            data: [res.totalDeposited, res.totalInterest],
+            backgroundColor: ['#2563eb', '#059669'],
+            borderWidth: 2,
+            borderColor: isDark ? '#111c33' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: textColor, font: { weight: '600' } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  const val = ctx.parsed;
+                  const pct = res.finalBalance > 0 ? ((val / res.finalBalance) * 100).toFixed(1) : 0;
+                  return `${ctx.label}: ${FinMetrics.formatMoney(val)} (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+      return;
+    }
 
     const datasets = currentChartType === 'line' ? [
       {
@@ -315,18 +420,69 @@
   }
 
   // Toggle chart style
-  btnChartArea.addEventListener('click', () => {
-    currentChartType = 'line';
-    btnChartArea.classList.add('active');
-    btnChartBar.classList.remove('active');
-    recalculate();
-  });
+  if (btnChartArea) {
+    btnChartArea.addEventListener('click', () => {
+      currentChartType = 'line';
+      btnChartArea.classList.add('active');
+      if (btnChartDonut) btnChartDonut.classList.remove('active');
+      if (btnChartBar) btnChartBar.classList.remove('active');
+      recalculate();
+    });
+  }
 
-  btnChartBar.addEventListener('click', () => {
-    currentChartType = 'bar';
-    btnChartBar.classList.add('active');
-    btnChartArea.classList.remove('active');
-    recalculate();
+  if (btnChartDonut) {
+    btnChartDonut.addEventListener('click', () => {
+      currentChartType = 'doughnut';
+      btnChartDonut.classList.add('active');
+      if (btnChartArea) btnChartArea.classList.remove('active');
+      if (btnChartBar) btnChartBar.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  if (btnChartBar) {
+    btnChartBar.addEventListener('click', () => {
+      currentChartType = 'bar';
+      btnChartBar.classList.add('active');
+      if (btnChartArea) btnChartArea.classList.remove('active');
+      if (btnChartDonut) btnChartDonut.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  // Presets
+  const PRESETS = {
+    sp500: { principal: 10000, monthly: 500, years: 20, rate: 9.5, inflation: 2.5 },
+    treasury: { principal: 25000, monthly: 300, years: 10, rate: 5.2, inflation: 2.0 },
+    fire: { principal: 50000, monthly: 1500, years: 15, rate: 12.0, inflation: 2.8 },
+    college: { principal: 5000, monthly: 250, years: 18, rate: 7.5, inflation: 2.5 }
+  };
+
+  document.querySelectorAll('.preset-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preset-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = PRESETS[btn.getAttribute('data-preset')];
+      if (p) {
+        initialDepositInput.value = p.principal;
+        initialDepositSlider.value = p.principal;
+        monthlyDepositInput.value = p.monthly;
+        monthlyDepositSlider.value = p.monthly;
+        yearsInput.value = p.years;
+        yearsSlider.value = p.years;
+        rateInput.value = p.rate;
+        rateSlider.value = p.rate;
+        inflationInput.value = p.inflation;
+        if (FinMetrics.updateSliderFill) {
+          FinMetrics.updateSliderFill(initialDepositSlider);
+          FinMetrics.updateSliderFill(monthlyDepositSlider);
+          FinMetrics.updateSliderFill(yearsSlider);
+          FinMetrics.updateSliderFill(rateSlider);
+        }
+        recalculate();
+        FinMetrics.showToast(`Loaded: ${btn.textContent.trim()} scenario`);
+      }
+    });
   });
 
   // Export CSV

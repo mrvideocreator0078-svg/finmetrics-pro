@@ -714,6 +714,247 @@
 }
 
 /* ==========================================================================
+   ULTRA PRO MAX: PRESET PILLS, SENSITIVITY MATRIX & DONUT CHARTS
+   ========================================================================== */
+.preset-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+}
+
+.preset-pill-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+}
+
+.preset-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-medium);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+  user-select: none;
+}
+
+.preset-pill-btn:hover {
+  border-color: var(--emerald-600);
+  color: var(--emerald-700);
+  background: var(--emerald-50);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.preset-pill-btn.active {
+  background: var(--emerald-600);
+  border-color: var(--emerald-600);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+  font-weight: 700;
+}
+
+[data-theme="dark"] .preset-pill-btn:hover {
+  background: rgba(5, 150, 105, 0.15);
+  color: #34d399;
+}
+
+/* Chart View Segmented Switcher */
+.chart-view-toggle {
+  display: inline-flex;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+}
+
+.chart-toggle-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart-toggle-btn:hover {
+  color: var(--text-main);
+}
+
+.chart-toggle-btn.active {
+  background: var(--bg-surface);
+  color: var(--emerald-700);
+  box-shadow: var(--shadow-xs);
+}
+
+[data-theme="dark"] .chart-toggle-btn.active {
+  color: #34d399;
+  background: var(--bg-surface);
+}
+
+/* Executive Summary Actionable Card */
+.executive-summary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  box-shadow: var(--shadow-xs);
+  margin-top: 16px;
+}
+
+.exec-summary-title {
+  font-size: 0.925rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exec-summary-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exec-summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.exec-summary-item .bullet {
+  color: var(--emerald-600);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.exec-summary-item strong {
+  color: var(--text-main);
+}
+
+/* Sensitivity Analysis Matrix ("What-If" Engine) */
+.sensitivity-matrix-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  margin-top: 36px;
+  box-shadow: var(--shadow-sm);
+}
+
+.matrix-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.matrix-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.matrix-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+.matrix-table th, .matrix-table td {
+  padding: 12px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+}
+
+.matrix-table th:first-child, .matrix-table td:first-child {
+  text-align: left;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border-right: 1px solid var(--border-light);
+}
+
+.matrix-table th {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border-bottom: 2px solid var(--border-medium);
+}
+
+.matrix-table td {
+  background: var(--bg-surface);
+  transition: background var(--transition-fast);
+}
+
+.matrix-table tr:hover td {
+  background: var(--bg-subtle);
+}
+
+.matrix-cell-highlight {
+  background: var(--emerald-50) !important;
+  color: var(--emerald-700) !important;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .matrix-cell-highlight {
+  background: rgba(5, 150, 105, 0.2) !important;
+  color: #34d399 !important;
+}
+
+/* ==========================================================================
    RESPONSIVE ADJUSTMENTS
    ========================================================================== */
 @media (max-width: 1080px) {

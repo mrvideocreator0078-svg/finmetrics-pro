@@ -101,6 +101,15 @@
       </p>
     </div>
 
+    <!-- Curated Scenarios / Presets Bar -->
+    <div class="preset-pills-bar" aria-label="Curated Market Presets">
+      <span class="preset-pill-label">⚡ Quick Presets:</span>
+      <button class="preset-pill-btn active" data-preset="sp500">🏛️ S&amp;P 500 Index ($500/mo @ 9.5%)</button>
+      <button class="preset-pill-btn" data-preset="treasury">🛡️ Safe Yield ($300/mo @ 5.2%)</button>
+      <button class="preset-pill-btn" data-preset="fire">🚀 Tech Growth FIRE ($1,500/mo @ 12%)</button>
+      <button class="preset-pill-btn" data-preset="college">🎓 College 529 ($250/mo @ 7.5%)</button>
+    </div>
+
     <!-- Scenario Comparison Toggle Bar -->
     <div class="comparison-toggle-bar">
       <div class="toggle-info">
@@ -264,10 +273,11 @@
         <!-- Visual Chart Card -->
         <div class="chart-container-card">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Portfolio Accumulation Trajectory</h3>
-            <div class="segmented-chips">
-              <button class="chip-btn active" id="btnChartArea">Growth Curve</button>
-              <button class="chip-btn" id="btnChartBar">Annual Breakdown</button>
+            <h3 class="chart-card-title">Portfolio Accumulation &amp; Asset Allocation</h3>
+            <div class="chart-view-toggle">
+              <button class="chart-toggle-btn active" id="btnChartArea">📈 Growth Area</button>
+              <button class="chart-toggle-btn" id="btnChartDonut">🍩 Donut Ratio</button>
+              <button class="chart-toggle-btn" id="btnChartBar">📊 Annual Bar</button>
             </div>
           </div>
 
@@ -275,7 +285,7 @@
             <canvas id="growthChart" role="img" aria-label="Interactive graph displaying principal versus compound interest growth over time"></canvas>
           </div>
 
-          <div class="chart-legend-row">
+          <div class="chart-legend-row" id="chartLegendRow">
             <div class="legend-item">
               <span class="legend-dot" style="background:#059669;"></span>
               <span>Total Interest</span>
@@ -285,6 +295,17 @@
               <span>Principal Contributed</span>
             </div>
           </div>
+        </div>
+
+        <!-- Executive Actionable Summary Card -->
+        <div class="executive-summary-card">
+          <div class="exec-summary-title">
+            <span>💡</span>
+            <span>Executive Wealth Intelligence</span>
+          </div>
+          <ul class="exec-summary-list" id="execSummaryList">
+            <!-- Populated dynamically by app.js -->
+          </ul>
         </div>
 
       </section>
@@ -330,6 +351,21 @@
           <tbody id="scheduleBody">
             <!-- Rendered dynamically by app.js -->
           </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Rate & Timeline Sensitivity Matrix ("What-If" Analysis) -->
+    <section class="sensitivity-matrix-card" aria-labelledby="matrixHeading">
+      <div class="matrix-title-row">
+        <div>
+          <h2 id="matrixHeading" class="matrix-title">Return Rate &amp; Horizon Sensitivity Matrix</h2>
+          <p class="matrix-sub">Interactive simulation of final wealth accumulation across alternative market return rates and holding periods.</p>
+        </div>
+      </div>
+      <div class="table-responsive-box">
+        <table class="matrix-table" id="sensitivityTable">
+          <!-- Populated dynamically by app.js -->
         </table>
       </div>
     </section>

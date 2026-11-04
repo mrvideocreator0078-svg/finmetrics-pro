@@ -120,9 +120,10 @@
   <section class="hero-section">
     <div class="shell hero-content">
       <div class="hero-badge-pill">
-        <span>Institutional Financial Modeling</span>
+        <span class="live-pulse-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin-right:6px;box-shadow:0 0 0 2px rgba(5,150,105,0.3);"></span>
+        <span>Institutional Financial Intelligence Engine</span>
         <span>·</span>
-        <span>Zero Commercial Bias</span>
+        <span>100% Client-Side Pure Compute</span>
       </div>
 
       <h1 class="hero-title">
@@ -167,6 +168,11 @@
       <div class="quick-calc-body">
         <!-- Tab 1: Compound -->
         <div class="quick-calc-tab-content active" id="tabCompound">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Quick Presets:</span>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcPrincipal').value=10000;document.getElementById('qcMonthly').value=500;document.getElementById('qcYears').value=20;document.getElementById('qcRate').value=9.5;document.getElementById('qcBtnCompound').click();">🏛️ S&amp;P 500 Index ($500/mo @ 9.5%)</button>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcPrincipal').value=50000;document.getElementById('qcMonthly').value=1500;document.getElementById('qcYears').value=15;document.getElementById('qcRate').value=12;document.getElementById('qcBtnCompound').click();">🚀 FIRE Tech Growth ($1.5k/mo @ 12%)</button>
+          </div>
           <div class="quick-calc-grid">
             <div class="quick-input-group">
               <label class="quick-label" for="qcPrincipal">Initial Investment</label>
@@ -208,6 +214,11 @@
 
         <!-- Tab 2: Mortgage -->
         <div class="quick-calc-tab-content" id="tabMortgage">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Quick Presets:</span>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcHomePrice').value=350000;document.getElementById('qcDown').value=70000;document.getElementById('qcMortRate').value=6.75;document.getElementById('qcBtnMortgage').click();">🏡 Starter ($350k, 20% Down)</button>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcHomePrice').value=550000;document.getElementById('qcDown').value=110000;document.getElementById('qcMortRate').value=6.5;document.getElementById('qcBtnMortgage').click();">🏙️ Suburban Family ($550k)</button>
+          </div>
           <div class="quick-calc-grid">
             <div class="quick-input-group">
               <label class="quick-label" for="qcHomePrice">Home Price</label>
@@ -247,6 +258,11 @@
 
         <!-- Tab 3: Debt -->
         <div class="quick-calc-tab-content" id="tabDebt">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Quick Presets:</span>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcDebtBal').value=8500;document.getElementById('qcDebtApr').value=24.99;document.getElementById('qcDebtPay').value=350;document.getElementById('qcBtnDebt').click();">💳 Credit Card ($8.5k @ 24.9%)</button>
+            <button type="button" class="preset-pill-btn" style="padding:4px 12px;font-size:0.775rem;" onclick="document.getElementById('qcDebtBal').value=18000;document.getElementById('qcDebtApr').value=21.5;document.getElementById('qcDebtPay').value=600;document.getElementById('qcBtnDebt').click();">📉 Avalanche ($18k @ 21.5%)</button>
+          </div>
           <div class="quick-calc-grid">
             <div class="quick-input-group">
               <label class="quick-label" for="qcDebtBal">Total Debt Balance</label>

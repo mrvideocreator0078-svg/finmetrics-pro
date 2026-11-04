@@ -106,6 +106,15 @@
       </p>
     </div>
 
+    <!-- Curated Scenarios / Presets Bar -->
+    <div class="preset-pills-bar" aria-label="Curated Mortgage Presets">
+      <span class="preset-pill-label">⚡ Real Estate Presets:</span>
+      <button class="preset-pill-btn active" data-preset="starter">🏡 Starter Home ($350k, 30-Yr @ 6.75%)</button>
+      <button class="preset-pill-btn" data-preset="suburban">🏙️ Suburban Family ($500k, +$250/mo Extra)</button>
+      <button class="preset-pill-btn" data-preset="aggressive">⚡ Aggressive Accelerator (+$500/mo Extra)</button>
+      <button class="preset-pill-btn" data-preset="term15">🏦 15-Year Fixed Pace ($450k @ 5.85%)</button>
+    </div>
+
     <!-- Comparison Toggle Bar -->
     <div class="comparison-toggle-bar">
       <div class="toggle-info">
@@ -303,27 +312,42 @@
         <!-- Chart Card -->
         <div class="chart-container-card">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Total Lifetime Loan Cost Comparison</h3>
+            <h3 class="chart-card-title">Total Lifetime Loan Cost &amp; Amortization</h3>
+            <div class="chart-view-toggle">
+              <button class="chart-toggle-btn active" id="btnMortgageBar">📊 Stacked Comparison</button>
+              <button class="chart-toggle-btn" id="btnMortgageDonut">🍩 Principal vs Interest</button>
+            </div>
           </div>
 
           <div class="chart-canvas-wrap">
             <canvas id="mortgageChart" role="img" aria-label="Comparison chart showing standard 30 year mortgage versus accelerated payoff"></canvas>
           </div>
 
-          <div class="chart-legend-row">
+          <div class="chart-legend-row" id="mortgageLegendRow">
             <div class="legend-item">
               <span class="legend-dot" style="background:#ef4444;"></span>
               <span>Total Interest Paid</span>
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background:#10b981;"></span>
+              <span class="legend-dot" style="background:#059669;"></span>
               <span>Interest Saved</span>
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background:#3b82f6;"></span>
+              <span class="legend-dot" style="background:#2563eb;"></span>
               <span>Original Principal</span>
             </div>
           </div>
+        </div>
+
+        <!-- Executive Actionable Summary Card -->
+        <div class="executive-summary-card">
+          <div class="exec-summary-title">
+            <span>💡</span>
+            <span>Mortgage Intelligence &amp; Equity Takeaways</span>
+          </div>
+          <ul class="exec-summary-list" id="mortgageExecSummary">
+            <!-- Populated dynamically by app.js -->
+          </ul>
         </div>
 
       </section>
@@ -370,6 +394,21 @@
           <tbody id="scheduleBody">
             <!-- Rendered by app.js -->
           </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Extra Payment Sensitivity Matrix ("What-If" Analysis) -->
+    <section class="sensitivity-matrix-card" aria-labelledby="matrixHeading">
+      <div class="matrix-title-row">
+        <div>
+          <h2 id="matrixHeading" class="matrix-title">Extra Payment Sensitivity Matrix</h2>
+          <p class="matrix-sub">Compare interest saved and payoff acceleration across different extra monthly principal amounts.</p>
+        </div>
+      </div>
+      <div class="table-responsive-box">
+        <table class="matrix-table" id="mortgageSensitivityTable">
+          <!-- Populated dynamically by app.js -->
         </table>
       </div>
     </section>

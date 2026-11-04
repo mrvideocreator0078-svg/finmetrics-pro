@@ -44,6 +44,12 @@
   const cmpValB = document.getElementById('cmpValB');
   const cmpDiff = document.getElementById('cmpDiff');
 
+  const btnMortgageBar = document.getElementById('btnMortgageBar');
+  const btnMortgageDonut = document.getElementById('btnMortgageDonut');
+  const mortgageExecSummary = document.getElementById('mortgageExecSummary');
+  const mortgageSensitivityTable = document.getElementById('mortgageSensitivityTable');
+
+  let currentChartType = 'bar';
   let chartInstance = null;
   let isComparisonActive = false;
 
@@ -130,7 +136,7 @@
       resLoanAmount.textContent = FinMetrics.formatMoney(res.loanAmount);
     }
 
-    resTimeSaved.textContent = res.yearsSaved > 0 
+    resTimeSaved.textContent = res.yearsSaved > 0
       ? `Pay off ${res.yearsSaved} years earlier`
       : 'Standard loan schedule';
 
@@ -155,6 +161,10 @@
 
     // Schedule Table
     renderScheduleTable(res.yearlySummary);
+
+    // Executive Summary & Sensitivity Matrix
+    renderMortgageExecutiveSummary(res, params);
+    renderMortgageSensitivityMatrix(params);
 
     // Chart
     updateChart(res, params);
@@ -198,6 +208,66 @@
     mortgageMilestones.innerHTML = html;
   }
 
+  function renderMortgageExecutiveSummary(res, params) {
+    if (!mortgageExecSummary) return;
+    const totalLifetimeSavings = res.interestSaved;
+    const payoffYears = (res.monthsToPayoff / 12).toFixed(1);
+    const standardYears = params.loanTermYears;
+
+    mortgageExecSummary.innerHTML = `
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Payoff Acceleration: Adding an extra <strong>${FinMetrics.formatMoney(params.extraMonthly)}/mo</strong> directly against principal pays off your mortgage in <strong>${payoffYears} years</strong> instead of ${standardYears} years.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Cumulative Interest Saved: You permanently eliminate <strong>${FinMetrics.formatMoney(totalLifetimeSavings)}</strong> in cash interest charges owed to the lender.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Equity Freedom: You achieve 100% home equity <strong>${res.yearsSaved} years earlier</strong>, unlocking <strong>${FinMetrics.formatMoney(res.totalMonthlyPayment)}/mo</strong> in free cashflow.</div>
+      </li>
+    `;
+  }
+
+  function renderMortgageSensitivityMatrix(params) {
+    if (!mortgageSensitivityTable) return;
+    const extraOptions = [0, 100, 250, 500, 750, 1000];
+
+    let headerHtml = `
+      <thead>
+        <tr>
+          <th>Extra Monthly Principal</th>
+          <th>Total Interest Paid</th>
+          <th>Lifetime Interest Saved</th>
+          <th>Payoff Horizon</th>
+          <th>Years Shaved Off</th>
+        </tr>
+      </thead>
+    `;
+
+    let bodyHtml = '<tbody>';
+    extraOptions.forEach(extra => {
+      const pCopy = Object.assign({}, params, { extraMonthly: extra });
+      const mRes = FinMath.calculateMortgage(pCopy);
+      const isSelected = params.extraMonthly === extra;
+      const yrs = (mRes.monthsToPayoff / 12).toFixed(1);
+
+      bodyHtml += `
+        <tr class="${isSelected ? 'matrix-cell-highlight' : ''}">
+          <td><strong>${extra === 0 ? 'Standard ($0/mo)' : `+${FinMetrics.formatMoney(extra)}/mo`}</strong></td>
+          <td>${FinMetrics.formatMoney(mRes.totalInterest)}</td>
+          <td style="color:var(--emerald-600);font-weight:700;">+${FinMetrics.formatMoney(mRes.interestSaved)}</td>
+          <td>${yrs} Years</td>
+          <td style="color:var(--emerald-700);font-weight:700;">${mRes.yearsSaved > 0 ? `-${mRes.yearsSaved} Yrs` : 'Baseline'}</td>
+        </tr>
+      `;
+    });
+    bodyHtml += '</tbody>';
+
+    mortgageSensitivityTable.innerHTML = headerHtml + bodyHtml;
+  }
+
   function renderScheduleTable(summary) {
     if (!scheduleBody) return;
     scheduleBody.innerHTML = summary.map(row => `
@@ -224,6 +294,41 @@
     }
 
     const ctx = canvas.getContext('2d');
+
+    if (currentChartType === 'doughnut') {
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Borrowed Principal', 'Interest Paid (Accelerated)', 'Interest Saved'],
+          datasets: [{
+            data: [res.loanAmount, res.totalInterest, res.interestSaved],
+            backgroundColor: ['#2563eb', '#ef4444', '#059669'],
+            borderWidth: 2,
+            borderColor: isDark ? '#111c33' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: textColor, font: { weight: '600' } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return `${ctx.label}: ${FinMetrics.formatMoney(ctx.parsed)}`;
+                }
+              }
+            }
+          }
+        }
+      });
+      return;
+    }
 
     chartInstance = new Chart(ctx, {
       type: 'bar',
@@ -321,6 +426,62 @@
   // Export CSV
   exportCsvBtn.addEventListener('click', () => {
     FinMetrics.exportTableToCSV('mortgageTable', 'mortgage-payoff-schedule.csv');
+  });
+
+  // Chart toggle
+  if (btnMortgageBar) {
+    btnMortgageBar.addEventListener('click', () => {
+      currentChartType = 'bar';
+      btnMortgageBar.classList.add('active');
+      if (btnMortgageDonut) btnMortgageDonut.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  if (btnMortgageDonut) {
+    btnMortgageDonut.addEventListener('click', () => {
+      currentChartType = 'doughnut';
+      btnMortgageDonut.classList.add('active');
+      if (btnMortgageBar) btnMortgageBar.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  // Presets
+  const MORTGAGE_PRESETS = {
+    starter: { price: 350000, down: 70000, rate: 6.75, term: 30, extra: 150 },
+    suburban: { price: 500000, down: 100000, rate: 6.5, term: 30, extra: 250 },
+    aggressive: { price: 400000, down: 80000, rate: 6.75, term: 30, extra: 500 },
+    term15: { price: 450000, down: 90000, rate: 5.85, term: 15, extra: 0 }
+  };
+
+  document.querySelectorAll('.preset-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preset-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = MORTGAGE_PRESETS[btn.getAttribute('data-preset')];
+      if (p) {
+        homePriceInput.value = p.price;
+        downPaymentInput.value = p.down;
+        interestRateInput.value = p.rate;
+        interestRateSlider.value = p.rate;
+        extraMonthlyInput.value = p.extra;
+        extraMonthlySlider.value = p.extra;
+        loanTermYearsInput.value = p.term;
+        if (loanTermChips) {
+          loanTermChips.querySelectorAll('.chip-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-years') === String(p.term));
+          });
+        }
+        if (FinMetrics.updateSliderFill) {
+          FinMetrics.updateSliderFill(interestRateSlider);
+          FinMetrics.updateSliderFill(extraMonthlySlider);
+        }
+        updateDownPaymentPct();
+        recalculate();
+        FinMetrics.showToast(`Loaded: ${btn.textContent.trim()} scenario`);
+      }
+    });
   });
 
   // Copy link

@@ -39,6 +39,12 @@
   const cmpValB = document.getElementById('cmpValB');
   const cmpDiff = document.getElementById('cmpDiff');
 
+  const btnDebtLine = document.getElementById('btnDebtLine');
+  const btnDebtDonut = document.getElementById('btnDebtDonut');
+  const debtExecSummary = document.getElementById('debtExecSummary');
+  const debtSensitivityTable = document.getElementById('debtSensitivityTable');
+
+  let currentChartType = 'line';
   let chartInstance = null;
   let isComparisonActive = false;
 
@@ -128,8 +134,12 @@
     // Schedule Table
     renderScheduleTable(res.schedule);
 
+    // Executive Summary & Sensitivity Matrix
+    renderDebtExecutiveSummary(res, params);
+    renderDebtSensitivityMatrix(params);
+
     // Chart
-    updateChart(res);
+    updateChart(res, params);
 
     // URL Sync
     FinMetrics.syncUrlParams({
@@ -168,6 +178,67 @@
     debtMilestones.innerHTML = html;
   }
 
+  function renderDebtExecutiveSummary(res, params) {
+    if (!debtExecSummary) return;
+    const totalOutflow = params.balance + res.targetTotalInterest;
+    const saved = res.interestSaved;
+    const months = res.targetMonths;
+    const years = (months / 12).toFixed(1);
+
+    debtExecSummary.innerHTML = `
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Total Freedom Velocity: At <strong>${FinMetrics.formatMoney(params.monthlyPayment)}/mo</strong>, you become completely debt-free in <strong>${months} months (${years} years)</strong> on <strong>${res.payoffDate}</strong>.</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Minimum Trap Escape: Compared to minimum payments, this plan saves you <strong>${FinMetrics.formatMoney(saved)}</strong> in cold hard cash interest!</div>
+      </li>
+      <li class="exec-summary-item">
+        <span class="bullet">▸</span>
+        <div>Lifetime Outflow: Your total cash to eliminate this debt is <strong>${FinMetrics.formatMoney(totalOutflow)}</strong> (Principal: ${FinMetrics.formatMoney(params.balance)} + Interest: ${FinMetrics.formatMoney(res.targetTotalInterest)}).</div>
+      </li>
+    `;
+  }
+
+  function renderDebtSensitivityMatrix(params) {
+    if (!debtSensitivityTable) return;
+    const paymentSteps = [250, 350, 500, 750, 1000];
+
+    let headerHtml = `
+      <thead>
+        <tr>
+          <th>Monthly Payment</th>
+          <th>Months to Freedom</th>
+          <th>Total Interest Paid</th>
+          <th>Interest Saved vs Minimum</th>
+          <th>Debt-Free Date</th>
+        </tr>
+      </thead>
+    `;
+
+    let bodyHtml = '<tbody>';
+    paymentSteps.forEach(pmt => {
+      const pCopy = Object.assign({}, params, { monthlyPayment: pmt });
+      const dRes = FinMath.calculateDebtPayoff(pCopy);
+      if (dRes && !dRes.error) {
+        const isSelected = Math.abs(params.monthlyPayment - pmt) < 25;
+        bodyHtml += `
+          <tr class="${isSelected ? 'matrix-cell-highlight' : ''}">
+            <td><strong>${FinMetrics.formatMoney(pmt)}/mo</strong></td>
+            <td>${dRes.targetMonths} Months (${(dRes.targetMonths / 12).toFixed(1)} yrs)</td>
+            <td style="color:#ef4444;">${FinMetrics.formatMoney(dRes.targetTotalInterest)}</td>
+            <td style="color:var(--emerald-600);font-weight:700;">+${FinMetrics.formatMoney(dRes.interestSaved)}</td>
+            <td><strong>${dRes.payoffDate}</strong></td>
+          </tr>
+        `;
+      }
+    });
+    bodyHtml += '</tbody>';
+
+    debtSensitivityTable.innerHTML = headerHtml + bodyHtml;
+  }
+
   function renderScheduleTable(schedule) {
     if (!scheduleBody) return;
     const rows = schedule.slice(0, 120);
@@ -182,7 +253,7 @@
     `).join('');
   }
 
-  function updateChart(res) {
+  function updateChart(res, params) {
     const canvas = document.getElementById('debtChart');
     if (!canvas || !window.Chart) return;
 
@@ -194,10 +265,45 @@
       chartInstance.destroy();
     }
 
+    const ctx = canvas.getContext('2d');
+
+    if (currentChartType === 'doughnut') {
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Borrowed Principal Debt', 'Interest Paid', 'Interest Saved vs Minimums'],
+          datasets: [{
+            data: [params.balance, res.targetTotalInterest, res.interestSaved],
+            backgroundColor: ['#2563eb', '#ef4444', '#059669'],
+            borderWidth: 2,
+            borderColor: isDark ? '#111c33' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: textColor, font: { weight: '600' } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return `${ctx.label}: ${FinMetrics.formatMoney(ctx.parsed)}`;
+                }
+              }
+            }
+          }
+        }
+      });
+      return;
+    }
+
     const labels = res.schedule.map(r => `M${r.month}`);
     const data = res.schedule.map(r => Math.round(r.balance));
-
-    const ctx = canvas.getContext('2d');
 
     chartInstance = new Chart(ctx, {
       type: 'line',
@@ -279,6 +385,56 @@
       }
     });
   }
+
+  // Chart View Toggle
+  if (btnDebtLine) {
+    btnDebtLine.addEventListener('click', () => {
+      currentChartType = 'line';
+      btnDebtLine.classList.add('active');
+      if (btnDebtDonut) btnDebtDonut.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  if (btnDebtDonut) {
+    btnDebtDonut.addEventListener('click', () => {
+      currentChartType = 'doughnut';
+      btnDebtDonut.classList.add('active');
+      if (btnDebtLine) btnDebtLine.classList.remove('active');
+      recalculate();
+    });
+  }
+
+  // Presets
+  const DEBT_PRESETS = {
+    creditCard: { balance: 8500, apr: 24.99, payment: 350 },
+    avalanche: { balance: 18000, apr: 21.5, payment: 600 },
+    student: { balance: 35000, apr: 6.8, payment: 500 },
+    personal: { balance: 12000, apr: 14.5, payment: 450 }
+  };
+
+  document.querySelectorAll('.preset-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preset-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = DEBT_PRESETS[btn.getAttribute('data-preset')];
+      if (p) {
+        balanceInput.value = p.balance;
+        balanceSlider.value = p.balance;
+        aprInput.value = p.apr;
+        aprSlider.value = p.apr;
+        monthlyPaymentInput.value = p.payment;
+        monthlyPaymentSlider.value = p.payment;
+        if (FinMetrics.updateSliderFill) {
+          FinMetrics.updateSliderFill(balanceSlider);
+          FinMetrics.updateSliderFill(aprSlider);
+          FinMetrics.updateSliderFill(monthlyPaymentSlider);
+        }
+        recalculate();
+        FinMetrics.showToast(`Loaded: ${btn.textContent.trim()} scenario`);
+      }
+    });
+  });
 
   // Export CSV
   exportCsvBtn.addEventListener('click', () => {
