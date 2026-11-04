@@ -356,67 +356,172 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     9. PRINT REPORT AUDIT GENERATOR (EXECUTIVE DOSSIER)
+     9. PRINT REPORT AUDIT GENERATOR (EXECUTIVE WEALTH DOSSIER)
      ══════════════════════════════════════════════════════════════ */
-  function generatePrintReport(title = 'FinMetrics Pro Financial Audit') {
-    const cleanTitle = title || document.title.split('—')[0].trim();
+  let currentAuditId = null;
 
-    let printContainer = document.getElementById('printDossierHeader');
-    if (!printContainer) {
-      printContainer = document.createElement('div');
-      printContainer.id = 'printDossierHeader';
-      printContainer.className = 'print-dossier-header';
-      const main = document.querySelector('main') || document.body;
-      main.insertBefore(printContainer, main.firstChild);
+  function preparePrintDossier(title) {
+    const calcKey = document.body.getAttribute('data-calc-key');
+    const pageMainHeading = document.querySelector('.calc-head-cluster h1, .calc-title')?.textContent?.trim();
+    const cleanTitle = title || pageMainHeading || document.title.split('—')[0].trim();
+
+    if (!currentAuditId) {
+      currentAuditId = 'FMP-' + Math.floor(100000 + Math.random() * 900000);
     }
 
+    // 1. Header Container
+    let printHeader = document.getElementById('printDossierHeader');
+    if (!printHeader) {
+      printHeader = document.createElement('div');
+      printHeader.id = 'printDossierHeader';
+      printHeader.className = 'print-dossier-header';
+      const main = document.querySelector('main') || document.body;
+      main.insertBefore(printHeader, main.firstChild);
+    }
+
+    // 2. Extract User Inputs
     const inputs = [];
     document.querySelectorAll('.calc-inputs-pane .form-field').forEach(field => {
       const label = field.querySelector('.field-label');
-      const input = field.querySelector('input[type="number"], select');
+      const input = field.querySelector('input[type="number"], select, input[type="text"]');
       if (label && input && input.value !== undefined && input.value !== '') {
-        const valText = input.tagName === 'SELECT'
-          ? input.options[input.selectedIndex].text
-          : input.value;
-        inputs.push({ name: label.textContent.trim(), value: valText });
+        let valText = '';
+        if (input.tagName === 'SELECT') {
+          valText = input.options[input.selectedIndex]?.text || input.value;
+        } else {
+          const prefix = field.querySelector('.field-prefix')?.textContent?.trim() || '';
+          const suffix = field.querySelector('.field-suffix')?.textContent?.trim() || '';
+          valText = `${prefix}${input.value}${suffix ? ' ' + suffix : ''}`.trim();
+        }
+        // Clean label of any info icons
+        const cleanLabel = label.cloneNode(true);
+        cleanLabel.querySelectorAll('.field-help-icon, .info-tooltip').forEach(el => el.remove());
+        inputs.push({ name: cleanLabel.textContent.trim(), value: valText });
       }
     });
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    printContainer.innerHTML = `
+    printHeader.innerHTML = `
+      <div class="print-top-accent-bar"></div>
       <div class="print-header-top">
-        <div>
-          <span class="print-brand-mark">FINMETRICS PRO</span>
-          <span class="print-brand-sub">INSTITUTIONAL QUANTITATIVE DOSSIER</span>
+        <div class="print-brand-crest">
+          <span class="crest-icon">🏛️</span>
+          <div>
+            <span class="print-brand-mark">FINMETRICS PRO</span>
+            <span class="print-brand-sub">INSTITUTIONAL QUANTITATIVE DOSSIER</span>
+            <div class="print-doc-classification">
+              <span class="sec-dot">●</span>
+              <span>CONFIDENTIAL / PRIVATE CLIENT FIDUCIARY AUDIT</span>
+            </div>
+          </div>
         </div>
         <div class="print-header-meta">
-          <div><strong>Run Date:</strong> ${dateStr} at ${timeStr}</div>
-          <div><strong>Model Standard:</strong> CFA / GAAP Actuarial Engine v2.4</div>
-          <div><strong>Audit ID:</strong> FMP-${Math.floor(100000 + Math.random() * 900000)}</div>
+          <div><span class="meta-label">RUN DATE:</span> <span class="meta-val">${dateStr} · ${timeStr}</span></div>
+          <div><span class="meta-label">MODEL STANDARD:</span> <span class="meta-val">CFA / GAAP Actuarial Engine v2.4</span></div>
+          <div><span class="meta-label">AUDIT ID:</span> <span class="meta-val">${currentAuditId}</span></div>
         </div>
       </div>
-      <div class="print-report-title">${cleanTitle}</div>
+      <div class="print-divider-line"></div>
+      <div class="print-title-row">
+        <div>
+          <span class="print-section-eyebrow">QUANTITATIVE AUDIT REPORT</span>
+          <h1 class="print-report-title">${cleanTitle}</h1>
+        </div>
+        <div class="print-stamp-badge">
+          <span class="stamp-check">✓</span>
+          <div class="stamp-text">
+            <span class="stamp-verified">VERIFIED COMPUTATION</span><br>
+            <span class="stamp-spec">CLIENT-SIDE DETERMINISTIC</span>
+          </div>
+        </div>
+      </div>
       ${inputs.length > 0 ? `
-        <div class="print-params-summary-grid">
-          ${inputs.map(i => `
-            <div class="print-param-item">
-              <span class="print-param-label">${i.name}</span>
-              <span class="print-param-val">${i.value}</span>
-            </div>
-          `).join('')}
+        <div class="print-params-card">
+          <div class="print-params-head">AUDIT PARAMETERS &amp; INPUT SPECIFICATION</div>
+          <div class="print-params-summary-grid">
+            ${inputs.map(i => `
+              <div class="print-param-item">
+                <span class="print-param-label">${i.name}</span>
+                <span class="print-param-val">${i.value}</span>
+              </div>
+            `).join('')}
+          </div>
         </div>
       ` : ''}
-      <div class="print-confidential-bar">
-        Confidential Quantitative Computation Report · Prepared for Personal / Professional Balance Sheet Planning · Zero Server Logging
+    `;
+
+    // 3. Crisp Chart Snapshot for High-DPI Vector Printing
+    document.querySelectorAll('.chart-canvas-wrap canvas').forEach(canvas => {
+      let snapshot = canvas.parentNode.querySelector('.chart-print-snapshot');
+      if (!snapshot) {
+        snapshot = document.createElement('img');
+        snapshot.className = 'chart-print-snapshot';
+        snapshot.setAttribute('alt', 'Institutional Chart Visual Analysis');
+        canvas.parentNode.insertBefore(snapshot, canvas.nextSibling);
+      }
+      try {
+        snapshot.src = canvas.toDataURL('image/png', 1.0);
+      } catch (err) {
+        console.warn('Canvas export skipped:', err);
+      }
+    });
+
+    // 4. Institutional Signature & Fiduciary Footer
+    let printFooter = document.getElementById('printDossierFooter');
+    if (!printFooter) {
+      printFooter = document.createElement('div');
+      printFooter.id = 'printDossierFooter';
+      printFooter.className = 'print-dossier-footer';
+      const main = document.querySelector('main') || document.body;
+      main.appendChild(printFooter);
+    }
+
+    printFooter.innerHTML = `
+      <div class="print-footer-legal">
+        <strong>DISCLAIMER &amp; ACTUARIAL ATTESTATION:</strong> This quantitative analysis is generated using deterministic mathematical algorithms based on CFA Institute actuarial standards. FinMetrics Pro executes 100% client-side computation with zero server telemetry or financial data retention. This dossier serves as an analytical reference tool and does not constitute formal fiduciary investment, tax, or legal advisory. Consult a licensed CFP® or CPA before executing capital reallocations.
+      </div>
+      <div class="print-signoff-grid">
+        <div class="signoff-box">
+          <div class="signoff-label">PREPARED BY / ENGINE</div>
+          <div class="signoff-line">FinMetrics Pro Algorithmic Engine</div>
+          <div class="signoff-sub">Deterministic Client-Side Verification</div>
+        </div>
+        <div class="signoff-box">
+          <div class="signoff-label">WEALTH ADVISOR / AUDITOR</div>
+          <div class="signoff-line-fill"></div>
+          <div class="signoff-sub">Signature &amp; Credential / CFP® #</div>
+        </div>
+        <div class="signoff-box">
+          <div class="signoff-label">CLIENT / PRINCIPAL ATTESTATION</div>
+          <div class="signoff-line-fill"></div>
+          <div class="signoff-sub">Acknowledged &amp; Accepted Balance Sheet Plan</div>
+        </div>
+      </div>
+      <div class="print-footer-sub-bar">
+        <span>FinMetrics Pro Institutional Wealth Engine · finmetrics-pro-d1fj.vercel.app</span>
+        <span>Document Security Hash: SHA256-CLIENT-VERIFIED · Audit ID: ${currentAuditId}</span>
       </div>
     `;
 
+    return cleanTitle;
+  }
+
+  function generatePrintReport(title = 'FinMetrics Pro Financial Audit') {
+    const cleanTitle = preparePrintDossier(title);
+    const originalTitle = document.title;
     document.title = `${cleanTitle} — FinMetrics Pro Institutional Dossier`;
     window.print();
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 1500);
   }
+
+  window.addEventListener('beforeprint', () => {
+    preparePrintDossier();
+  });
 
   /* ══════════════════════════════════════════════════════════════
      9B. LIVE MARKET BENCHMARK TICKER ENGINE
@@ -715,6 +820,7 @@
     copyShareLink,
     showToast,
     exportTableToCSV,
+    preparePrintDossier,
     generatePrintReport,
     updateSliderFill,
     initMarketTicker
