@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compound Interest &amp; SIP Wealth Engine — FinMetrics Pro</title>
+  <title>Compound Interest &amp; Investment Calculator — FinMetrics Pro</title>
   <meta name="description" content="Simulate portfolio growth with monthly deposits, compounding frequency, inflation-adjusted purchasing power, and annual schedule exports. 100% private.">
   <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/compound-interest/">
   
@@ -43,7 +43,8 @@
           <li><a href="../../index.html#investing" class="nav-link active">Investing</a></li>
           <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
           <li><a href="../../index.html#debt" class="nav-link">Debt &amp; Loans</a></li>
-          <li><a href="../../index.html#editorial" class="nav-link">Guides</a></li>
+          <li><a href="../../methodology.html" class="nav-link">Methodology</a></li>
+          <li><a href="../../about.html" class="nav-link">About</a></li>
         </ul>
       </nav>
 
@@ -65,7 +66,7 @@
           </select>
         </div>
 
-        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">🌙</button>
       </div>
     </div>
   </header>
@@ -73,6 +74,7 @@
   <!-- ADSENSE LEADERBOARD UNIT -->
   <div class="shell" style="margin-top:20px;">
     <div class="adsense-unit adsense-leaderboard" id="adUnit-calc-top">
+      <div class="adsense-label">Advertisement</div>
       <!-- Google AdSense 728x90 Top Leaderboard -->
     </div>
   </div>
@@ -80,28 +82,20 @@
   <!-- MAIN -->
   <main class="shell" id="mainContent">
 
-    <!-- Breadcrumb & Scenario Naming Bar -->
-    <div class="breadcrumb-scenario-bar">
-      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-        <ol class="breadcrumbs">
-          <li><a href="../../index.html">Home</a></li>
-          <li class="sep">/</li>
-          <li><a href="../../index.html#investing">Investing</a></li>
-          <li class="sep">/</li>
-          <li class="current">Compound Interest Calculator</li>
-        </ol>
-      </nav>
-
-      <div class="scenario-name-wrap">
-        <span class="scenario-name-label">Portfolio Scenario:</span>
-        <input type="text" id="scenarioName" class="scenario-name-input" value="My Retirement Growth Plan" aria-label="Scenario Plan Name">
-      </div>
-    </div>
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <ol class="breadcrumbs">
+        <li><a href="../../index.html">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="../../index.html#investing">Investing</a></li>
+        <li class="sep">/</li>
+        <li class="current">Compound Interest Calculator</li>
+      </ol>
+    </nav>
 
     <!-- Header Wrap -->
     <div class="calc-header-wrap">
-      <span class="calc-title-badge">📈 Wealth Engine</span>
-      <h1 class="calc-main-title">Compound Interest &amp; SIP Wealth Engine</h1>
+      <span class="calc-title-badge">Wealth Engine</span>
+      <h1 class="calc-main-title">Compound Interest &amp; Investment Calculator</h1>
       <p class="calc-lead-desc">
         Project your long-term wealth accumulation through exponential compounding. Adjust monthly contributions, expected annual rate of return, and inflation to view exact purchasing power.
       </p>
@@ -110,8 +104,8 @@
     <!-- Scenario Comparison Toggle Bar -->
     <div class="comparison-toggle-bar">
       <div class="toggle-info">
-        <span class="new-badge">NEW</span>
-        <span>Benchmark Comparison: Compare your current plan against a conservative 6% index benchmark</span>
+        <span class="new-badge">BENCHMARK</span>
+        <span>Compare your custom portfolio return rate against a conservative 6.0% index benchmark</span>
       </div>
       <button id="comparisonModeBtn" class="btn-compare-toggle">
         <span>⇄</span> <span>Compare Scenarios</span>
@@ -121,15 +115,15 @@
     <div id="comparisonPanel" class="comparison-panel">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div>
-          <strong style="color:var(--emerald-400);">Scenario A (Your Custom Plan):</strong>
+          <strong style="color:var(--emerald-700);">Scenario A (Your Plan):</strong>
           <span id="cmpValA" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$416,589</span>
         </div>
         <div>
-          <strong style="color:var(--text-muted);">Scenario B (Conservative 6.0% Return):</strong>
+          <strong style="color:var(--text-muted);">Scenario B (6.0% Benchmark):</strong>
           <span id="cmpValB" style="font-family:var(--font-mono);margin-left:8px;" class="tnum">$254,120</span>
         </div>
         <div>
-          <strong style="color:var(--cyan-400);">Alpha Advantage:</strong>
+          <strong style="color:var(--blue-600);">Net Alpha Difference:</strong>
           <span id="cmpDiff" style="font-family:var(--font-mono);font-weight:700;margin-left:8px;" class="tnum">+$162,469</span>
         </div>
       </div>
@@ -146,7 +140,7 @@
         <div class="form-field">
           <div class="field-label-row">
             <label for="initialDeposit" class="field-label">Initial Investment</label>
-            <span class="field-help-icon" title="Your starting capital or lump-sum balance">?</span>
+            <span class="field-help-icon" title="Starting capital or lump-sum balance">?</span>
           </div>
           <div class="input-control-box">
             <span class="input-affix currency-affix">$</span>
@@ -161,7 +155,7 @@
         <!-- Monthly Contribution -->
         <div class="form-field">
           <div class="field-label-row">
-            <label for="monthlyDeposit" class="field-label">Monthly Contribution (SIP)</label>
+            <label for="monthlyDeposit" class="field-label">Monthly Contribution</label>
             <span class="field-help-icon" title="Amount added at the start of each month">?</span>
           </div>
           <div class="input-control-box">
@@ -178,7 +172,7 @@
         <div class="form-field">
           <div class="field-label-row">
             <label for="years" class="field-label">Investment Horizon</label>
-            <span class="tnum" id="yearsDisplay" style="color:var(--emerald-400);font-weight:700;">20 Years</span>
+            <span class="tnum" id="yearsDisplay" style="color:var(--emerald-700);font-weight:700;">20 Years</span>
           </div>
           <div class="input-control-box">
             <input type="number" id="years" class="calc-number-input no-prefix" value="20" min="1" max="50" step="1">
@@ -194,10 +188,10 @@
         <div class="form-field">
           <div class="field-label-row">
             <label for="rate" class="field-label">Expected Annual Return</label>
-            <span class="field-help-icon" title="S&amp;P 500 historic average is ~10% (nominal)">?</span>
+            <span class="field-help-icon" title="S&amp;P 500 historic average is ~10% nominal">?</span>
           </div>
           <div class="input-control-box">
-            <input type="number" id="rate" class="calc-number-input no-prefix" value="9.5" min="0.1" max="30" step="0.1">
+            <input type="number" id="rate" class="calc-number-input no-prefix" value="9.5" min="0" max="30" step="0.1">
             <span class="input-affix">% APR</span>
           </div>
           <div class="range-slider-wrap">
@@ -240,7 +234,6 @@
           <div class="metric-card hero-metric">
             <div class="metric-label">
               <span>Ending Balance</span>
-              <span>💰</span>
             </div>
             <div class="metric-val tnum" id="resEndingBalance">$416,589</div>
             <div class="metric-sub">Nominal future value</div>
@@ -249,7 +242,6 @@
           <div class="metric-card">
             <div class="metric-label">
               <span>Total Interest</span>
-              <span>📈</span>
             </div>
             <div class="metric-val tnum" id="resTotalInterest">$286,589</div>
             <div class="metric-sub" id="resInterestRatio">68.8% of portfolio</div>
@@ -258,30 +250,15 @@
           <div class="metric-card">
             <div class="metric-label">
               <span>Purchasing Power</span>
-              <span>🛡️</span>
             </div>
             <div class="metric-val tnum" id="resRealBalance">$240,115</div>
-            <div class="metric-sub">Adjusted for inflation</div>
+            <div class="metric-sub">Inflation-discounted</div>
           </div>
         </div>
 
-        <!-- Dynamic Smart Insight Banner -->
+        <!-- Smart Insight Banner -->
         <div class="smart-insight-banner">
-          <div class="insight-pulse-dot" aria-hidden="true"></div>
-          <div class="insight-content-text" id="insightText">
-            Over 20 years, your money earns <b id="insInterest">$286,589</b> in compound growth — which is more than double your actual out-of-pocket deposits (<b id="insDeposits">$130,000</b>)!
-          </div>
-        </div>
-
-        <!-- Wealth Milestone Timeline Tracker -->
-        <div class="milestone-timeline-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <h3 style="font-size:1.05rem;font-weight:700;">🎯 Portfolio Milestone Timeline</h3>
-            <span style="font-size:0.75rem;color:var(--emerald-400);font-weight:600;">Track Your Wealth Milestones</span>
-          </div>
-          <div class="milestone-track" id="milestoneTrack">
-            <!-- Populated dynamically by app.js -->
-          </div>
+          Over 20 years, your portfolio generates <b id="insInterest">$286,589</b> in cumulative compound interest — more than double your total out-of-pocket deposits (<b id="insDeposits">$130,000</b>).
         </div>
 
         <!-- Visual Chart Card -->
@@ -300,11 +277,11 @@
 
           <div class="chart-legend-row">
             <div class="legend-item">
-              <span class="legend-dot" style="background:#10b981;"></span>
+              <span class="legend-dot" style="background:#059669;"></span>
               <span>Total Interest</span>
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background:#3b82f6;"></span>
+              <span class="legend-dot" style="background:#2563eb;"></span>
               <span>Principal Contributed</span>
             </div>
           </div>
@@ -315,18 +292,16 @@
 
     <!-- ADSENSE MID RECTANGLE UNIT -->
     <div class="adsense-unit adsense-rectangle" id="adUnit-calc-mid">
+      <div class="adsense-label">Advertisement</div>
       <!-- Google AdSense 300x250 Mid Content -->
     </div>
-
-    <!-- AFFILIATE PARTNER OFFERS (AUTO INJECTED BY CORE.JS) -->
-    <section id="affiliateCardsContainer" aria-label="High-Yield Account Comparison"></section>
 
     <!-- Amortization / Year-by-Year Schedule -->
     <section class="schedule-table-card" aria-labelledby="scheduleHeading">
       <div class="table-head-cluster">
         <div>
           <h2 id="scheduleHeading" class="table-title">Annual Growth Breakdown Schedule</h2>
-          <p class="section-head-sub">Year-by-year mathematical accounting of deposits, earned interest, and balances.</p>
+          <p class="section-sub">Year-by-year mathematical accounting of deposits, earned interest, and balances.</p>
         </div>
         <div class="table-actions-cluster">
           <button class="btn-calc-secondary" id="exportCsvBtn">
@@ -360,11 +335,11 @@
     </section>
 
     <!-- Comprehensive Editorial & Financial Guide -->
-    <section class="editorial-content-section" aria-labelledby="guideHeading">
+    <section class="editorial-section" aria-labelledby="guideHeading">
       <article class="editorial-article">
         <h2 id="guideHeading">The Mathematics of Compounding: How Long-Term Wealth Accumulates</h2>
         <p>
-          Compound interest is often referred to as the eighth wonder of the world for a simple mathematical reason: unlike simple interest, which only yields returns on the initial principal sum, compound interest generates earnings on both the initial principal <em>and</em> the accumulated interest from prior periods.
+          Compound interest represents the exponential mathematical function of financial capital: returns in each period are calculated on both the original principal balance and the accumulated interest from all prior intervals.
         </p>
 
         <div class="formula-callout-box">
@@ -375,25 +350,30 @@
           </div>
         </div>
 
+        <h2>Nominal Returns vs. Real Purchasing Power</h2>
+        <p>
+          While nominal future values illustrate mathematical compounding, true purchasing power is governed by inflation. A portfolio of $1,000,000 thirty years in the future will not purchase the same basket of real goods as $1,000,000 today. Our calculator discounts future cash flows using standard historical inflation models to provide the real purchasing value in today's dollars.
+        </p>
+
         <h2>Frequently Asked Questions</h2>
-        <div class="faq-accordion-wrap">
-          <details class="faq-item" open>
-            <summary class="faq-question">What is a realistic annual rate of return to assume?</summary>
-            <div class="faq-answer">
+        <div class="faq-wrap">
+          <details class="faq-card" open>
+            <summary class="faq-header">What is a realistic annual rate of return to assume?</summary>
+            <div class="faq-body">
               Historically, the S&amp;P 500 index has generated an average annualized nominal return of approximately 10% over the last 90 years (before inflation). When adjusted for inflation, real returns have averaged between 6.5% and 7.0%. For conservative financial planning, most advisors recommend modeling returns between 7% and 9%.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary class="faq-question">How does compounding frequency impact returns?</summary>
-            <div class="faq-answer">
+          <details class="faq-card">
+            <summary class="faq-header">How does compounding frequency impact returns?</summary>
+            <div class="faq-body">
               The more frequently interest is calculated and added to the principal balance (daily vs. monthly vs. annually), the faster the balance grows. However, the difference between monthly and daily compounding is relatively minor due to the mathematical limits of continuous compounding.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary class="faq-question">What is the "Rule of 72"?</summary>
-            <div class="faq-answer">
+          <details class="faq-card">
+            <summary class="faq-header">What is the "Rule of 72"?</summary>
+            <div class="faq-body">
               The Rule of 72 is a quick mental math shortcut to estimate how many years it takes for an investment to double at a given annual interest rate. Simply divide 72 by your interest rate. For example, at an 8% annual return, your money doubles in approximately 9 years (72 ÷ 8 = 9).
             </div>
           </details>
@@ -436,7 +416,7 @@
             <div class="brand-logo-icon">F</div>
             <div class="brand-name">FinMetrics <span>Pro</span></div>
           </div>
-          <p class="footer-brand-bio">
+          <p class="footer-bio">
             Institutional-grade financial engineering tools, wealth accumulation engines, and debt elimination simulators engineered with pure client-side precision.
           </p>
         </div>

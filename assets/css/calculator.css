@@ -1,11 +1,11 @@
 /* ==========================================================================
    FINMETRICS PRO — CALCULATOR WORKBENCH DESIGN SYSTEM
-   Two-Column Responsive Architecture, Interactive Sliders, Charts & Tables
+   Authoritative 2-Column Responsive Architecture, Sliders, Charts & Tables
    ========================================================================== */
 
 /* Breadcrumb Navigation */
 .breadcrumb-nav {
-  padding: 16px 0 24px;
+  padding: 16px 0 20px;
 }
 
 .breadcrumbs {
@@ -13,17 +13,18 @@
   align-items: center;
   gap: 8px;
   list-style: none;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 .breadcrumbs a {
   color: var(--text-secondary);
+  font-weight: 500;
   transition: color var(--transition-fast);
 }
 
 .breadcrumbs a:hover {
-  color: var(--emerald-400);
+  color: var(--emerald-600);
 }
 
 .breadcrumbs .sep {
@@ -31,8 +32,8 @@
 }
 
 .breadcrumbs .current {
-  color: var(--text-primary);
-  font-weight: 500;
+  color: var(--text-main);
+  font-weight: 600;
 }
 
 /* Calculator Header */
@@ -48,18 +49,25 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.12);
-  color: var(--emerald-400);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--emerald-50);
+  color: var(--emerald-700);
+  border: 1px solid var(--emerald-100);
   margin-bottom: 12px;
 }
 
+[data-theme="dark"] .calc-title-badge {
+  background: rgba(5, 150, 105, 0.15);
+  color: #34d399;
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
 .calc-main-title {
-  font-size: 2.35rem;
+  font-size: 2.25rem;
   font-weight: 800;
   letter-spacing: -0.025em;
+  color: var(--text-main);
   margin-bottom: 10px;
 }
 
@@ -71,43 +79,115 @@
 }
 
 /* ==========================================================================
+   SCENARIO COMPARISON MATRIX (A VS B BENCHMARK)
+   ========================================================================== */
+.comparison-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--emerald-600);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-xs);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.toggle-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.new-badge {
+  background: var(--emerald-600);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.btn-compare-toggle {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-medium);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-compare-toggle:hover {
+  background: var(--emerald-50);
+  border-color: var(--emerald-600);
+  color: var(--emerald-700);
+}
+
+.comparison-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  display: none;
+  box-shadow: var(--shadow-xs);
+}
+
+.comparison-panel.active {
+  display: block;
+}
+
+/* ==========================================================================
    TWO-COLUMN WORKBENCH
    ========================================================================== */
 .calc-workbench-grid {
   display: grid;
-  grid-template-columns: 460px 1fr;
+  grid-template-columns: 440px 1fr;
   gap: 32px;
   align-items: start;
-  margin-bottom: 56px;
+  margin-bottom: 48px;
 }
 
-/* Left Pane: Inputs Panel */
+/* Left: Form Input Pane */
 .calc-inputs-pane {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
-  padding: 32px 28px;
-  box-shadow: var(--shadow-md);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .input-group-title {
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.825rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-light);
   margin-bottom: 4px;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .field-label-row {
@@ -117,9 +197,9 @@
 }
 
 .field-label {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -132,11 +212,12 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--bg-card);
+  background: var(--bg-subtle);
   color: var(--text-muted);
   font-size: 0.7rem;
+  font-weight: 700;
   cursor: help;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
 }
 
 .input-control-box {
@@ -144,19 +225,19 @@
   display: flex;
   align-items: center;
   background: var(--bg-input);
-  border: 1.5px solid var(--border-subtle);
+  border: 1.5px solid var(--border-medium);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
 }
 
 .input-control-box:focus-within {
-  border-color: var(--emerald-500);
-  box-shadow: 0 0 0 3px var(--emerald-glow);
-  background: var(--bg-card);
+  border-color: var(--emerald-600);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  background: var(--bg-surface);
 }
 
 .input-affix {
-  padding: 0 14px;
+  padding: 0 12px;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -165,20 +246,22 @@
 
 .calc-number-input {
   flex: 1;
-  padding: 12px 14px 12px 0;
+  padding: 10px 12px 10px 0;
   font-family: var(--font-mono);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-main);
   outline: none;
+  border: none;
+  background: transparent;
   width: 100%;
 }
 
 .calc-number-input.no-prefix {
-  padding-left: 14px;
+  padding-left: 12px;
 }
 
-/* Modern Range Slider */
+/* Range Slider */
 .range-slider-wrap {
   margin-top: 4px;
 }
@@ -188,11 +271,10 @@
   appearance: none;
   width: 100%;
   height: 6px;
-  background: var(--border-subtle);
+  background: var(--border-light);
   border-radius: 999px;
   outline: none;
   cursor: pointer;
-  transition: background var(--transition-fast);
 }
 
 .calc-range-slider::-webkit-slider-thumb {
@@ -201,9 +283,9 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--emerald-400);
-  border: 2px solid #020617;
-  box-shadow: 0 0 10px var(--emerald-glow);
+  background: var(--emerald-600);
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: transform var(--transition-fast);
 }
@@ -216,52 +298,55 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--emerald-400);
-  border: 2px solid #020617;
+  background: var(--emerald-600);
+  border: 2px solid #ffffff;
   cursor: pointer;
 }
 
 .slider-limits {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.725rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
   margin-top: 4px;
 }
 
-/* Button Group / Radio Chips */
+/* Segmented Chips */
 .segmented-chips {
   display: flex;
-  background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 4px;
-  gap: 4px;
+  padding: 3px;
+  gap: 3px;
 }
 
 .chip-btn {
   flex: 1;
-  padding: 8px 12px;
+  padding: 7px 10px;
   border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   font-weight: 600;
   color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
   text-align: center;
   transition: all var(--transition-fast);
 }
 
 .chip-btn.active {
-  background: var(--bg-card);
-  color: var(--emerald-400);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--emerald-700);
+  box-shadow: var(--shadow-xs);
+  font-weight: 700;
 }
 
-/* Actions Row in Left Pane */
+/* Action Buttons */
 .calc-quick-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-top: 8px;
 }
 
@@ -270,25 +355,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  gap: 6px;
+  padding: 9px 14px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-medium);
   border-radius: var(--radius-md);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-calc-secondary:hover {
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-  background: var(--bg-card-hover);
+  border-color: var(--emerald-600);
+  color: var(--text-main);
+  background: var(--bg-surface);
 }
 
 /* ==========================================================================
-   RIGHT PANE: RESULTS & VISUALIZATIONS
+   RIGHT PANE: SUMMARY METRICS & CHARTS
    ========================================================================== */
 .calc-results-pane {
   display: flex;
@@ -296,7 +382,6 @@
   gap: 24px;
 }
 
-/* Primary Metric Cards Grid */
 .primary-metrics-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -305,27 +390,31 @@
 
 .metric-card {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 22px 20px;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
+  padding: 20px 18px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
 }
 
 .metric-card.hero-metric {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, var(--bg-surface) 100%);
-  border-color: rgba(16, 185, 129, 0.35);
-  box-shadow: var(--shadow-glow);
+  background: var(--emerald-50);
+  border-color: var(--emerald-100);
+}
+
+[data-theme="dark"] .metric-card.hero-metric {
+  background: rgba(5, 150, 105, 0.12);
+  border-color: rgba(5, 150, 105, 0.25);
 }
 
 .metric-label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.775rem;
+  font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -335,65 +424,53 @@
   font-size: 1.85rem;
   font-weight: 800;
   font-family: var(--font-mono);
-  color: var(--text-primary);
+  color: var(--text-main);
   letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .metric-card.hero-metric .metric-val {
-  color: var(--emerald-400);
+  color: var(--emerald-700);
+}
+
+[data-theme="dark"] .metric-card.hero-metric .metric-val {
+  color: #34d399;
 }
 
 .metric-sub {
   font-size: 0.8rem;
   color: var(--text-secondary);
-  margin-top: 6px;
 }
 
 /* Smart Insight Callout Banner */
 .smart-insight-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 18px 22px;
-  border-radius: var(--radius-lg);
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: var(--text-primary);
-}
-
-.insight-pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--emerald-400);
-  box-shadow: 0 0 12px var(--emerald-400);
-  margin-top: 6px;
-  flex-shrink: 0;
-  animation: pulseGlow 2s infinite;
-}
-
-@keyframes pulseGlow {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.7; }
-}
-
-.insight-content-text {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  border-left: 4px solid var(--emerald-600);
+  border-top: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-main);
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-.insight-content-text b {
-  color: var(--emerald-400);
+.smart-insight-banner b {
+  color: var(--emerald-700);
+}
+
+[data-theme="dark"] .smart-insight-banner b {
+  color: #34d399;
 }
 
 /* Chart Container Card */
 .chart-container-card {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
   padding: 24px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .chart-card-header {
@@ -401,12 +478,14 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .chart-card-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-main);
 }
 
 .chart-canvas-wrap {
@@ -415,7 +494,6 @@
   width: 100%;
 }
 
-/* Breakdown Legends */
 .chart-legend-row {
   display: flex;
   align-items: center;
@@ -423,8 +501,9 @@
   gap: 24px;
   margin-top: 16px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
+  flex-wrap: wrap;
 }
 
 .legend-item {
@@ -436,19 +515,19 @@
 .legend-dot {
   width: 10px;
   height: 10px;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 /* ==========================================================================
-   AMORTIZATION & BREAKDOWN TABLE
+   AMORTIZATION SCHEDULE TABLE
    ========================================================================== */
 .schedule-table-card {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-xl);
   padding: 28px;
-  box-shadow: var(--shadow-md);
-  margin-bottom: 56px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 48px;
 }
 
 .table-head-cluster {
@@ -456,23 +535,26 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .table-title {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-main);
 }
 
 .table-actions-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .table-responsive-box {
   overflow-x: auto;
   max-height: 480px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
 }
 
@@ -480,19 +562,19 @@
   width: 100%;
   border-collapse: collapse;
   text-align: right;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .fin-data-table th, .fin-data-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .fin-data-table th {
-  background: var(--bg-card);
+  background: var(--bg-subtle);
   color: var(--text-muted);
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   position: sticky;
@@ -502,366 +584,57 @@
 
 .fin-data-table td {
   font-family: var(--font-mono);
-  color: var(--text-primary);
+  color: var(--text-main);
 }
 
 .fin-data-table tr:hover td {
-  background: var(--bg-card-hover);
+  background: var(--bg-subtle);
 }
 
 .fin-data-table th:first-child, .fin-data-table td:first-child {
   text-align: left;
 }
 
-/* ==========================================================================
-   EDITORIAL & METHODOLOGY SECTION (E-E-A-T)
-   ========================================================================== */
-.editorial-content-section {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: 48px;
-  margin-bottom: 56px;
-}
-
-.editorial-article h2 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-top: 36px;
-  margin-bottom: 16px;
-  color: var(--text-primary);
-}
-
-.editorial-article h2:first-child {
-  margin-top: 0;
-}
-
-.editorial-article h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-top: 24px;
-  margin-bottom: 12px;
-  color: var(--text-primary);
-}
-
-.editorial-article p {
-  font-size: 1.025rem;
-  color: var(--text-secondary);
-  line-height: 1.75;
-  margin-bottom: 20px;
-}
-
-.editorial-article ul, .editorial-article ol {
-  margin-left: 24px;
-  margin-bottom: 24px;
-  color: var(--text-secondary);
-  line-height: 1.75;
-}
-
-.editorial-article li {
-  margin-bottom: 8px;
-}
-
-/* Mathematical Formula Callout Box */
+/* Formula Callout */
 .formula-callout-box {
-  background: var(--bg-card);
-  border-left: 4px solid var(--emerald-500);
+  background: var(--bg-subtle);
+  border-left: 4px solid var(--primary-navy);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  padding: 24px;
-  margin: 28px 0;
-  border-top: 1px solid var(--border-subtle);
-  border-right: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 20px 24px;
+  margin: 24px 0;
+  border-top: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+[data-theme="dark"] .formula-callout-box {
+  border-left-color: var(--emerald-600);
 }
 
 .formula-title {
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--emerald-400);
-  margin-bottom: 8px;
+  color: var(--emerald-700);
+  margin-bottom: 6px;
 }
 
 .formula-display {
   font-family: var(--font-mono);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  padding: 10px 0;
+  color: var(--text-main);
+  padding: 8px 0;
 }
 
 .formula-legend {
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   FAQ ACCORDION
-   ========================================================================== */
-.faq-accordion-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.faq-item {
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-  overflow: hidden;
-  transition: all var(--transition-fast);
-}
-
-.faq-item[open] {
-  border-color: var(--border-hover);
-  background: var(--bg-card-hover);
-}
-
-.faq-question {
-  padding: 18px 22px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-}
-
-.faq-question::-webkit-details-marker {
-  display: none;
-}
-
-.faq-question::after {
-  content: "+";
-  font-size: 1.4rem;
-  font-weight: 400;
-  color: var(--text-muted);
-  transition: transform var(--transition-fast);
-}
-
-.faq-item[open] .faq-question::after {
-  content: "−";
-  color: var(--emerald-400);
-}
-
-.faq-answer {
-  padding: 0 22px 20px;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.65;
-}
-
-/* ==========================================================================
-   PRINT & PDF EXPORT STYLES
-   ========================================================================== */
-@media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-  .site-header, .site-footer, .calc-inputs-pane, .calc-quick-actions, .table-actions-cluster, .breadcrumb-nav {
-    display: none !important;
-  }
-  .calc-workbench-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .metric-card, .chart-container-card, .schedule-table-card {
-    border: 1px solid #ccc !important;
-    box-shadow: none !important;
-    page-break-inside: avoid;
-  }
-}
-
-/* ==========================================================================
-   SCENARIO NAMING & COMPARISON MODE
-   ========================================================================== */
-.breadcrumb-scenario-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.scenario-name-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 6px 14px;
-}
-
-.scenario-name-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.scenario-name-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--emerald-400);
-  font-family: var(--font-sans);
-  min-width: 180px;
-}
-
-.comparison-toggle-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 12px 20px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.toggle-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.new-badge {
-  background: var(--emerald-500);
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-}
-
-.btn-compare-toggle {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-  border-radius: var(--radius-md);
-  padding: 8px 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all var(--transition-fast);
-}
-
-.btn-compare-toggle:hover {
-  border-color: var(--emerald-400);
-  color: var(--emerald-400);
-}
-
-.comparison-panel {
-  background: var(--bg-card);
-  border: 1px dashed var(--border-hover);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-top: 16px;
-  display: none;
-}
-
-.comparison-panel.active {
-  display: block;
-}
-
-/* ==========================================================================
-   MILESTONE TIMELINE TRACKER
-   ========================================================================== */
-.milestone-timeline-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 24px;
-}
-
-.milestone-track {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  margin-top: 24px;
-  padding: 0 16px;
-}
-
-.milestone-track::before {
-  content: '';
-  position: absolute;
-  top: 12px;
-  left: 20px;
-  right: 20px;
-  height: 3px;
-  background: var(--border-subtle);
-  z-index: 1;
-}
-
-.milestone-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.milestone-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 2px solid var(--border-subtle);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  transition: all var(--transition-fast);
-}
-
-.milestone-step.achieved .milestone-dot {
-  background: var(--emerald-500);
-  border-color: var(--emerald-400);
-  color: #fff;
-  box-shadow: 0 0 10px var(--emerald-glow);
-}
-
-.milestone-val {
-  font-size: 0.85rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--text-primary);
-}
-
-.milestone-sub {
-  font-size: 0.725rem;
-  color: var(--text-muted);
-}
-
-/* ==========================================================================
-   RELATED TOOLS CROSS-LINKING GRID
-   ========================================================================== */
+/* Related Tools */
 .related-tools-section {
   margin: 48px 0 24px;
 }
@@ -869,6 +642,7 @@
 .related-tools-title {
   font-size: 1.35rem;
   font-weight: 800;
+  color: var(--text-main);
   margin-bottom: 20px;
 }
 
@@ -880,24 +654,26 @@
 
 .related-tool-card {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
 }
 
 .related-tool-card:hover {
-  border-color: var(--emerald-500);
-  transform: translateY(-3px);
+  border-color: var(--emerald-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .related-tool-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-main);
 }
 
 .related-tool-desc {
@@ -908,22 +684,55 @@
 
 .related-tool-link {
   font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--emerald-400);
+  font-weight: 700;
+  color: var(--emerald-600);
   margin-top: auto;
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-@media (max-width: 768px) {
-  .related-tools-grid {
-    grid-template-columns: 1fr;
+/* ==========================================================================
+   PRINT / PDF STYLESHEET
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
   }
-  .milestone-track {
-    overflow-x: auto;
-    padding-bottom: 12px;
+  .site-header, .site-footer, .calc-inputs-pane, .calc-quick-actions, .table-actions-cluster, .breadcrumb-nav, .adsense-unit, .comparison-toggle-bar {
+    display: none !important;
+  }
+  .calc-workbench-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .metric-card, .chart-container-card, .schedule-table-card {
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
   }
 }
 
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 1080px) {
+  .calc-workbench-grid {
+    grid-template-columns: 1fr;
+  }
+  .calc-inputs-pane {
+    max-width: 100%;
+  }
+}
 
+@media (max-width: 768px) {
+  .primary-metrics-row {
+    grid-template-columns: 1fr;
+  }
+  .related-tools-grid {
+    grid-template-columns: 1fr;
+  }
+  .calc-main-title {
+    font-size: 1.85rem;
+  }
+}

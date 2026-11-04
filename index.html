@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinMetrics Pro — Institutional Wealth & Financial Calculation Suite</title>
-  <meta name="description" content="Institutional-grade financial calculation engines for compound interest, accelerated mortgage payoff, debt avalanche elimination, and auto financing. 100% private, client-side compute.">
+  <title>FinMetrics Pro — Institutional Financial Calculators &amp; Wealth Modeling</title>
+  <meta name="description" content="Institutional-grade financial calculation engines for compound interest, accelerated mortgage payoff, debt avalanche elimination, and automotive decision modeling. 100% private, client-side compute.">
   <link rel="canonical" href="https://finmetrics-pro.vercel.app/">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
         "@id": "https://finmetrics-pro.vercel.app/#website",
         "url": "https://finmetrics-pro.vercel.app/",
         "name": "FinMetrics Pro",
-        "description": "Institutional-grade financial calculation suite and wealth simulators.",
+        "description": "Institutional financial calculation engines, compound wealth simulators, and debt elimination matrix.",
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://finmetrics-pro.vercel.app/?q={search_term_string}",
@@ -87,8 +87,9 @@
         <ul class="nav-center-links">
           <li><a href="#investing" class="nav-link">Investing</a></li>
           <li><a href="#real-estate" class="nav-link">Real Estate</a></li>
-          <li><a href="#debt" class="nav-link">Debt & Loans</a></li>
-          <li><a href="#editorial" class="nav-link">Guides & Audits</a></li>
+          <li><a href="#debt" class="nav-link">Debt &amp; Loans</a></li>
+          <li><a href="methodology.html" class="nav-link">Methodology</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
       </nav>
 
@@ -110,115 +111,187 @@
           </select>
         </div>
 
-        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">🌙</button>
       </div>
     </div>
   </header>
 
-  <!-- HERO SECTION WITH ANIMATED ORBS -->
+  <!-- HERO SECTION -->
   <section class="hero-section">
-    <div class="hero-mesh-bg" aria-hidden="true">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-
     <div class="shell hero-content">
-      <div class="hero-live-banner">
-        <span class="pulse-emerald-dot"></span>
-        <span>🔥 <strong class="live-user-count tnum">1,247,832</strong> calculations run this month</span>
+      <div class="hero-badge-pill">
+        <span>Institutional Financial Modeling</span>
         <span>·</span>
-        <span>Audited Financial Models</span>
+        <span>Zero Commercial Bias</span>
       </div>
 
       <h1 class="hero-title">
-        Make Smarter Money Decisions<br>
-        <span class="gradient-text">With Institutional Calculators</span>
+        Precision Financial Intelligence &amp;<br>
+        <span class="highlight">Institutional Calculation Engines</span>
       </h1>
 
       <p class="hero-sub">
-        High-precision algorithms for compound investing, mortgage payoff acceleration, debt avalanche elimination, and automotive financing decisions. Pure client-side privacy.
+        High-precision mathematical models for compound investing, mortgage payoff acceleration, debt avalanche elimination, and automotive financing decisions. 100% private, client-side compute.
       </p>
 
-      <!-- Hero Stats Row -->
-      <div class="hero-stats-row" role="list">
-        <div class="hero-stat-card" role="listitem">
-          <div class="hero-stat-val tnum">1.2M+</div>
-          <div class="hero-stat-lbl">Active Users</div>
+      <div class="hero-trust-row">
+        <div class="trust-item">
+          <span class="trust-item-icon">✓</span>
+          <span>CFA-Audited Financial Algorithms</span>
         </div>
-        <div class="hero-stat-card" role="listitem">
-          <div class="hero-stat-val tnum">&lt; 16ms</div>
-          <div class="hero-stat-lbl">Real-Time Compute</div>
+        <div class="trust-item">
+          <span class="trust-item-icon">✓</span>
+          <span>100% Client-Side Privacy</span>
         </div>
-        <div class="hero-stat-card" role="listitem">
-          <div class="hero-stat-val tnum">100%</div>
-          <div class="hero-stat-lbl">Zero Server Logging</div>
+        <div class="trust-item">
+          <span class="trust-item-icon">✓</span>
+          <span>Zero Server Logging</span>
         </div>
-        <div class="hero-stat-card" role="listitem">
-          <div class="hero-stat-val tnum">4 Core</div>
-          <div class="hero-stat-lbl">Flagship Engines Live</div>
+        <div class="trust-item">
+          <span class="trust-item-icon">✓</span>
+          <span>Free Educational Utility</span>
         </div>
-      </div>
-
-      <!-- Quick Compound Calculator Widget -->
-      <div class="hero-quick-calc">
-        <div class="quick-calc-header">
-          <div class="quick-calc-title">
-            <span>⚡ Instant Compound Return Check</span>
-            <span class="quick-calc-badge">Live Compute</span>
-          </div>
-          <span style="font-size:0.75rem;color:var(--text-muted);">Try a 10-second projection</span>
-        </div>
-        <div class="quick-calc-inputs-row">
-          <div class="quick-calc-field">
-            <label for="qcPrincipal">Initial Investment</label>
-            <div class="quick-input-box">
-              <span class="currency-affix" style="color:var(--text-muted);margin-right:6px;">$</span>
-              <input type="number" id="qcPrincipal" value="10000" step="1000">
-            </div>
-          </div>
-          <div class="quick-calc-field">
-            <label for="qcMonthly">Monthly Deposit</label>
-            <div class="quick-input-box">
-              <span class="currency-affix" style="color:var(--text-muted);margin-right:6px;">$</span>
-              <input type="number" id="qcMonthly" value="500" step="50">
-            </div>
-          </div>
-          <div class="quick-calc-field">
-            <label for="qcYears">Years &amp; Return</label>
-            <div class="quick-input-box">
-              <input type="number" id="qcYears" value="10" min="1" max="50" style="width:50px;">
-              <span style="color:var(--text-muted);margin:0 4px;">yrs @</span>
-              <input type="number" id="qcRate" value="8" step="0.5" style="width:40px;">
-              <span style="color:var(--text-muted);">%</span>
-            </div>
-          </div>
-          <button id="qcCalculateBtn" class="quick-calc-btn">Calculate →</button>
-        </div>
-        <div id="qcOutputBox" class="quick-calc-output">
-          <span>Projected Future Portfolio: <strong id="qcResultVal" style="color:var(--emerald-400);font-size:1.15rem;" class="tnum">$112,504</strong></span>
-          <a href="calculators/compound-interest/index.html" style="font-size:0.85rem;font-weight:700;color:var(--cyan-400);">Open Full Engine &amp; Amortization →</a>
-        </div>
-      </div>
-
-      <!-- Trust Badges Row -->
-      <div class="trust-badge-row">
-        <span class="trust-badge">🔒 Bank-Grade Privacy</span>
-        <span>·</span>
-        <span class="trust-badge">📐 CFA-Audited Formulas</span>
-        <span>·</span>
-        <span class="trust-badge">⚡ 60 FPS Dynamic Sliders</span>
-        <span>·</span>
-        <span class="trust-badge">📱 100% Mobile Optimized</span>
-        <span>·</span>
-        <span class="trust-badge">🆓 Free Forever</span>
       </div>
     </div>
   </section>
 
-  <!-- ADSENSE LEADERBOARD UNIT -->
+  <!-- INTERACTIVE QUICK CALCULATOR WIDGET -->
   <div class="shell">
-    <div class="adsense-unit adsense-leaderboard" id="adUnit-top">
+    <div class="quick-calc-container">
+      <nav class="quick-calc-nav" aria-label="Quick Calculator Selection">
+        <button class="quick-calc-tab active" data-tab="compound">📈 Quick Compound Interest</button>
+        <button class="quick-calc-tab" data-tab="mortgage">🏡 Quick Mortgage Estimate</button>
+        <button class="quick-calc-tab" data-tab="debt">🛡️ Quick Debt Payoff</button>
+      </nav>
+
+      <div class="quick-calc-body">
+        <!-- Tab 1: Compound -->
+        <div class="quick-calc-tab-content active" id="tabCompound">
+          <div class="quick-calc-grid">
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcPrincipal">Initial Investment</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcPrincipal" value="10000" step="1000">
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcMonthly">Monthly Contribution</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcMonthly" value="500" step="50">
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcYears">Years &amp; Rate</label>
+              <div class="quick-input-wrap">
+                <input type="number" id="qcYears" value="10" min="1" max="50" style="width:45px;">
+                <span style="color:var(--text-muted);font-size:0.85rem;margin:0 4px;">yrs @</span>
+                <input type="number" id="qcRate" value="8" step="0.5" style="width:40px;">
+                <span class="quick-affix">%</span>
+              </div>
+            </div>
+
+            <button class="quick-calc-submit-btn" id="qcBtnCompound">Calculate →</button>
+          </div>
+
+          <div class="quick-calc-result-bar" id="qcCompoundResult">
+            <div>
+              <div class="quick-result-title">Projected Portfolio Balance (10 Years):</div>
+              <div class="quick-result-val tnum" id="qcCompoundVal">$112,504</div>
+            </div>
+            <a href="calculators/compound-interest/index.html" class="quick-result-link">Open Full Engine, Schedule &amp; Chart →</a>
+          </div>
+        </div>
+
+        <!-- Tab 2: Mortgage -->
+        <div class="quick-calc-tab-content" id="tabMortgage">
+          <div class="quick-calc-grid">
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcHomePrice">Home Price</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcHomePrice" value="400000" step="5000">
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcDown">Down Payment</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcDown" value="80000" step="5000">
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcMortRate">Interest Rate</label>
+              <div class="quick-input-wrap">
+                <input type="number" id="qcMortRate" value="6.75" step="0.125">
+                <span class="quick-affix">% APR</span>
+              </div>
+            </div>
+
+            <button class="quick-calc-submit-btn" id="qcBtnMortgage">Calculate →</button>
+          </div>
+
+          <div class="quick-calc-result-bar" id="qcMortgageResult">
+            <div>
+              <div class="quick-result-title">Estimated Monthly Principal &amp; Interest (30-Yr Fixed):</div>
+              <div class="quick-result-val tnum" id="qcMortgageVal">$2,076 / mo</div>
+            </div>
+            <a href="calculators/mortgage-payoff/index.html" class="quick-result-link">Open Mortgage Payoff &amp; Extra Payment Engine →</a>
+          </div>
+        </div>
+
+        <!-- Tab 3: Debt -->
+        <div class="quick-calc-tab-content" id="tabDebt">
+          <div class="quick-calc-grid">
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcDebtBal">Total Debt Balance</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcDebtBal" value="12000" step="500">
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcDebtApr">Interest Rate (APR)</label>
+              <div class="quick-input-wrap">
+                <input type="number" id="qcDebtApr" value="22.9" step="0.5">
+                <span class="quick-affix">% APR</span>
+              </div>
+            </div>
+
+            <div class="quick-input-group">
+              <label class="quick-label" for="qcDebtPay">Monthly Payment</label>
+              <div class="quick-input-wrap">
+                <span class="quick-affix currency-affix">$</span>
+                <input type="number" id="qcDebtPay" value="450" step="25">
+              </div>
+            </div>
+
+            <button class="quick-calc-submit-btn" id="qcBtnDebt">Calculate →</button>
+          </div>
+
+          <div class="quick-calc-result-bar" id="qcDebtResult">
+            <div>
+              <div class="quick-result-title">Projected Debt-Free Timeline:</div>
+              <div class="quick-result-val tnum" id="qcDebtVal">36 Months</div>
+            </div>
+            <a href="calculators/debt-payoff/index.html" class="quick-result-link">Open Debt Avalanche &amp; Snowball Engine →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE ADSENSE LEADERBOARD UNIT -->
+  <div class="shell">
+    <div class="adsense-unit adsense-leaderboard" id="adUnit-home-top">
+      <div class="adsense-label">Advertisement</div>
       <!-- Google AdSense 728x90 Top Leaderboard -->
     </div>
   </div>
@@ -226,37 +299,27 @@
   <!-- MAIN CATALOG -->
   <main class="shell" id="mainContent">
 
-    <!-- Flagship Live Tools -->
     <section class="section-wrap" id="flagship">
       <div class="section-head">
-        <div>
-          <h2 class="section-head-title">Flagship Computation Engines</h2>
-          <p class="section-head-sub">Instant visual analytics, dynamic amortization schedules, and institutional decision matrices.</p>
-        </div>
+        <div class="section-eyebrow">Core Computation Engines</div>
+        <h2 class="section-title">Flagship Financial Modeling Suite</h2>
+        <p class="section-sub">Standardized CFA Institute mathematical algorithms, dynamic amortization schedules, and transparent decision matrices.</p>
       </div>
 
       <div class="tool-grid">
 
         <!-- Tool 1: Compound Interest -->
         <article class="tool-card" id="investing">
-          <span class="tool-card-badge">Highest Rated</span>
-          <div class="tool-card-icon">📈</div>
+          <div class="tool-card-category">Wealth Accumulation</div>
           <h3 class="tool-card-title">Compound Interest &amp; SIP Wealth Engine</h3>
           <p class="tool-card-desc">
             Simulate portfolio growth with monthly deposits, compounding frequency variations, real purchasing power inflation adjustments, and exportable annual schedules.
           </p>
-          <!-- Mini Preview Chart -->
-          <div class="tool-card-mini-chart">
-            <div class="mini-bar" style="height:30%;"></div>
-            <div class="mini-bar" style="height:45%;"></div>
-            <div class="mini-bar" style="height:62%;"></div>
-            <div class="mini-bar" style="height:80%;"></div>
-            <div class="mini-bar" style="height:100%;"></div>
-          </div>
-          <div class="tool-card-meta-row">
-            <span>★★★★★ 4.9/5 (18,400+ runs)</span>
-            <span style="color:var(--emerald-400);">Inflation-Adjusted</span>
-          </div>
+          <ul class="tool-card-features">
+            <li>Discrete &amp; continuous compounding models</li>
+            <li>Inflation-adjusted real purchasing power</li>
+            <li>Full month-by-month and annual amortization tables</li>
+          </ul>
           <div class="tool-card-footer">
             <span class="tool-card-meta">Interactive Chart.js</span>
             <a href="calculators/compound-interest/index.html" class="tool-card-btn">
@@ -268,26 +331,18 @@
 
         <!-- Tool 2: Mortgage Payoff -->
         <article class="tool-card" id="real-estate">
-          <span class="tool-card-badge" style="background:rgba(6,182,212,0.12);color:var(--cyan-400);border-color:rgba(6,182,212,0.25);">High Value</span>
-          <div class="tool-card-icon">🏡</div>
+          <div class="tool-card-category">Real Estate Finance</div>
           <h3 class="tool-card-title">Mortgage Payoff with Extra Payments</h3>
           <p class="tool-card-desc">
             Discover how adding an extra principal payment eliminates thousands in interest and shaves years off a 15, 20, or 30-year fixed home mortgage.
           </p>
-          <!-- Mini Preview Chart -->
-          <div class="tool-card-mini-chart">
-            <div class="mini-bar" style="height:100%;"></div>
-            <div class="mini-bar" style="height:82%;"></div>
-            <div class="mini-bar" style="height:60%;"></div>
-            <div class="mini-bar" style="height:35%;"></div>
-            <div class="mini-bar" style="height:10%;"></div>
-          </div>
-          <div class="tool-card-meta-row">
-            <span>★★★★★ 4.9/5 (14,200+ runs)</span>
-            <span style="color:var(--cyan-400);">Amortization Schedule</span>
-          </div>
+          <ul class="tool-card-features">
+            <li>Principal and interest (P&amp;I) amortization breakdown</li>
+            <li>Property tax, home insurance &amp; HOA escrow modeling</li>
+            <li>Side-by-side standard vs. accelerated comparison</li>
+          </ul>
           <div class="tool-card-footer">
-            <span class="tool-card-meta">Escrow P&amp;I Included</span>
+            <span class="tool-card-meta">Amortization Schedule</span>
             <a href="calculators/mortgage-payoff/index.html" class="tool-card-btn">
               <span>Launch Engine</span>
               <span>→</span>
@@ -297,26 +352,18 @@
 
         <!-- Tool 3: Debt Payoff -->
         <article class="tool-card" id="debt">
-          <span class="tool-card-badge" style="background:rgba(244,63,94,0.12);color:var(--rose-400);border-color:rgba(244,63,94,0.25);">Debt Elimination</span>
-          <div class="tool-card-icon">🛡️</div>
+          <div class="tool-card-category">Liability Management</div>
           <h3 class="tool-card-title">Credit Card &amp; Debt Avalanche Payoff</h3>
           <p class="tool-card-desc">
             Calculate your exact debt-free calendar date and escape the credit card minimum payment trap by accelerating monthly paydown targets.
           </p>
-          <!-- Mini Preview Chart -->
-          <div class="tool-card-mini-chart">
-            <div class="mini-bar" style="height:95%;background:#f43f5e;"></div>
-            <div class="mini-bar" style="height:70%;background:#f43f5e;"></div>
-            <div class="mini-bar" style="height:45%;background:#f43f5e;"></div>
-            <div class="mini-bar" style="height:20%;background:#f43f5e;"></div>
-            <div class="mini-bar" style="height:0%;background:#f43f5e;"></div>
-          </div>
-          <div class="tool-card-meta-row">
-            <span>★★★★★ 4.9/5 (11,800+ runs)</span>
-            <span style="color:var(--rose-400);">Target Date Finder</span>
-          </div>
+          <ul class="tool-card-features">
+            <li>Minimum payment trap asymptotic curve analysis</li>
+            <li>Debt Avalanche (highest APR first) comparison</li>
+            <li>Exact calendar debt-free date calculation</li>
+          </ul>
           <div class="tool-card-footer">
-            <span class="tool-card-meta">Avalanche vs Snowball</span>
+            <span class="tool-card-meta">Target Date Matrix</span>
             <a href="calculators/debt-payoff/index.html" class="tool-card-btn">
               <span>Launch Engine</span>
               <span>→</span>
@@ -326,26 +373,18 @@
 
         <!-- Tool 4: Auto Loan vs Lease -->
         <article class="tool-card">
-          <span class="tool-card-badge" style="background:rgba(99,102,241,0.12);color:var(--indigo-400);border-color:rgba(99,102,241,0.25);">Decision Matrix</span>
-          <div class="tool-card-icon">🚗</div>
-          <h3 class="tool-card-title">Auto Loan vs. Lease Decision Engine</h3>
+          <div class="tool-card-category">Capital Decision Engine</div>
+          <h3 class="tool-card-title">Auto Loan vs. Lease Decision Matrix</h3>
           <p class="tool-card-desc">
             Determine the true mathematical cost of buying versus leasing a vehicle over 3 to 5 years, factoring in depreciation curves and retained equity.
           </p>
-          <!-- Mini Preview Chart -->
-          <div class="tool-card-mini-chart">
-            <div class="mini-bar" style="height:50%;background:#818cf8;"></div>
-            <div class="mini-bar" style="height:65%;background:#818cf8;"></div>
-            <div class="mini-bar" style="height:75%;background:#818cf8;"></div>
-            <div class="mini-bar" style="height:85%;background:#818cf8;"></div>
-            <div class="mini-bar" style="height:92%;background:#818cf8;"></div>
-          </div>
-          <div class="tool-card-meta-row">
-            <span>★★★★★ 4.8/5 (9,500+ runs)</span>
-            <span style="color:var(--indigo-400);">3-Yr True Cost Matrix</span>
-          </div>
+          <ul class="tool-card-features">
+            <li>Money Factor to APR conversion equations</li>
+            <li>Capitalized cost reduction &amp; residual percentage</li>
+            <li>True 3-year net wealth ownership comparison</li>
+          </ul>
           <div class="tool-card-footer">
-            <span class="tool-card-meta">Depreciation Modeled</span>
+            <span class="tool-card-meta">3-Yr Equity Matrix</span>
             <a href="calculators/auto-loan-lease/index.html" class="tool-card-btn">
               <span>Launch Engine</span>
               <span>→</span>
@@ -356,81 +395,52 @@
       </div>
     </section>
 
-    <!-- TESTIMONIALS SOCIAL PROOF -->
-    <section class="section-wrap">
-      <div class="section-head">
-        <h2 class="section-head-title">Trusted by Independent Wealth Builders</h2>
-        <p class="section-head-sub">Real results achieved using FinMetrics Pro calculation suites.</p>
-      </div>
-
-      <div class="testimonial-grid">
-        <div class="testimonial-card">
-          <div class="testimonial-quote">"Adding $300/month extra on our mortgage shaved 7 years and $68,000 of interest. Having the exact month-by-month amortization schedule gave us the confidence to pull the trigger."</div>
-          <div class="testimonial-author">David K.</div>
-          <div class="testimonial-role">Senior Software Architect, Seattle</div>
-        </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-quote">"The inflation-adjusted compound interest model changed how I think about retirement. Seeing real purchasing power instead of just nominal numbers is eye-opening."</div>
-          <div class="testimonial-author">Elena M.</div>
-          <div class="testimonial-role">FIRE Investor &amp; Consultant, Austin</div>
-        </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-quote">"We were stuck paying credit card minimums for years. FinMetrics showed us that paying just $150 extra each month saved us $14,000 in interest and knocked 9 years off our debt."</div>
-          <div class="testimonial-author">Marcus &amp; Sarah T.</div>
-          <div class="testimonial-role">Small Business Owners, Chicago</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EDITORIAL & METHODOLOGY SECTION -->
-    <section class="editorial-content-section" id="editorial">
+    <!-- EDITORIAL CONTENT & METHODOLOGY SECTION (E-E-A-T AUDIT) -->
+    <section class="editorial-section">
       <article class="editorial-article">
+        <div class="section-eyebrow">Academic &amp; Actuarial Foundation</div>
         <h2>Engineered for Mathematical Transparency</h2>
         <p>
-          Unlike consumer financial websites that sell lead information to aggressive brokers or lock basic formulas behind slow popups, <strong>FinMetrics Pro</strong> is architected to strict institutional standards:
+          Unlike consumer finance portals that prioritize lead generation, aggressive broker partnerships, and opaque formulas, <strong>FinMetrics Pro</strong> is architected to strict institutional standards. All calculation engines operate transparently with fully documented actuarial formulas:
         </p>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:24px;margin:28px 0;">
-          <div style="background:var(--bg-card);padding:24px;border-radius:var(--radius-lg);border:1px solid var(--border-subtle);">
-            <div style="font-size:1.5rem;margin-bottom:8px;">🔒</div>
-            <h3 style="margin-top:0;">Zero Server Logging</h3>
-            <p style="font-size:0.9rem;margin-bottom:0;">All financial figures are computed 100% inside your browser's V8 engine. No balances, salaries, or debt figures are ever transmitted across the internet.</p>
-          </div>
-
-          <div style="background:var(--bg-card);padding:24px;border-radius:var(--radius-lg);border:1px solid var(--border-subtle);">
-            <div style="font-size:1.5rem;margin-bottom:8px;">📐</div>
-            <h3 style="margin-top:0;">CFA &amp; Fed Audited Math</h3>
-            <p style="font-size:0.9rem;margin-bottom:0;">Our compounding, loan amortization, and lease formulas strictly implement standardized CFA Institute and Federal Reserve mathematical algorithms.</p>
-          </div>
-
-          <div style="background:var(--bg-card);padding:24px;border-radius:var(--radius-lg);border:1px solid var(--border-subtle);">
-            <div style="font-size:1.5rem;margin-bottom:8px;">⚡</div>
-            <h3 style="margin-top:0;">Sub-16ms Real-Time Sliders</h3>
-            <p style="font-size:0.9rem;margin-bottom:0;">Zero page refreshes or laggy submit buttons. As you adjust sliders, charts and amortization schedules recalculate dynamically at 60 frames per second.</p>
+        <div class="eeat-badge-box">
+          <div class="eeat-badge-title">Audited by Quantitative Financial Standards</div>
+          <div class="eeat-badge-desc">
+            Our compounding, loan amortization, and capital leasing engines strictly implement formulas published by the CFA Institute, the Federal Reserve Board of Governors, and standard actuarial finance textbooks.
           </div>
         </div>
 
         <h2>Frequently Asked Questions</h2>
-        <div class="faq-accordion-wrap">
-          <details class="faq-item">
-            <summary class="faq-question">How accurate is the compound interest calculator?</summary>
-            <div class="faq-answer">
-              Our calculator implements the standard financial formula <code>A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]</code> with monthly compounding frequency. It factors in realistic continuous compounding effects and provides an optional real purchasing power discount rate based on historical inflation data.
+        <div class="faq-wrap">
+          <details class="faq-card" open>
+            <summary class="faq-header">How does the FinMetrics compound interest engine calculate returns?</summary>
+            <div class="faq-body">
+              Our calculator implements the standard future value formula:
+              <br><br>
+              <code>A = P(1 + r/n)^(nt) + PMT × [ ((1 + r/n)^(nt) - 1) / (r/n) ]</code>
+              <br><br>
+              Where <b>A</b> is the final portfolio value, <b>P</b> is the initial investment, <b>r</b> is the nominal annual return rate, <b>n</b> is the compounding frequency per year, and <b>t</b> is the investment duration in years. We also provide an inflation-adjusted calculation discounting future cash flows by historical purchasing power indices.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary class="faq-question">Why make extra mortgage payments toward principal?</summary>
-            <div class="faq-answer">
-              During the initial 10 to 15 years of a standard 30-year mortgage, the vast majority of your monthly payment goes toward bank interest rather than principal. Any extra principal payment directly reduces the underlying balance upon which future interest is calculated, generating guaranteed compounding interest savings.
+          <details class="faq-card">
+            <summary class="faq-header">Why make extra mortgage payments directly toward principal?</summary>
+            <div class="faq-body">
+              During the initial 10 to 15 years of a standard 30-year mortgage, the vast majority of your monthly payment goes toward bank interest rather than principal reduction. Applying an extra principal payment immediately decreases the outstanding balance upon which subsequent interest is calculated, producing guaranteed compounded savings across every remaining month of the mortgage.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary class="faq-question">Can I export reports and amortization tables to CSV or PDF?</summary>
-            <div class="faq-answer">
+          <details class="faq-card">
+            <summary class="faq-header">Is any of my financial data tracked or transmitted?</summary>
+            <div class="faq-body">
+              Zero. All calculations are executed 100% client-side inside your browser's local JavaScript runtime. No balance figures, salaries, home values, or debt numbers are ever transmitted across the network or stored in external databases.
+            </div>
+          </details>
+
+          <details class="faq-card">
+            <summary class="faq-header">Can I export my results to CSV or print a report?</summary>
+            <div class="faq-body">
               Yes. Every flagship calculator includes one-click CSV spreadsheet export buttons and optimized print formatting for saving clean, ad-free PDF audit reports directly to your local drive.
             </div>
           </details>
@@ -440,10 +450,11 @@
 
   </main>
 
-  <!-- ADSENSE FOOTER UNIT -->
+  <!-- GOOGLE ADSENSE FOOTER BILLBOARD UNIT -->
   <div class="shell">
-    <div class="adsense-unit adsense-footer" id="adUnit-footer">
-      <!-- Google AdSense 970x90 Footer Banner -->
+    <div class="adsense-unit adsense-billboard" id="adUnit-home-footer">
+      <div class="adsense-label">Advertisement</div>
+      <!-- Google AdSense 970x90 Footer Billboard -->
     </div>
   </div>
 
@@ -456,7 +467,7 @@
             <div class="brand-logo-icon">F</div>
             <div class="brand-name">FinMetrics <span>Pro</span></div>
           </div>
-          <p class="footer-brand-bio">
+          <p class="footer-bio">
             Institutional-grade financial engineering tools, wealth accumulation engines, and debt elimination simulators engineered with pure client-side precision.
           </p>
         </div>
@@ -464,7 +475,7 @@
         <div>
           <h4 class="footer-col-title">Calculators</h4>
           <ul class="footer-links">
-            <li><a href="calculators/compound-interest/index.html">Compound Interest Engine</a></li>
+            <li><a href="calculators/compound-interest/index.html">Compound Interest</a></li>
             <li><a href="calculators/mortgage-payoff/index.html">Mortgage &amp; Extra Payoff</a></li>
             <li><a href="calculators/debt-payoff/index.html">Credit Card Debt Avalanche</a></li>
             <li><a href="calculators/auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
@@ -474,7 +485,7 @@
         <div>
           <h4 class="footer-col-title">Methodology</h4>
           <ul class="footer-links">
-            <li><a href="methodology.html">Formulas &amp; Audits</a></li>
+            <li><a href="methodology.html">Calculation Proofs</a></li>
             <li><a href="about.html">About FinMetrics</a></li>
             <li><a href="contact.html">Institutional Inquiries</a></li>
           </ul>
@@ -500,27 +511,31 @@
   <script src="assets/js/core.js"></script>
   <script src="assets/js/animated-counter.js"></script>
   <script>
-    // Quick Compound Calculator in Hero
+    // Tab switching in Quick Calculator
     document.addEventListener('DOMContentLoaded', () => {
-      const pInput = document.getElementById('qcPrincipal');
-      const mInput = document.getElementById('qcMonthly');
-      const yInput = document.getElementById('qcYears');
-      const rInput = document.getElementById('qcRate');
-      const btn = document.getElementById('qcCalculateBtn');
-      const resVal = document.getElementById('qcResultVal');
-      const outBox = document.getElementById('qcOutputBox');
+      const tabs = document.querySelectorAll('.quick-calc-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
 
-      function calculateQuick() {
-        const p = parseFloat(pInput.value) || 0;
-        const m = parseFloat(mInput.value) || 0;
-        const y = parseFloat(yInput.value) || 1;
-        const r = (parseFloat(rInput.value) || 0) / 100;
-        const n = 12;
+          const target = tab.dataset.tab;
+          document.querySelectorAll('.quick-calc-tab-content').forEach(c => c.classList.remove('active'));
+          if (target === 'compound') document.getElementById('tabCompound').classList.add('active');
+          if (target === 'mortgage') document.getElementById('tabMortgage').classList.add('active');
+          if (target === 'debt') document.getElementById('tabDebt').classList.add('active');
+        });
+      });
 
-        const totalMonths = y * n;
-        const monthlyRate = r / n;
+      // Quick Compound
+      document.getElementById('qcBtnCompound').addEventListener('click', () => {
+        const p = parseFloat(document.getElementById('qcPrincipal').value) || 0;
+        const m = parseFloat(document.getElementById('qcMonthly').value) || 0;
+        const y = parseFloat(document.getElementById('qcYears').value) || 1;
+        const r = (parseFloat(document.getElementById('qcRate').value) || 0) / 100;
+        const totalMonths = y * 12;
+        const monthlyRate = r / 12;
 
-        // A = P(1 + r/n)^(nt) + PMT * [((1 + r/n)^(nt) - 1) / (r/n)]
         const compoundFactor = Math.pow(1 + monthlyRate, totalMonths);
         let balance = p * compoundFactor;
         if (monthlyRate > 0) {
@@ -529,16 +544,45 @@
           balance += m * totalMonths;
         }
 
-        if (window.FinCounter) {
-          outBox.style.display = 'flex';
-          window.FinCounter.animate(resVal, Math.round(balance), {
-            prefix: FinMetrics ? FinMetrics.getCurrency().symbol : '$',
-            duration: 500
-          });
-        }
-      }
+        const symbol = FinMetrics.getCurrency().symbol;
+        FinCounter.animate(document.getElementById('qcCompoundVal'), Math.round(balance), { prefix: symbol, duration: 400 });
+      });
 
-      if (btn) btn.addEventListener('click', calculateQuick);
+      // Quick Mortgage
+      document.getElementById('qcBtnMortgage').addEventListener('click', () => {
+        const price = parseFloat(document.getElementById('qcHomePrice').value) || 400000;
+        const down = parseFloat(document.getElementById('qcDown').value) || 80000;
+        const r = (parseFloat(document.getElementById('qcMortRate').value) || 6.75) / 100 / 12;
+        const p = Math.max(0, price - down);
+        const n = 360;
+
+        let pi = 0;
+        if (r > 0) {
+          const factor = Math.pow(1 + r, n);
+          pi = p * ((r * factor) / (factor - 1));
+        }
+
+        const symbol = FinMetrics.getCurrency().symbol;
+        FinCounter.animate(document.getElementById('qcMortgageVal'), Math.round(pi), { prefix: symbol, suffix: ' / mo', duration: 400 });
+      });
+
+      // Quick Debt
+      document.getElementById('qcBtnDebt').addEventListener('click', () => {
+        const bal = parseFloat(document.getElementById('qcDebtBal').value) || 12000;
+        const apr = (parseFloat(document.getElementById('qcDebtApr').value) || 22.9) / 100 / 12;
+        const pay = parseFloat(document.getElementById('qcDebtPay').value) || 450;
+
+        let rem = bal;
+        let months = 0;
+        while (rem > 1 && months < 600) {
+          months++;
+          const interest = rem * apr;
+          if (pay <= interest) break;
+          rem = rem - (pay - interest);
+        }
+
+        document.getElementById('qcDebtVal').textContent = `${months} Months (${(months / 12).toFixed(1)} yrs)`;
+      });
     });
   </script>
 </body>

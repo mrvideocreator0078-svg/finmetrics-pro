@@ -1,14 +1,14 @@
 /**
  * FINMETRICS PRO — INSTITUTIONAL CORE RUNTIME
- * Theme Switcher, Multi-Currency Engine, Global Search, Live Stats,
- * Slider Dynamic Fills, Mobile Drawer & Partner Affiliate Comparison Matrix
+ * Real Multi-Currency Engine, Global Search, Slider Fills, Mobile Navigation
+ * Pure Client-Side Privacy & Standard Financial Utilities
  */
 
 (function () {
   'use strict';
 
   /* ══════════════════════════════════════════════════════════════
-     1. CURRENCY CONVERSION & FORMATTING ENGINE
+     1. MULTI-CURRENCY CONVERSION & FORMATTING ENGINE
      ══════════════════════════════════════════════════════════════ */
   const CURRENCIES = {
     USD: { symbol: '$', code: 'USD', locale: 'en-US' },
@@ -60,12 +60,13 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     2. THEME ENGINE (DARK / LIGHT)
+     2. THEME ENGINE (LIGHT DEFAULT / DARK OPTIONAL)
      ══════════════════════════════════════════════════════════════ */
   function getPreferredTheme() {
     const stored = localStorage.getItem('finmetrics_theme');
     if (stored) return stored;
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    // Default to light for clean institutional trust
+    return 'light';
   }
 
   function applyTheme(theme) {
@@ -73,19 +74,19 @@
     localStorage.setItem('finmetrics_theme', theme);
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) {
-      themeBtn.innerHTML = theme === 'light' ? '🌙' : '☀️';
-      themeBtn.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`);
+      themeBtn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      themeBtn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`);
     }
     window.dispatchEvent(new CustomEvent('finmetrics:themeChanged', { detail: { theme } }));
   }
 
   function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    applyTheme(current === 'dark' ? 'light' : 'dark');
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(current === 'light' ? 'dark' : 'light');
   }
 
   /* ══════════════════════════════════════════════════════════════
-     3. SHAREABLE URL SYNCHRONIZATION
+     3. SHAREABLE URL PARAMETERS
      ══════════════════════════════════════════════════════════════ */
   function syncUrlParams(params) {
     const url = new URL(window.location);
@@ -110,7 +111,7 @@
 
   function copyShareLink() {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      showToast('Link copied to clipboard with current parameters!');
+      showToast('Calculation parameters link copied to clipboard.');
     }).catch(() => {
       showToast('Failed to copy link', true);
     });
@@ -139,16 +140,16 @@
 
     const toast = document.createElement('div');
     toast.style.cssText = `
-      background: ${isError ? '#ef4444' : '#10b981'};
-      color: #fff;
+      background: ${isError ? '#e11d48' : '#059669'};
+      color: #ffffff;
       padding: 12px 20px;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-      transform: translateY(20px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+      transform: translateY(16px);
       opacity: 0;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: auto;
     `;
     toast.textContent = message;
@@ -160,16 +161,16 @@
     });
 
     setTimeout(() => {
-      toast.style.transform = 'translateY(20px)';
+      toast.style.transform = 'translateY(16px)';
       toast.style.opacity = '0';
-      setTimeout(() => toast.remove(), 250);
-    }, 3200);
+      setTimeout(() => toast.remove(), 200);
+    }, 3000);
   }
 
   /* ══════════════════════════════════════════════════════════════
      5. CSV EXPORT UTILITY
      ══════════════════════════════════════════════════════════════ */
-  function exportTableToCSV(tableId, filename = 'financial-report.csv') {
+  function exportTableToCSV(tableId, filename = 'financial-schedule.csv') {
     const table = document.getElementById(tableId);
     if (!table) return;
 
@@ -186,182 +187,11 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast(`Exported ${filename} successfully!`);
+    showToast(`Exported ${filename} successfully.`);
   }
 
   /* ══════════════════════════════════════════════════════════════
-     6. LIVE SOCIAL PROOF & USAGE COUNTER
-     ══════════════════════════════════════════════════════════════ */
-  function getLiveUserCount() {
-    const baseDate = new Date('2024-01-01').getTime();
-    const now = Date.now();
-    const daysElapsed = Math.floor((now - baseDate) / (1000 * 60 * 60 * 24));
-    const baseCalculations = 1184200;
-    const dailyAverage = 1845;
-    const sessionHourOffset = (new Date().getHours() * 73) + (new Date().getMinutes() * 2);
-    return baseCalculations + (daysElapsed * dailyAverage) + sessionHourOffset;
-  }
-
-  function updateLiveCounters() {
-    const count = getLiveUserCount();
-    const formatted = Number(count).toLocaleString('en-US');
-    document.querySelectorAll('.live-user-count').forEach(el => {
-      el.textContent = formatted;
-    });
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     7. MILESTONE CELEBRATION SYSTEM
-     ══════════════════════════════════════════════════════════════ */
-  const CELEBRATED_MILESTONES = new Set();
-
-  function checkMilestone(currentVal, prevVal) {
-    const milestones = [
-      { val: 10000, label: '$10,000 Milestone' },
-      { val: 50000, label: '$50,000 Milestone' },
-      { val: 100000, label: '$100,000 Milestone' },
-      { val: 250000, label: '$250,000 Quarter-Million Milestone' },
-      { val: 500000, label: '$500,000 Half-Million Milestone' },
-      { val: 1000000, label: '🏆 $1,000,000 Wealth Target Achieved!' },
-      { val: 2000000, label: '🚀 $2,000,000 Multi-Millionaire Target!' }
-    ];
-
-    for (const m of milestones) {
-      if (currentVal >= m.val && prevVal < m.val && !CELEBRATED_MILESTONES.has(m.val)) {
-        CELEBRATED_MILESTONES.add(m.val);
-        triggerMilestoneAnimation(m.label, currentVal);
-        break;
-      }
-    }
-  }
-
-  function triggerMilestoneAnimation(label, currentVal) {
-    showToast(`🎉 Congratulations! You reached ${label}!`);
-
-    const container = document.createElement('div');
-    container.style.cssText = `
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 10000;
-      overflow: hidden;
-    `;
-    document.body.appendChild(container);
-
-    const colors = ['#10b981', '#06b6d4', '#6366f1', '#f59e0b', '#ec4899', '#ffffff'];
-    for (let i = 0; i < 40; i++) {
-      const piece = document.createElement('div');
-      const size = Math.random() * 8 + 6;
-      const left = Math.random() * 100;
-      const animDuration = Math.random() * 1.5 + 1.2;
-      const delay = Math.random() * 0.4;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-
-      piece.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: ${left}%;
-        width: ${size}px;
-        height: ${size * 1.4}px;
-        background-color: ${color};
-        border-radius: 2px;
-        animation: confettiFall ${animDuration}s cubic-bezier(0.25, 1, 0.5, 1) ${delay}s forwards;
-      `;
-      container.appendChild(piece);
-    }
-
-    setTimeout(() => {
-      container.remove();
-    }, 3500);
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     8. AFFILIATE & RATE COMPARISON ENGINE (HIGH REVENUE CPC)
-     ══════════════════════════════════════════════════════════════ */
-  const PARTNER_DATA = {
-    'compound-interest': {
-      title: 'Compare Top High-Yield Savings & Brokerage Accounts',
-      subtitle: 'Maximize compound interest with audited, FDIC-insured institutions. Real-time rates.',
-      partners: [
-        { name: 'Marcus by Goldman Sachs', badge: 'Editor\'s Choice', rate: '5.10% APY', perk: 'No minimum balance, FDIC insured', cta: 'View Account', link: '#' },
-        { name: 'SoFi High-Yield Checking', badge: 'Highest Yield', rate: '4.60% APY', perk: 'Up to $300 direct deposit bonus', cta: 'Claim Bonus', link: '#' },
-        { name: 'Vanguard Cash Plus', badge: 'Top Brokerage', rate: '4.85% APY', perk: 'Seamless sweep to index funds', cta: 'Explore Account', link: '#' }
-      ]
-    },
-    'mortgage-payoff': {
-      title: 'Compare Today\'s Lowest Mortgage Refinance Rates',
-      subtitle: 'Lock in competitive APRs and accelerate your home equity with top-rated lenders.',
-      partners: [
-        { name: 'Better.com Mortgage', badge: 'Zero Origination', rate: '6.45% APR', perk: '100% online approval in 24 hours', cta: 'Check My Rate', link: '#' },
-        { name: 'Rocket Mortgage', badge: '#1 in Customer Trust', rate: '6.65% APR', perk: 'Rate-drop protection guaranteed', cta: 'Get Free Quote', link: '#' },
-        { name: 'Figure Home Equity', badge: 'Fastest Funding', rate: '7.15% APR', perk: 'Fixed rate equity unlock in 5 days', cta: 'Apply Online', link: '#' }
-      ]
-    },
-    'debt-payoff': {
-      title: 'Top 0% Intro APR Balance Transfer Cards',
-      subtitle: 'Slash debt interest to 0% for up to 21 months and accelerate your payoff timeline.',
-      partners: [
-        { name: 'Citi Simplicity® Card', badge: 'Longest 0% Intro', rate: '0% Intro APR', perk: '21 Months on Balance Transfers', cta: 'Apply Now', link: '#' },
-        { name: 'Wells Fargo Reflect®', badge: 'Top Rated', rate: '0% Intro APR', perk: 'Up to 21 Months 0% intro term', cta: 'View Terms', link: '#' },
-        { name: 'Chase Slate Edge℠', badge: 'Rate Reduction', rate: '0% Intro APR', perk: '18 Months 0% APR + annual rate drops', cta: 'Apply Now', link: '#' }
-      ]
-    },
-    'auto-loan-lease': {
-      title: 'Compare Auto Financing & Refinance Offers',
-      subtitle: 'Pre-qualify without affecting your credit score with national lending partners.',
-      partners: [
-        { name: 'LightStream Auto Loan', badge: 'Lowest Fixed Rate', rate: '6.89% APR', perk: 'Same-day funding, no prepayment fee', cta: 'Check Rates', link: '#' },
-        { name: 'Capital One Auto Nav', badge: 'Pre-Approval', rate: 'Competitive', perk: 'Pre-qualify with zero credit score hit', cta: 'Pre-Qualify', link: '#' },
-        { name: 'PenFed Credit Union', badge: 'Best for Used', rate: '6.99% APR', perk: 'Open to everyone, 100% financing', cta: 'View Rates', link: '#' }
-      ]
-    }
-  };
-
-  function injectAffiliateCards(calcKey, targetContainerId = 'affiliateCardsContainer') {
-    const container = document.getElementById(targetContainerId);
-    if (!container) return;
-
-    const data = PARTNER_DATA[calcKey];
-    if (!data) return;
-
-    let html = `
-      <div class="affiliate-matrix-wrap">
-        <div class="affiliate-matrix-header">
-          <div class="affiliate-matrix-tag">⚡ Verified Partner Offers</div>
-          <h3 class="affiliate-matrix-title">${data.title}</h3>
-          <p class="affiliate-matrix-subtitle">${data.subtitle}</p>
-        </div>
-        <div class="affiliate-cards-row">
-    `;
-
-    data.partners.forEach(partner => {
-      html += `
-        <div class="affiliate-card">
-          <div class="affiliate-badge">${partner.badge}</div>
-          <div class="affiliate-name">${partner.name}</div>
-          <div class="affiliate-rate-val">${partner.rate}</div>
-          <div class="affiliate-perk">${partner.perk}</div>
-          <a href="${partner.link}" class="affiliate-cta-btn" target="_blank" rel="noopener sponsored">
-            <span>${partner.cta}</span>
-            <span>→</span>
-          </a>
-        </div>
-      `;
-    });
-
-    html += `
-        </div>
-        <div class="affiliate-disclosure-footer">
-          Advertiser Disclosure: We may receive compensation from the companies whose products we review or feature. All opinions are our own and rates are subject to lender approval.
-        </div>
-      </div>
-    `;
-
-    container.innerHTML = html;
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     9. SEARCH MODAL ENGINE (CTRL + K)
+     6. SEARCH MODAL ENGINE (CTRL + K)
      ══════════════════════════════════════════════════════════════ */
   const CALCULATOR_CATALOG = [
     { title: 'Compound Interest & SIP Wealth Engine', path: 'calculators/compound-interest/index.html', cat: 'Investing', desc: 'Simulate compounding returns, inflation impact, and milestone timeline.' },
@@ -388,7 +218,7 @@
         <div class="search-modal-box">
           <div class="search-input-wrap">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchModalInput" placeholder="Search calculators (e.g., mortgage, compound, debt)..." autocomplete="off">
+            <input type="text" id="searchModalInput" placeholder="Search calculators (e.g. compound, mortgage, debt)..." autocomplete="off">
             <button class="search-close-btn" id="searchCloseBtn">✕</button>
           </div>
           <div class="search-results-list" id="searchResultsList"></div>
@@ -421,7 +251,7 @@
       );
 
       if (filtered.length === 0) {
-        results.innerHTML = `<div class="search-empty" style="padding:16px;color:var(--text-muted);text-align:center;">No matching calculators found for "${query}"</div>`;
+        results.innerHTML = `<div style="padding:16px;color:var(--text-muted);text-align:center;">No matching calculators found for "${query}"</div>`;
         return;
       }
 
@@ -461,14 +291,14 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     10. SLIDER TRACK DYNAMIC FILL (NATIVE TOUCH FEEL)
+     7. NATIVE RANGE SLIDER DYNAMIC TRACK FILL
      ══════════════════════════════════════════════════════════════ */
   function updateSliderFill(slider) {
     const min = Number(slider.min) || 0;
     const max = Number(slider.max) || 100;
     const val = Number(slider.value) || 0;
     const pct = Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
-    slider.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${pct}%, var(--border-subtle) ${pct}%, var(--border-subtle) 100%)`;
+    slider.style.background = `linear-gradient(to right, #059669 0%, #059669 ${pct}%, var(--border-light) ${pct}%, var(--border-light) 100%)`;
   }
 
   function initSliderFills() {
@@ -479,13 +309,12 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     11. MOBILE NAVIGATION DRAWER
+     8. MOBILE NAVIGATION DRAWER
      ══════════════════════════════════════════════════════════════ */
   function setupMobileDrawer() {
     const navCluster = document.querySelector('.nav-actions-cluster');
     if (!navCluster) return;
 
-    // Check if toggle exists
     let toggle = document.querySelector('.mobile-menu-toggle');
     if (!toggle) {
       toggle = document.createElement('button');
@@ -504,11 +333,11 @@
       const rootPrefix = isSubdir ? '../../' : '';
 
       drawer.innerHTML = `
-        <a href="${rootPrefix}index.html#investing">📈 Investing Calculators</a>
-        <a href="${rootPrefix}index.html#real-estate">🏡 Real Estate & Mortgage</a>
-        <a href="${rootPrefix}index.html#debt">🛡️ Debt & Loans</a>
-        <a href="${rootPrefix}about.html">About FinMetrics</a>
-        <a href="${rootPrefix}methodology.html">Math Methodology</a>
+        <a href="${rootPrefix}index.html#investing">Investing & Compound Interest</a>
+        <a href="${rootPrefix}index.html#real-estate">Real Estate & Mortgage Payoff</a>
+        <a href="${rootPrefix}index.html#debt">Debt Avalanche & Snowball</a>
+        <a href="${rootPrefix}methodology.html">Mathematical Methodology</a>
+        <a href="${rootPrefix}about.html">About FinMetrics Pro</a>
       `;
       document.body.appendChild(drawer);
     }
@@ -527,7 +356,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     12. PRINT / PDF REPORT GENERATOR
+     9. PRINT REPORT AUDIT GENERATOR
      ══════════════════════════════════════════════════════════════ */
   function generatePrintReport(title = 'FinMetrics Pro Financial Audit') {
     document.title = `${title} — FinMetrics Report`;
@@ -535,19 +364,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     13. SMOOTH SCROLL FOR MOBILE
-     ══════════════════════════════════════════════════════════════ */
-  function smoothScrollToResults(targetId = 'resultsPane') {
-    if (window.innerWidth <= 768) {
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     14. INITIALIZATION
+     10. INITIALIZATION
      ══════════════════════════════════════════════════════════════ */
   document.addEventListener('DOMContentLoaded', () => {
     applyTheme(getPreferredTheme());
@@ -563,14 +380,8 @@
     }
 
     setupSearchModal();
-    updateLiveCounters();
     initSliderFills();
     setupMobileDrawer();
-
-    const calcKey = document.body.dataset.calcKey;
-    if (calcKey) {
-      injectAffiliateCards(calcKey);
-    }
   });
 
   window.FinMetrics = {
@@ -583,13 +394,7 @@
     copyShareLink,
     showToast,
     exportTableToCSV,
-    getLiveUserCount,
-    updateLiveCounters,
-    checkMilestone,
-    triggerMilestoneAnimation,
-    injectAffiliateCards,
     generatePrintReport,
-    smoothScrollToResults,
     updateSliderFill
   };
 })();
