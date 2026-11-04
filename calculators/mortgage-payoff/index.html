@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage Payoff with Extra Payments Calculator — FinMetrics Pro</title>
+  <meta name="description" content="Calculate your mortgage payoff date and see how much interest you can save with extra monthly principal payments. Free full amortization schedule and chart.">
+  <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/mortgage-payoff/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/calculator.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mortgage Payoff & Extra Principal Calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Calculate interest savings and accelerated payoff dates with extra monthly mortgage principal payments."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="shell nav-container">
+      <a href="../../index.html" class="brand-link" aria-label="FinMetrics Pro Home">
+        <div class="brand-logo-icon">F</div>
+        <div class="brand-name">FinMetrics <span>Pro</span></div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-center-links">
+          <li><a href="../../index.html#investing" class="nav-link">Investing</a></li>
+          <li><a href="../../index.html#real-estate" class="nav-link active">Real Estate</a></li>
+          <li><a href="../../index.html#debt" class="nav-link">Debt & Loans</a></li>
+          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions-cluster">
+        <button class="search-trigger-btn" aria-label="Quick Search">
+          <span>🔍</span>
+          <span>Search</span>
+          <span class="kbd-shortcut">Ctrl K</span>
+        </button>
+
+        <div class="currency-selector-wrap">
+          <select id="currencySelect" class="currency-select" aria-label="Choose Display Currency">
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="GBP">£ GBP</option>
+            <option value="INR">₹ INR</option>
+            <option value="CAD">CA$ CAD</option>
+            <option value="AUD">A$ AUD</option>
+          </select>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="shell" id="mainContent">
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <ol class="breadcrumbs">
+        <li><a href="../../index.html">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="../../index.html#real-estate">Real Estate</a></li>
+        <li class="sep">/</li>
+        <li class="current">Mortgage Payoff Calculator</li>
+      </ol>
+    </nav>
+
+    <div class="calc-header-wrap">
+      <span class="calc-title-badge">🏡 Real Estate Engine</span>
+      <h1 class="calc-main-title">Mortgage Payoff with Extra Payments Calculator</h1>
+      <p class="calc-lead-desc">
+        Discover exactly how adding an extra monthly payment directly against your principal balance eliminates thousands in interest and shaves years off your mortgage.
+      </p>
+    </div>
+
+    <!-- WORKBENCH -->
+    <div class="calc-workbench-grid">
+
+      <!-- LEFT: Inputs -->
+      <section class="calc-inputs-pane" aria-labelledby="mortgageInputsHeading">
+        <h2 id="mortgageInputsHeading" class="input-group-title">Mortgage Terms & Details</h2>
+
+        <!-- Home Price -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="homePrice" class="field-label">Home Purchase Price</label>
+            <span class="field-help-icon" title="Estimated purchase or property appraisal value">?</span>
+          </div>
+          <div class="input-control-box">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="homePrice" class="calc-number-input" value="450000" min="20000" max="10000000" step="5000">
+          </div>
+        </div>
+
+        <!-- Down Payment -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="downPayment" class="field-label">Down Payment</label>
+            <span id="downPaymentPctBadge" class="tnum" style="color:var(--emerald-400);font-weight:600;">20%</span>
+          </div>
+          <div class="input-control-box">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="downPayment" class="calc-number-input" value="90000" min="0" max="10000000" step="2500">
+          </div>
+        </div>
+
+        <!-- Loan Term Chips -->
+        <div class="form-field">
+          <label class="field-label">Loan Term</label>
+          <div class="segmented-chips" id="loanTermChips">
+            <button class="chip-btn" data-years="15">15 Years</button>
+            <button class="chip-btn" data-years="20">20 Years</button>
+            <button class="chip-btn active" data-years="30">30 Years</button>
+          </div>
+          <input type="hidden" id="loanTermYears" value="30">
+        </div>
+
+        <!-- Interest Rate -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="interestRate" class="field-label">Fixed Interest Rate (APR)</label>
+          </div>
+          <div class="input-control-box">
+            <input type="number" id="interestRate" class="calc-number-input no-prefix" value="6.75" min="0.1" max="20" step="0.125">
+            <span class="input-affix">% APR</span>
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="interestRateSlider" class="calc-range-slider" min="2" max="12" step="0.125" value="6.75" aria-label="Interest Rate Slider">
+            <div class="slider-limits"><span>2%</span><span>12%</span></div>
+          </div>
+        </div>
+
+        <!-- Extra Monthly Payment -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="extraMonthly" class="field-label">Extra Monthly Principal</label>
+            <span class="field-help-icon" title="Amount applied directly toward reducing the loan balance every month">?</span>
+          </div>
+          <div class="input-control-box" style="border-color:var(--emerald-500);">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="extraMonthly" class="calc-number-input" value="250" min="0" max="10000" step="25">
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="extraMonthlySlider" class="calc-range-slider" min="0" max="2000" step="25" value="250" aria-label="Extra Monthly Payment Slider">
+            <div class="slider-limits"><span>$0</span><span>$2,000/mo extra</span></div>
+          </div>
+        </div>
+
+        <!-- Optional Escrows Collapsible -->
+        <details class="faq-item" style="margin-top:4px;">
+          <summary class="faq-question" style="padding:12px;font-size:0.9rem;">Taxes, Insurance & HOA Escrows</summary>
+          <div class="faq-answer" style="padding:12px;display:flex;flex-direction:column;gap:12px;">
+            <div class="form-field">
+              <label for="propTax" class="field-label">Annual Property Tax ($)</label>
+              <div class="input-control-box">
+                <span class="input-affix currency-affix">$</span>
+                <input type="number" id="propTax" class="calc-number-input" value="5400" step="100">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="homeIns" class="field-label">Annual Homeowners Insurance ($)</label>
+              <div class="input-control-box">
+                <span class="input-affix currency-affix">$</span>
+                <input type="number" id="homeIns" class="calc-number-input" value="1400" step="50">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="hoa" class="field-label">Monthly HOA Dues ($)</label>
+              <div class="input-control-box">
+                <span class="input-affix currency-affix">$</span>
+                <input type="number" id="hoa" class="calc-number-input" value="0" step="25">
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Actions -->
+        <div class="calc-quick-actions">
+          <button class="btn-calc-secondary" id="copyShareBtn">
+            <span>🔗</span>
+            <span>Share</span>
+          </button>
+          <button class="btn-calc-secondary" id="resetBtn">
+            <span>↺</span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Visuals & Metrics -->
+      <section class="calc-results-pane" aria-labelledby="mortgageResultsHeading">
+        <h2 id="mortgageResultsHeading" class="sr-only">Mortgage Payoff Results</h2>
+
+        <div class="primary-metrics-row">
+          <div class="metric-card hero-metric">
+            <div class="metric-label">
+              <span>Interest Saved</span>
+              <span>💰</span>
+            </div>
+            <div class="metric-val" id="resInterestSaved">$94,218</div>
+            <div class="metric-sub" id="resTimeSaved">Pay off 6.2 years earlier</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Monthly Payment</span>
+              <span>📅</span>
+            </div>
+            <div class="metric-val" id="resMonthlyPayment">$2,585</div>
+            <div class="metric-sub" id="resPISplit">P&I: $2,335 | Escrow: $567</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Loan Amount</span>
+              <span>🏦</span>
+            </div>
+            <div class="metric-val" id="resLoanAmount">$360,000</div>
+            <div class="metric-sub">Base principal borrowed</div>
+          </div>
+        </div>
+
+        <!-- Smart Insight Banner -->
+        <div class="smart-insight-banner">
+          <div class="insight-pulse-dot" aria-hidden="true"></div>
+          <div class="insight-content-text" id="insightText">
+            By paying an extra <b id="insExtra">$250/mo</b>, you will pay off your 30-year mortgage in <b id="insYears">23.8 years</b> and save <b id="insSavings">$94,218</b> in pure interest!
+          </div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="chart-container-card">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Total Lifetime Loan Cost Comparison</h3>
+          </div>
+
+          <div class="chart-canvas-wrap">
+            <canvas id="mortgageChart" role="img" aria-label="Comparison chart showing standard 30 year mortgage versus accelerated payoff"></canvas>
+          </div>
+
+          <div class="chart-legend-row">
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#ef4444;"></span>
+              <span>Total Interest Paid</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#10b981;"></span>
+              <span>Interest Saved</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#3b82f6;"></span>
+              <span>Original Principal</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Amortization Schedule Table -->
+    <section class="schedule-table-card" aria-labelledby="amortHeading">
+      <div class="table-head-cluster">
+        <div>
+          <h2 id="amortHeading" class="table-title">Mortgage Amortization Schedule</h2>
+          <p class="section-head-sub">Annual breakdown of principal reduction, interest paid, and remaining loan balance.</p>
+        </div>
+        <div class="table-actions-cluster">
+          <button class="btn-calc-secondary" id="exportCsvBtn">
+            <span>📥</span>
+            <span>Export CSV</span>
+          </button>
+          <button class="btn-calc-secondary" onclick="window.print()">
+            <span>🖨️</span>
+            <span>Print Schedule</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive-box">
+        <table class="fin-data-table" id="mortgageTable">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Calendar Year</th>
+              <th>Principal Paid</th>
+              <th>Interest Paid</th>
+              <th>Remaining Loan Balance</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody">
+            <!-- Rendered by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Editorial Guide (E-E-A-T AdSense Proof) -->
+    <section class="editorial-content-section" aria-labelledby="guideHeading">
+      <article class="editorial-article">
+        <h2 id="guideHeading">How Extra Principal Payments Save Tens of Thousands in Interest</h2>
+        <p>
+          In standard residential mortgages, payments are front-loaded with interest. During the initial 5 to 10 years of a 30-year fixed loan, over 65% to 75% of your monthly payment goes directly toward servicing the bank's interest, leaving only a small fraction to pay down the actual principal.
+        </p>
+        <p>
+          When you designate an additional sum specifically as an <strong>"Extra Principal Payment"</strong>, 100% of that capital goes toward eliminating the outstanding loan balance immediately. Because subsequent interest is calculated on a smaller principal base, every dollar paid in extra principal produces compounding savings across every remaining month of the mortgage.
+        </p>
+
+        <div class="formula-callout-box">
+          <div class="formula-title">Monthly Mortgage Payment Formula (P&I)</div>
+          <div class="formula-display">M = P × [ r(1 + r)^N ] / [ (1 + r)^N - 1 ]</div>
+          <div class="formula-legend">
+            Where <b>M</b> is monthly principal and interest, <b>P</b> is borrowed principal, <b>r</b> is monthly interest rate (annual APR / 12), and <b>N</b> is total number of monthly payments.
+          </div>
+        </div>
+
+        <h2>Three Strategies to Accelerate Mortgage Payoff</h2>
+        <ol>
+          <li><strong>Consistent Monthly Extra:</strong> Adding a fixed amount (e.g. $150 – $300) to every mortgage payment. This is the most reliable, budget-friendly strategy.</li>
+          <li><strong>Bi-Weekly Payment Schedule:</strong> Making half-payments every two weeks results in 26 half-payments per year (equivalent to 13 full monthly payments instead of 12). This automatically shaves 4 to 6 years off a 30-year mortgage without noticeable lifestyle impact.</li>
+          <li><strong>Lump-Sum Annual Prepayment:</strong> Applying annual work bonuses, tax refunds, or equity windfalls directly to the principal balance once a year.</li>
+        </ol>
+
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion-wrap">
+          <details class="faq-item" open>
+            <summary class="faq-question">Will my lender penalize me for paying extra?</summary>
+            <div class="faq-answer">
+              Under federal regulations, almost all conventional, FHA, and VA loans issued after 2014 do not have prepayment penalties. However, always verify that your loan agreement specifies "no prepayment penalty" and ensure your loan servicer applies extra funds to "Principal Only" rather than advancing next month's payment.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Should I pay off my mortgage early or invest the money in index funds?</summary>
+            <div class="faq-answer">
+              This depends on your interest rate. If your mortgage rate is high (e.g. 6.5% - 7.5%), paying it down provides a guaranteed, risk-free after-tax return equal to your mortgage rate. If your rate is locked in at an ultra-low historical rate (e.g. 2.75% - 3.5%), investing excess capital in broad index funds (historically returning ~9-10% nominally) typically produces greater long-term net worth.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What is mortgage recasting vs. refinancing?</summary>
+            <div class="faq-answer">
+              Recasting keeps your existing loan, interest rate, and term intact, but lowers your required monthly payment after you make a significant lump-sum principal reduction. Refinancing replaces your entire loan with a brand new loan, which requires closing costs and an appraisal.
+            </div>
+          </details>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-top-grid">
+        <div>
+          <div class="brand-link">
+            <div class="brand-logo-icon">F</div>
+            <div class="brand-name">FinMetrics <span>Pro</span></div>
+          </div>
+          <p class="footer-brand-bio">
+            Institutional-grade financial engineering tools, wealth accumulation engines, and debt elimination simulators engineered with pure client-side precision.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Calculators</h4>
+          <ul class="footer-links">
+            <li><a href="../compound-interest/index.html">Compound Interest</a></li>
+            <li><a href="index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="../debt-payoff/index.html">Credit Card Debt Snowball</a></li>
+            <li><a href="../auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Methodology</h4>
+          <ul class="footer-links">
+            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../about.html">About FinMetrics</a></li>
+            <li><a href="../../contact.html">Institutional Inquiries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal & Trust</h4>
+          <ul class="footer-links">
+            <li><a href="../../privacy.html">Privacy Policy</a></li>
+            <li><a href="../../terms.html">Terms of Service</a></li>
+            <li><a href="../../disclaimer.html">Financial Disclosures</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>© 2026 FinMetrics Pro. All rights reserved. Zero cookies tracked.</div>
+        <div>Built for high-precision financial literacy.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/chart.min.js"></script>
+  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/math-utils.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

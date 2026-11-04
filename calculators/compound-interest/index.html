@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compound Interest & SIP Calculator — FinMetrics Pro</title>
+  <meta name="description" content="Calculate compound interest with regular monthly deposits, inflation adjustments, and visual charts. See your milestone timeline and export yearly schedules.">
+  <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/compound-interest/">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/calculator.css">
+
+  <!-- Schema.org JSON-LD for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Compound Interest & SIP Wealth Calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Institutional-grade compound interest calculator with dynamic chart visualizer, inflation adjustments, and annual amortization table."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <header class="site-header">
+    <div class="shell nav-container">
+      <a href="../../index.html" class="brand-link" aria-label="FinMetrics Pro Home">
+        <div class="brand-logo-icon">F</div>
+        <div class="brand-name">FinMetrics <span>Pro</span></div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-center-links">
+          <li><a href="../../index.html#investing" class="nav-link active">Investing</a></li>
+          <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
+          <li><a href="../../index.html#debt" class="nav-link">Debt & Loans</a></li>
+          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions-cluster">
+        <button class="search-trigger-btn" aria-label="Quick Search">
+          <span>🔍</span>
+          <span>Search</span>
+          <span class="kbd-shortcut">Ctrl K</span>
+        </button>
+
+        <div class="currency-selector-wrap">
+          <select id="currencySelect" class="currency-select" aria-label="Choose Display Currency">
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="GBP">£ GBP</option>
+            <option value="INR">₹ INR</option>
+            <option value="CAD">CA$ CAD</option>
+            <option value="AUD">A$ AUD</option>
+          </select>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ MAIN CONTENT ═══════════════════════════ -->
+  <main class="shell" id="mainContent">
+
+    <!-- Breadcrumb Bar -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <ol class="breadcrumbs">
+        <li><a href="../../index.html">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="../../index.html#investing">Investing</a></li>
+        <li class="sep">/</li>
+        <li class="current">Compound Interest Calculator</li>
+      </ol>
+    </nav>
+
+    <!-- Calculator Title Header -->
+    <div class="calc-header-wrap">
+      <span class="calc-title-badge">📈 Wealth Engine</span>
+      <h1 class="calc-main-title">Compound Interest & Investment Calculator</h1>
+      <p class="calc-lead-desc">
+        Project your long-term wealth accumulation through the power of compounding. Adjust monthly contributions, expected annual rate of return, and inflation to view exact purchasing power.
+      </p>
+    </div>
+
+    <!-- Workbench Grid -->
+    <div class="calc-workbench-grid">
+
+      <!-- LEFT: Inputs Workbench -->
+      <section class="calc-inputs-pane" aria-labelledby="inputsHeading">
+        <h2 id="inputsHeading" class="input-group-title">Investment Parameters</h2>
+
+        <!-- Initial Principal -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="initialDeposit" class="field-label">Initial Investment</label>
+            <span class="field-help-icon" title="Your starting capital or lump-sum balance">?</span>
+          </div>
+          <div class="input-control-box">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="initialDeposit" class="calc-number-input" value="10000" min="0" max="10000000" step="500">
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="initialDepositSlider" class="calc-range-slider" min="0" max="100000" step="500" value="10000" aria-label="Initial Investment Slider">
+            <div class="slider-limits"><span>$0</span><span>$100,000+</span></div>
+          </div>
+        </div>
+
+        <!-- Monthly Contribution -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="monthlyDeposit" class="field-label">Monthly Contribution (SIP)</label>
+            <span class="field-help-icon" title="Amount added at the start of each month">?</span>
+          </div>
+          <div class="input-control-box">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="monthlyDeposit" class="calc-number-input" value="500" min="0" max="50000" step="25">
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="monthlyDepositSlider" class="calc-range-slider" min="0" max="5000" step="50" value="500" aria-label="Monthly Contribution Slider">
+            <div class="slider-limits"><span>$0</span><span>$5,000/mo</span></div>
+          </div>
+        </div>
+
+        <!-- Investment Horizon (Years) -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="years" class="field-label">Investment Horizon</label>
+            <span class="tnum" id="yearsDisplay">20 Years</span>
+          </div>
+          <div class="input-control-box">
+            <input type="number" id="years" class="calc-number-input no-prefix" value="20" min="1" max="50" step="1">
+            <span class="input-affix">Years</span>
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="yearsSlider" class="calc-range-slider" min="1" max="40" step="1" value="20" aria-label="Years Slider">
+            <div class="slider-limits"><span>1 Yr</span><span>40 Yrs</span></div>
+          </div>
+        </div>
+
+        <!-- Expected Annual Return (%) -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="rate" class="field-label">Expected Annual Return</label>
+            <span class="field-help-icon" title="S&P 500 historic average is ~10% (nominal)">?</span>
+          </div>
+          <div class="input-control-box">
+            <input type="number" id="rate" class="calc-number-input no-prefix" value="9.5" min="0.1" max="30" step="0.1">
+            <span class="input-affix">% APR</span>
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="rateSlider" class="calc-range-slider" min="1" max="20" step="0.25" value="9.5" aria-label="Annual Return Slider">
+            <div class="slider-limits"><span>1%</span><span>20%</span></div>
+          </div>
+        </div>
+
+        <!-- Expected Inflation Rate -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="inflation" class="field-label">Estimated Inflation Rate</label>
+            <span class="field-help-icon" title="Calculates real purchasing power in today's dollars">?</span>
+          </div>
+          <div class="input-control-box">
+            <input type="number" id="inflation" class="calc-number-input no-prefix" value="2.8" min="0" max="15" step="0.1">
+            <span class="input-affix">%</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="calc-quick-actions">
+          <button class="btn-calc-secondary" id="copyShareBtn">
+            <span>🔗</span>
+            <span>Share Calculation</span>
+          </button>
+          <button class="btn-calc-secondary" id="resetBtn">
+            <span>↺</span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Visual Insights & Chart -->
+      <section class="calc-results-pane" aria-labelledby="resultsHeading">
+        <h2 id="resultsHeading" class="sr-only">Calculation Results</h2>
+
+        <!-- Key Metrics Cards -->
+        <div class="primary-metrics-row">
+          <div class="metric-card hero-metric">
+            <div class="metric-label">
+              <span>Ending Balance</span>
+              <span>💰</span>
+            </div>
+            <div class="metric-val" id="resEndingBalance">$416,589</div>
+            <div class="metric-sub">Nominal future value</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Total Interest</span>
+              <span>📈</span>
+            </div>
+            <div class="metric-val" id="resTotalInterest">$286,589</div>
+            <div class="metric-sub" id="resInterestRatio">68.8% of portfolio</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Purchasing Power</span>
+              <span>🛡️</span>
+            </div>
+            <div class="metric-val" id="resRealBalance">$240,115</div>
+            <div class="metric-sub">Adjusted for 2.8% inflation</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Smart Insight Banner -->
+        <div class="smart-insight-banner">
+          <div class="insight-pulse-dot" aria-hidden="true"></div>
+          <div class="insight-content-text" id="insightText">
+            Over 20 years, your money earns <b id="insInterest">$286,589</b> in compound growth — which is more than double your actual out-of-pocket deposits (<b id="insDeposits">$130,000</b>)!
+          </div>
+        </div>
+
+        <!-- Visual Chart Card -->
+        <div class="chart-container-card">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Portfolio Accumulation Trajectory</h3>
+            <div class="segmented-chips">
+              <button class="chip-btn active" id="btnChartArea">Growth Curve</button>
+              <button class="chip-btn" id="btnChartBar">Annual Breakdown</button>
+            </div>
+          </div>
+
+          <div class="chart-canvas-wrap">
+            <canvas id="growthChart" role="img" aria-label="Interactive graph displaying principal versus compound interest growth over time"></canvas>
+          </div>
+
+          <div class="chart-legend-row">
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#10b981;"></span>
+              <span>Total Interest</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#3b82f6;"></span>
+              <span>Principal Contributed</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Amortization / Year-by-Year Schedule -->
+    <section class="schedule-table-card" aria-labelledby="scheduleHeading">
+      <div class="table-head-cluster">
+        <div>
+          <h2 id="scheduleHeading" class="table-title">Annual Growth Breakdown Schedule</h2>
+          <p class="section-head-sub">Year-by-year mathematical accounting of deposits, earned interest, and balances.</p>
+        </div>
+        <div class="table-actions-cluster">
+          <button class="btn-calc-secondary" id="exportCsvBtn">
+            <span>📥</span>
+            <span>Export CSV</span>
+          </button>
+          <button class="btn-calc-secondary" onclick="window.print()">
+            <span>🖨️</span>
+            <span>Print Report</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive-box">
+        <table class="fin-data-table" id="growthTable">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Starting Balance</th>
+              <th>Annual Deposits</th>
+              <th>Interest Earned</th>
+              <th>Ending Balance</th>
+              <th>Inflation-Adjusted</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody">
+            <!-- Rendered dynamically by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Comprehensive Editorial & Financial Guide (E-E-A-T AdSense Proof) -->
+    <section class="editorial-content-section" aria-labelledby="guideHeading">
+      <article class="editorial-article">
+        <h2 id="guideHeading">The Mathematics of Compounding: How Long-Term Wealth Accumulates</h2>
+        <p>
+          Compound interest is often referred to as the eighth wonder of the world for a simple mathematical reason: unlike simple interest, which only yields returns on the initial principal sum, compound interest generates earnings on both the initial principal <em>and</em> the accumulated interest from prior periods.
+        </p>
+
+        <div class="formula-callout-box">
+          <div class="formula-title">The Fundamental Future Value Formula</div>
+          <div class="formula-display">A = P (1 + r/n)^(nt) + PMT × [ ((1 + r/n)^(nt) - 1) / (r/n) ]</div>
+          <div class="formula-legend">
+            Where <b>A</b> is the final portfolio value, <b>P</b> is initial principal, <b>PMT</b> is monthly contribution, <b>r</b> is nominal annual interest rate, <b>n</b> is compounding frequency per year, and <b>t</b> is time in years.
+          </div>
+        </div>
+
+        <h2>The Crucial Inflection Point: When Returns Exceed Contributions</h2>
+        <p>
+          In the early years of any investment strategy, the vast majority of your portfolio growth comes from direct out-of-pocket contributions. However, between years 7 and 12 (depending on your rate of return), a mathematical milestone occurs: the annual interest generated by your portfolio exceeds the total annual contributions you make.
+        </p>
+        <p>
+          From this inflection point forward, your money works significantly harder than you do. As demonstrated in the chart above, doubling your investment horizon from 10 to 20 years does not merely double your returns — it quadruples them due to exponential compounding.
+        </p>
+
+        <h2>Nominal vs. Real Returns: Factoring in Inflation</h2>
+        <p>
+          While seeing a large future nominal figure provides emotional satisfaction, real wealth is defined by <strong>purchasing power</strong>. A portfolio worth $1,000,000 in 30 years will not buy the same basket of goods as $1,000,000 today. Assuming an average historical inflation rate of 2.5% to 3.0%, this calculator discounts future cash flows to show what your future balance can actually buy in today's terms.
+        </p>
+
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion-wrap">
+          <details class="faq-item" open>
+            <summary class="faq-question">What is a realistic annual rate of return to assume?</summary>
+            <div class="faq-answer">
+              Historically, the S&P 500 index has generated an average annualized nominal return of approximately 10% over the last 90 years (before inflation). When adjusted for inflation, real returns have averaged between 6.5% and 7.0%. For conservative financial planning, most advisors recommend modeling returns between 7% and 9%.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">How does compounding frequency impact returns?</summary>
+            <div class="faq-answer">
+              The more frequently interest is calculated and added to the principal balance (daily vs. monthly vs. annually), the faster the balance grows. However, the difference between monthly and daily compounding is relatively minor due to the mathematical limits of continuous compounding.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What is the "Rule of 72"?</summary>
+            <div class="faq-answer">
+              The Rule of 72 is a quick mental math shortcut to estimate how many years it takes for an investment to double at a given annual interest rate. Simply divide 72 by your interest rate. For example, at an 8% annual return, your money doubles in approximately 9 years (72 ÷ 8 = 9).
+            </div>
+          </details>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-top-grid">
+        <div>
+          <div class="brand-link">
+            <div class="brand-logo-icon">F</div>
+            <div class="brand-name">FinMetrics <span>Pro</span></div>
+          </div>
+          <p class="footer-brand-bio">
+            Institutional-grade financial engineering tools, wealth accumulation engines, and debt elimination simulators engineered with pure client-side precision.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Calculators</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Compound Interest</a></li>
+            <li><a href="../mortgage-payoff/index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="../debt-payoff/index.html">Credit Card Debt Snowball</a></li>
+            <li><a href="../auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Methodology</h4>
+          <ul class="footer-links">
+            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../about.html">About FinMetrics</a></li>
+            <li><a href="../../contact.html">Institutional Inquiries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal & Trust</h4>
+          <ul class="footer-links">
+            <li><a href="../../privacy.html">Privacy Policy</a></li>
+            <li><a href="../../terms.html">Terms of Service</a></li>
+            <li><a href="../../disclaimer.html">Financial Disclosures</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>© 2026 FinMetrics Pro. All rights reserved. Zero cookies tracked.</div>
+        <div>Built for high-precision financial literacy.</div>
+      </div>
+
+      <div class="footer-disclaimer-box">
+        <strong>Disclaimer:</strong> FinMetrics Pro provides mathematical calculations and educational models for informational purposes only. It does not provide personalized legal, accounting, tax, or investment advice. Always consult a licensed Certified Financial Planner (CFP) or CPA before making significant financial commitments.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/chart.min.js"></script>
+  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/math-utils.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

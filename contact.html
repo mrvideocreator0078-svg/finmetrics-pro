@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Feedback — FinMetrics Pro</title>
+  <meta name="description" content="Get in touch with the mathematical engineering team at FinMetrics Pro for suggestions, formula audits, or institutional partnerships.">
+  <link rel="canonical" href="https://finmetrics-pro.vercel.app/contact.html">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/calculator.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="shell nav-container">
+      <a href="index.html" class="brand-link" aria-label="FinMetrics Pro Home">
+        <div class="brand-logo-icon">F</div>
+        <div class="brand-name">FinMetrics <span>Pro</span></div>
+      </a>
+      <div class="nav-actions-cluster">
+        <a href="index.html" class="nav-link">← All Calculators</a>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell" style="padding:48px 24px;">
+    <article class="editorial-article" style="max-width:860px;margin:0 auto;background:var(--bg-surface);padding:48px;border-radius:var(--radius-xl);border:1px solid var(--border-subtle);">
+      <span class="calc-title-badge">Direct Inquiries</span>
+      <h1 class="calc-main-title">Contact & Formula Audits</h1>
+      
+      <p>
+        Have a feature request, formula correction, or institutional partnership inquiry? Our quantitative engineering team reviews every communication directly.
+      </p>
+
+      <div style="margin-top:32px;display:flex;flex-direction:column;gap:20px;">
+        <div class="form-field">
+          <label class="field-label">Your Name</label>
+          <div class="input-control-box">
+            <input type="text" class="calc-number-input no-prefix" placeholder="Jane Doe">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Email Address</label>
+          <div class="input-control-box">
+            <input type="email" class="calc-number-input no-prefix" placeholder="jane@example.com">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Inquiry Topic</label>
+          <div class="input-control-box">
+            <select class="calc-number-input no-prefix" style="background:transparent;cursor:pointer;">
+              <option value="audit">Formula / Calculation Question</option>
+              <option value="feature">New Calculator Suggestion</option>
+              <option value="partnership">Institutional Partnership</option>
+              <option value="general">General Feedback</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Message</label>
+          <div class="input-control-box" style="height:auto;">
+            <textarea class="calc-number-input no-prefix" rows="4" style="resize:vertical;padding:12px 14px;" placeholder="How can our financial engineering team help?"></textarea>
+          </div>
+        </div>
+
+        <button class="btn-calc-secondary" style="background:var(--emerald-500);color:#020617;font-weight:700;padding:14px;border:none;cursor:pointer;" onclick="FinMetrics.showToast('Thank you! Your message has been received.')">
+          Send Message →
+        </button>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-bottom-bar">
+        <div>© 2026 FinMetrics Pro. All rights reserved. Zero cookies tracked.</div>
+        <div><a href="index.html">← Back to Calculators</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/core.js"></script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Card & Debt Payoff Calculator — FinMetrics Pro</title>
+  <meta name="description" content="Calculate your exact debt-free date and see how much interest you can save by beating the credit card minimum payment trap. Free monthly schedule and chart.">
+  <link rel="canonical" href="https://finmetrics-pro.vercel.app/calculators/debt-payoff/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/calculator.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Credit Card & Debt Snowball Payoff Calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Calculate interest savings, debt-free calendar dates, and monthly payoff schedules to eliminate high-APR credit card balances."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="shell nav-container">
+      <a href="../../index.html" class="brand-link" aria-label="FinMetrics Pro Home">
+        <div class="brand-logo-icon">F</div>
+        <div class="brand-name">FinMetrics <span>Pro</span></div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-center-links">
+          <li><a href="../../index.html#investing" class="nav-link">Investing</a></li>
+          <li><a href="../../index.html#real-estate" class="nav-link">Real Estate</a></li>
+          <li><a href="../../index.html#debt" class="nav-link active">Debt & Loans</a></li>
+          <li><a href="../../index.html#tax" class="nav-link">Tax & Salary</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions-cluster">
+        <button class="search-trigger-btn" aria-label="Quick Search">
+          <span>🔍</span>
+          <span>Search</span>
+          <span class="kbd-shortcut">Ctrl K</span>
+        </button>
+
+        <div class="currency-selector-wrap">
+          <select id="currencySelect" class="currency-select" aria-label="Choose Display Currency">
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="GBP">£ GBP</option>
+            <option value="INR">₹ INR</option>
+            <option value="CAD">CA$ CAD</option>
+            <option value="AUD">A$ AUD</option>
+          </select>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="shell" id="mainContent">
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <ol class="breadcrumbs">
+        <li><a href="../../index.html">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="../../index.html#debt">Debt & Loans</a></li>
+        <li class="sep">/</li>
+        <li class="current">Debt Payoff Calculator</li>
+      </ol>
+    </nav>
+
+    <div class="calc-header-wrap">
+      <span class="calc-title-badge" style="background:rgba(244,63,94,0.12);color:var(--rose-500);border-color:rgba(244,63,94,0.25);">🛡️ Debt Elimination Engine</span>
+      <h1 class="calc-main-title">Credit Card & Debt Payoff Calculator</h1>
+      <p class="calc-lead-desc">
+        Break free from compound debt. See your exact debt-free calendar date and calculate the thousands of dollars saved in interest by increasing your monthly payment above the minimum trap.
+      </p>
+    </div>
+
+    <!-- WORKBENCH -->
+    <div class="calc-workbench-grid">
+
+      <!-- LEFT: Inputs -->
+      <section class="calc-inputs-pane" aria-labelledby="debtInputsHeading">
+        <h2 id="debtInputsHeading" class="input-group-title">Debt Parameters</h2>
+
+        <!-- Current Balance -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="balance" class="field-label">Total Debt Balance</label>
+            <span class="field-help-icon" title="Current outstanding balance across your credit cards or high-interest loans">?</span>
+          </div>
+          <div class="input-control-box">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="balance" class="calc-number-input" value="12000" min="500" max="500000" step="500">
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="balanceSlider" class="calc-range-slider" min="1000" max="50000" step="500" value="12000" aria-label="Balance Slider">
+            <div class="slider-limits"><span>$1,000</span><span>$50,000+</span></div>
+          </div>
+        </div>
+
+        <!-- Interest Rate (APR) -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="apr" class="field-label">Interest Rate (APR %)</label>
+            <span class="field-help-icon" title="Average US credit card APR is ~24.5%">?</span>
+          </div>
+          <div class="input-control-box">
+            <input type="number" id="apr" class="calc-number-input no-prefix" value="22.9" min="0.5" max="45" step="0.1">
+            <span class="input-affix">% APR</span>
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="aprSlider" class="calc-range-slider" min="5" max="35" step="0.25" value="22.9" aria-label="APR Slider">
+            <div class="slider-limits"><span>5%</span><span>35%</span></div>
+          </div>
+        </div>
+
+        <!-- Target Monthly Payment -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="monthlyPayment" class="field-label">Target Monthly Payment</label>
+            <span class="field-help-icon" title="Amount you can commit to paying every single month">?</span>
+          </div>
+          <div class="input-control-box" style="border-color:var(--emerald-500);">
+            <span class="input-affix currency-affix">$</span>
+            <input type="number" id="monthlyPayment" class="calc-number-input" value="450" min="50" max="10000" step="25">
+          </div>
+          <div class="range-slider-wrap">
+            <input type="range" id="monthlyPaymentSlider" class="calc-range-slider" min="100" max="2000" step="25" value="450" aria-label="Monthly Payment Slider">
+            <div class="slider-limits"><span>$100/mo</span><span>$2,000/mo</span></div>
+          </div>
+        </div>
+
+        <!-- Quick Strategy Chips -->
+        <div class="form-field">
+          <label class="field-label">Suggested Monthly Targets</label>
+          <div class="segmented-chips" id="targetPaymentChips">
+            <button class="chip-btn" data-add="50">+$50/mo</button>
+            <button class="chip-btn active" data-add="100">+$100/mo</button>
+            <button class="chip-btn" data-add="200">+$200/mo</button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="calc-quick-actions">
+          <button class="btn-calc-secondary" id="copyShareBtn">
+            <span>🔗</span>
+            <span>Share</span>
+          </button>
+          <button class="btn-calc-secondary" id="resetBtn">
+            <span>↺</span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Visuals & Metrics -->
+      <section class="calc-results-pane" aria-labelledby="debtResultsHeading">
+        <h2 id="debtResultsHeading" class="sr-only">Debt Payoff Results</h2>
+
+        <div class="primary-metrics-row">
+          <div class="metric-card hero-metric">
+            <div class="metric-label">
+              <span>Debt-Free Date</span>
+              <span>🎉</span>
+            </div>
+            <div class="metric-val" id="resPayoffDate">November 2029</div>
+            <div class="metric-sub" id="resTotalMonths">In 36 Months</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Interest Saved</span>
+              <span>💰</span>
+            </div>
+            <div class="metric-val" id="resInterestSaved">$11,480</div>
+            <div class="metric-sub">Vs. paying minimums</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">
+              <span>Total Interest Paid</span>
+              <span>📉</span>
+            </div>
+            <div class="metric-val" id="resTotalInterest">$4,210</div>
+            <div class="metric-sub" id="resTotalPaid">Total paid: $16,210</div>
+          </div>
+        </div>
+
+        <!-- Smart Insight Banner -->
+        <div class="smart-insight-banner">
+          <div class="insight-pulse-dot" aria-hidden="true"></div>
+          <div class="insight-content-text" id="insightText">
+            By paying <b id="insPayment">$450/month</b>, you become completely debt-free in <b id="insTime">36 months</b> and save <b id="insSavings">$11,480</b> compared to the 22-year minimum payment trap!
+          </div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="chart-container-card">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Balance Paydown Trajectory</h3>
+          </div>
+
+          <div class="chart-canvas-wrap">
+            <canvas id="debtChart" role="img" aria-label="Chart showing remaining debt balance declining to zero over time"></canvas>
+          </div>
+
+          <div class="chart-legend-row">
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#10b981;"></span>
+              <span>Remaining Balance</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Monthly Breakdown Table -->
+    <section class="schedule-table-card" aria-labelledby="scheduleHeading">
+      <div class="table-head-cluster">
+        <div>
+          <h2 id="scheduleHeading" class="table-title">Monthly Debt Paydown Schedule</h2>
+          <p class="section-head-sub">Month-by-month accounting of principal repaid, interest charged, and remaining balances.</p>
+        </div>
+        <div class="table-actions-cluster">
+          <button class="btn-calc-secondary" id="exportCsvBtn">
+            <span>📥</span>
+            <span>Export CSV</span>
+          </button>
+          <button class="btn-calc-secondary" onclick="window.print()">
+            <span>🖨️</span>
+            <span>Print Report</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive-box">
+        <table class="fin-data-table" id="debtTable">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Monthly Payment</th>
+              <th>Principal Repaid</th>
+              <th>Interest Charged</th>
+              <th>Remaining Balance</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody">
+            <!-- Rendered by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Editorial Guide (E-E-A-T AdSense Proof) -->
+    <section class="editorial-content-section" aria-labelledby="guideHeading">
+      <article class="editorial-article">
+        <h2 id="guideHeading">The Mathematics of the Credit Card Minimum Payment Trap</h2>
+        <p>
+          Credit card issuers design minimum monthly payments to maximize their profitability, not your financial health. Typically calculated as just 2% of the outstanding balance or $35 (whichever is greater), minimum payments are mathematically structured so that nearly 85% of your payment goes directly toward paying off interest charges.
+        </p>
+        <p>
+          As the principal balance slowly trickles downward, your required minimum payment decreases proportionally. This creates an asymptotic curve where paying off a $10,000 balance at 24% APR can take <strong>over 24 years</strong> and cost over $18,000 in interest alone — almost double the original amount borrowed!
+        </p>
+
+        <h2>Avalanche vs. Snowball: Which Strategy Wins?</h2>
+        <p>
+          If you are managing balances across multiple cards or loans, financial economists recommend two proven strategies:
+        </p>
+        <ul>
+          <li><strong>The Debt Avalanche Method (Mathematically Optimal):</strong> List all your debts in order of interest rate (APR) from highest to lowest. Pay minimum payments on everything except the debt with the highest APR, throwing every extra dollar at that balance. This minimizes total interest paid.</li>
+          <li><strong>The Debt Snowball Method (Psychologically Optimal):</strong> List all debts in order of balance size from smallest to largest, regardless of interest rate. Knock out the smallest balance first for a quick psychological win. This momentum helps many individuals stick to their repayment habits long-term.</li>
+        </ul>
+
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion-wrap">
+          <details class="faq-item" open>
+            <summary class="faq-question">How does a 0% APR balance transfer credit card work?</summary>
+            <div class="faq-answer">
+              A 0% introductory APR balance transfer card allows you to move high-interest debt to a new card that charges zero interest for a promotional window (typically 12 to 21 months). Most cards charge a one-time 3% to 5% transfer fee. If you aggressively pay off the principal during the 0% window, you avoid hundreds or thousands of dollars in interest.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Will paying off my credit card in full hurt my credit score?</summary>
+            <div class="faq-answer">
+              No. Paying off credit card debt significantly improves your credit score by reducing your <strong>Credit Utilization Ratio</strong> (the percentage of available credit you are using), which accounts for 30% of your total FICO score. You do not need to carry a balance or pay interest to build a strong credit history.
+            </div>
+          </details>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-top-grid">
+        <div>
+          <div class="brand-link">
+            <div class="brand-logo-icon">F</div>
+            <div class="brand-name">FinMetrics <span>Pro</span></div>
+          </div>
+          <p class="footer-brand-bio">
+            Institutional-grade financial engineering tools, wealth accumulation engines, and debt elimination simulators engineered with pure client-side precision.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Calculators</h4>
+          <ul class="footer-links">
+            <li><a href="../compound-interest/index.html">Compound Interest</a></li>
+            <li><a href="../mortgage-payoff/index.html">Mortgage & Extra Payoff</a></li>
+            <li><a href="index.html">Credit Card Debt Snowball</a></li>
+            <li><a href="../auto-loan-lease/index.html">Auto Loan vs Lease</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Methodology</h4>
+          <ul class="footer-links">
+            <li><a href="../../methodology.html">Formulas & Mathematical Audits</a></li>
+            <li><a href="../../about.html">About FinMetrics</a></li>
+            <li><a href="../../contact.html">Institutional Inquiries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal & Trust</h4>
+          <ul class="footer-links">
+            <li><a href="../../privacy.html">Privacy Policy</a></li>
+            <li><a href="../../terms.html">Terms of Service</a></li>
+            <li><a href="../../disclaimer.html">Financial Disclosures</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>© 2026 FinMetrics Pro. All rights reserved. Zero cookies tracked.</div>
+        <div>Built for high-precision financial literacy.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/chart.min.js"></script>
+  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/math-utils.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
