@@ -46,12 +46,17 @@
 
   const btnMortgageBar = document.getElementById('btnMortgageBar');
   const btnMortgageDonut = document.getElementById('btnMortgageDonut');
+  const btnMortgageAnnual = document.getElementById('btnMortgageAnnual');
+  const btnMortgageMonthly = document.getElementById('btnMortgageMonthly');
+  const mortgageTableHead = document.getElementById('mortgageTableHead');
   const mortgageExecSummary = document.getElementById('mortgageExecSummary');
   const mortgageSensitivityTable = document.getElementById('mortgageSensitivityTable');
 
   let currentChartType = 'bar';
+  let currentScheduleView = 'annual';
   let chartInstance = null;
   let isComparisonActive = false;
+  let lastMortgageResult = null;
 
   // Sync inputs & sliders
   function bindSliderInputPair(input, slider, isFloat = false) {
@@ -159,8 +164,11 @@
       cmpDiff.textContent = `+${FinMetrics.formatMoney(res.interestSaved)}`;
     }
 
+    // Store for dynamic view toggling
+    lastMortgageResult = res;
+
     // Schedule Table
-    renderScheduleTable(res.yearlySummary);
+    renderScheduleTable();
 
     // Executive Summary & Sensitivity Matrix
     renderMortgageExecutiveSummary(res, params);
@@ -268,17 +276,54 @@
     mortgageSensitivityTable.innerHTML = headerHtml + bodyHtml;
   }
 
-  function renderScheduleTable(summary) {
-    if (!scheduleBody) return;
-    scheduleBody.innerHTML = summary.map(row => `
-      <tr>
-        <td><strong>Year ${row.yearNum}</strong></td>
-        <td>${row.calendarYear}</td>
-        <td>${FinMetrics.formatMoney(row.principalPaid)}</td>
-        <td style="color:#ef4444;">${FinMetrics.formatMoney(row.interestPaid)}</td>
-        <td><strong>${FinMetrics.formatMoney(row.endBalance)}</strong></td>
-      </tr>
-    `).join('');
+  function renderScheduleTable() {
+    if (!scheduleBody || !lastMortgageResult) return;
+
+    if (currentScheduleView === 'annual') {
+      if (mortgageTableHead) {
+        mortgageTableHead.innerHTML = `
+          <tr>
+            <th>Year</th>
+            <th>Calendar Year</th>
+            <th>Principal Paid</th>
+            <th>Interest Paid</th>
+            <th>Remaining Loan Balance</th>
+          </tr>
+        `;
+      }
+      scheduleBody.innerHTML = lastMortgageResult.yearlySummary.map(row => `
+        <tr>
+          <td><strong>Year ${row.yearNum}</strong></td>
+          <td>${row.calendarYear}</td>
+          <td>${FinMetrics.formatMoney(row.principalPaid)}</td>
+          <td style="color:#ef4444;">${FinMetrics.formatMoney(row.interestPaid)}</td>
+          <td><strong>${FinMetrics.formatMoney(row.endBalance)}</strong></td>
+        </tr>
+      `).join('');
+    } else {
+      if (mortgageTableHead) {
+        mortgageTableHead.innerHTML = `
+          <tr>
+            <th>Month</th>
+            <th>Total Payment</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Extra Principal</th>
+            <th>Remaining Balance</th>
+          </tr>
+        `;
+      }
+      scheduleBody.innerHTML = lastMortgageResult.schedule.map(row => `
+        <tr>
+          <td><strong>Month ${row.month}</strong></td>
+          <td>${FinMetrics.formatMoney(row.payment)}</td>
+          <td style="color:var(--emerald-500);font-weight:600;">+${FinMetrics.formatMoney(row.principal)}</td>
+          <td style="color:#ef4444;">${FinMetrics.formatMoney(row.interest)}</td>
+          <td>${row.extra > 0 ? `<span style="color:var(--emerald-500);font-weight:700;">+${FinMetrics.formatMoney(row.extra)}</span>` : '$0'}</td>
+          <td><strong>${FinMetrics.formatMoney(row.balance)}</strong></td>
+        </tr>
+      `).join('');
+    }
   }
 
   function updateChart(res, params) {
@@ -444,6 +489,27 @@
       btnMortgageDonut.classList.add('active');
       if (btnMortgageBar) btnMortgageBar.classList.remove('active');
       recalculate();
+    });
+  }
+
+  // Schedule View Toggle (Annual vs Full Monthly)
+  if (btnMortgageAnnual) {
+    btnMortgageAnnual.addEventListener('click', () => {
+      currentScheduleView = 'annual';
+      btnMortgageAnnual.classList.add('active');
+      if (btnMortgageMonthly) btnMortgageMonthly.classList.remove('active');
+      renderScheduleTable();
+      FinMetrics.showToast('Switched to Annual Equity Overview');
+    });
+  }
+
+  if (btnMortgageMonthly) {
+    btnMortgageMonthly.addEventListener('click', () => {
+      currentScheduleView = 'monthly';
+      btnMortgageMonthly.classList.add('active');
+      if (btnMortgageAnnual) btnMortgageAnnual.classList.remove('active');
+      renderScheduleTable();
+      FinMetrics.showToast('Switched to Full 360-Month Amortization Schedule');
     });
   }
 

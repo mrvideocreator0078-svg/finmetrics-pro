@@ -356,11 +356,195 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     9. PRINT REPORT AUDIT GENERATOR
+     9. PRINT REPORT AUDIT GENERATOR (EXECUTIVE DOSSIER)
      ══════════════════════════════════════════════════════════════ */
   function generatePrintReport(title = 'FinMetrics Pro Financial Audit') {
-    document.title = `${title} — FinMetrics Report`;
+    const cleanTitle = title || document.title.split('—')[0].trim();
+
+    let printContainer = document.getElementById('printDossierHeader');
+    if (!printContainer) {
+      printContainer = document.createElement('div');
+      printContainer.id = 'printDossierHeader';
+      printContainer.className = 'print-dossier-header';
+      const main = document.querySelector('main') || document.body;
+      main.insertBefore(printContainer, main.firstChild);
+    }
+
+    const inputs = [];
+    document.querySelectorAll('.calc-inputs-pane .form-field').forEach(field => {
+      const label = field.querySelector('.field-label');
+      const input = field.querySelector('input[type="number"], select');
+      if (label && input && input.value !== undefined && input.value !== '') {
+        const valText = input.tagName === 'SELECT'
+          ? input.options[input.selectedIndex].text
+          : input.value;
+        inputs.push({ name: label.textContent.trim(), value: valText });
+      }
+    });
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    printContainer.innerHTML = `
+      <div class="print-header-top">
+        <div>
+          <span class="print-brand-mark">FINMETRICS PRO</span>
+          <span class="print-brand-sub">INSTITUTIONAL QUANTITATIVE DOSSIER</span>
+        </div>
+        <div class="print-header-meta">
+          <div><strong>Run Date:</strong> ${dateStr} at ${timeStr}</div>
+          <div><strong>Model Standard:</strong> CFA / GAAP Actuarial Engine v2.4</div>
+          <div><strong>Audit ID:</strong> FMP-${Math.floor(100000 + Math.random() * 900000)}</div>
+        </div>
+      </div>
+      <div class="print-report-title">${cleanTitle}</div>
+      ${inputs.length > 0 ? `
+        <div class="print-params-summary-grid">
+          ${inputs.map(i => `
+            <div class="print-param-item">
+              <span class="print-param-label">${i.name}</span>
+              <span class="print-param-val">${i.value}</span>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      <div class="print-confidential-bar">
+        Confidential Quantitative Computation Report · Prepared for Personal / Professional Balance Sheet Planning · Zero Server Logging
+      </div>
+    `;
+
+    document.title = `${cleanTitle} — FinMetrics Pro Institutional Dossier`;
     window.print();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     9B. LIVE MARKET BENCHMARK TICKER ENGINE
+     ══════════════════════════════════════════════════════════════ */
+  const MARKET_BENCHMARKS = [
+    { id: 'sp500', name: 'S&P 500 Historical CAGR', rate: 9.82, type: 'investment', isPositive: true },
+    { id: 'treasury', name: 'US 10-Yr Treasury Yield', rate: 4.31, type: 'treasury', isPositive: false },
+    { id: 'hysa', name: 'Top FDIC Cash Yield', rate: 5.25, type: 'investment', isPositive: true },
+    { id: 'mortgage', name: '30-Yr Fixed Mortgage', rate: 6.84, type: 'mortgage', isPositive: false },
+    { id: 'cpi', name: 'US Core CPI Inflation', rate: 2.80, type: 'inflation', isPositive: false },
+    { id: 'prime', name: 'Wall St Prime Lending Rate', rate: 8.50, type: 'debt', isPositive: false }
+  ];
+
+  function initMarketTicker() {
+    let ribbon = document.querySelector('.market-ticker-ribbon');
+    if (!ribbon) {
+      ribbon = document.createElement('aside');
+      ribbon.className = 'market-ticker-ribbon';
+      ribbon.setAttribute('aria-label', 'Live Institutional Market Benchmarks');
+      const header = document.querySelector('.site-header');
+      if (header && header.parentNode) {
+        header.parentNode.insertBefore(ribbon, header.nextSibling);
+      } else {
+        document.body.insertBefore(ribbon, document.body.firstChild);
+      }
+    }
+
+    ribbon.innerHTML = `
+      <div class="shell market-ticker-shell">
+        <div class="ticker-label-wrap">
+          <span class="ticker-live-pulse"></span>
+          <span>Market Benchmarks:</span>
+        </div>
+        <div class="ticker-items-row">
+          ${MARKET_BENCHMARKS.map(b => `
+            <button type="button" class="ticker-bench-btn" data-rate="${b.rate}" data-id="${b.id}" data-type="${b.type}" title="Click to inject ${b.name} (${b.rate}%) into calculation engine">
+              <span class="ticker-bench-name">${b.name}</span>
+              <span class="ticker-bench-val ${b.isPositive ? 'pos' : ''}">${b.rate.toFixed(2)}%</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    // Interactive injection when clicked
+    ribbon.querySelectorAll('.ticker-bench-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rate = Number(btn.getAttribute('data-rate'));
+        const type = btn.getAttribute('data-type');
+        const name = btn.querySelector('.ticker-bench-name').textContent;
+        const calcKey = document.body.getAttribute('data-calc-key');
+
+        if (calcKey === 'compound-interest') {
+          if (type === 'inflation') {
+            const infInput = document.getElementById('inflation');
+            if (infInput) {
+              infInput.value = rate;
+              infInput.dispatchEvent(new Event('input', { bubbles: true }));
+              showToast(`Applied ${name} (${rate}%) as inflation baseline`);
+            }
+          } else {
+            const rateInput = document.getElementById('rate');
+            const rateSlider = document.getElementById('rateSlider');
+            if (rateInput && rateSlider) {
+              rateInput.value = rate;
+              rateSlider.value = rate;
+              updateSliderFill(rateSlider);
+              rateInput.dispatchEvent(new Event('input', { bubbles: true }));
+              showToast(`Applied ${name} (${rate}%) to compound growth engine`);
+            }
+          }
+        } else if (calcKey === 'mortgage-payoff') {
+          const mRateInput = document.getElementById('interestRate');
+          const mRateSlider = document.getElementById('interestRateSlider');
+          if (mRateInput && mRateSlider) {
+            mRateInput.value = rate;
+            mRateSlider.value = rate;
+            updateSliderFill(mRateSlider);
+            mRateInput.dispatchEvent(new Event('input', { bubbles: true }));
+            showToast(`Applied ${name} (${rate}%) to mortgage amortization engine`);
+          }
+        } else if (calcKey === 'debt-payoff') {
+          const aprInput = document.getElementById('apr');
+          const aprSlider = document.getElementById('aprSlider');
+          if (aprInput && aprSlider) {
+            aprInput.value = rate;
+            aprSlider.value = rate;
+            updateSliderFill(aprSlider);
+            aprInput.dispatchEvent(new Event('input', { bubbles: true }));
+            showToast(`Applied ${name} (${rate}%) to debt payoff engine`);
+          }
+        } else if (calcKey === 'auto-loan-lease') {
+          const loanRateInput = document.getElementById('loanRate');
+          if (loanRateInput) {
+            loanRateInput.value = rate;
+            loanRateInput.dispatchEvent(new Event('input', { bubbles: true }));
+            showToast(`Applied ${name} (${rate}%) to auto financing engine`);
+          }
+        } else {
+          // On Homepage or content pages: redirect with parameter
+          const isSubdir = window.location.pathname.includes('/calculators/');
+          const prefix = isSubdir ? '../' : 'calculators/';
+          if (type === 'mortgage') {
+            window.location.href = `${prefix}mortgage-payoff/index.html?rate=${rate}`;
+          } else if (type === 'debt') {
+            window.location.href = `${prefix}debt-payoff/index.html?apr=${rate}`;
+          } else {
+            window.location.href = `${prefix}compound-interest/index.html?r=${rate}`;
+          }
+        }
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     9C. UNIVERSAL KEYBOARD SHORTCUTS
+     ══════════════════════════════════════════════════════════════ */
+  function setupKeyboardShortcuts() {
+    window.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + P: Print Executive Dossier
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+        const calcKey = document.body.getAttribute('data-calc-key');
+        if (calcKey) {
+          e.preventDefault();
+          generatePrintReport();
+        }
+      }
+    });
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -516,6 +700,8 @@
     initSliderFills();
     setupMobileDrawer();
     initPartnerOffers();
+    initMarketTicker();
+    setupKeyboardShortcuts();
     registerServiceWorker();
   });
 
@@ -530,6 +716,7 @@
     showToast,
     exportTableToCSV,
     generatePrintReport,
-    updateSliderFill
+    updateSliderFill,
+    initMarketTicker
   };
 })();

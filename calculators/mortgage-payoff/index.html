@@ -248,7 +248,11 @@
         <div class="calc-quick-actions">
           <button class="btn-calc-secondary" id="copyShareBtn">
             <span>🔗</span>
-            <span>Share</span>
+            <span>Share Link</span>
+          </button>
+          <button class="btn-calc-secondary" id="printDossierBtn" onclick="FinMetrics.generatePrintReport('Mortgage Amortization & Principal Accelerator Dossier')">
+            <span>📄</span>
+            <span>Print Dossier</span>
           </button>
           <button class="btn-calc-secondary" id="resetBtn">
             <span>↺</span>
@@ -366,7 +370,11 @@
       <div class="table-head-cluster">
         <div>
           <h2 id="amortHeading" class="table-title">Mortgage Amortization Schedule</h2>
-          <p class="section-head-sub">Annual breakdown of principal reduction, interest paid, and remaining loan balance.</p>
+          <p class="section-head-sub">Detailed mathematical breakdown of principal reduction, interest paid, and equity accumulation.</p>
+          <div class="schedule-view-toggle">
+            <button type="button" class="view-toggle-btn active" id="btnMortgageAnnual">📅 Annual Summary (30 Yrs)</button>
+            <button type="button" class="view-toggle-btn" id="btnMortgageMonthly">📆 Full Monthly Schedule (360 Mo)</button>
+          </div>
         </div>
         <div class="table-actions-cluster">
           <button class="btn-calc-secondary" id="exportCsvBtn">
@@ -382,7 +390,7 @@
 
       <div class="table-responsive-box">
         <table class="fin-data-table" id="mortgageTable">
-          <thead>
+          <thead id="mortgageTableHead">
             <tr>
               <th>Year</th>
               <th>Calendar Year</th>

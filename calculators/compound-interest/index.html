@@ -221,11 +221,32 @@
           </div>
         </div>
 
+        <!-- Compounding Frequency -->
+        <div class="form-field">
+          <div class="field-label-row">
+            <label for="compoundFreq" class="field-label">Compounding Frequency</label>
+            <span class="field-help-icon" title="CFA Standard: How frequently earned interest is added to your principal balance">?</span>
+          </div>
+          <div class="input-control-box">
+            <select id="compoundFreq" class="calc-number-input no-prefix" style="background:transparent;cursor:pointer;font-weight:700;">
+              <option value="12" selected>Monthly (12x/Year — Standard Index/SIP)</option>
+              <option value="365">Daily (365x/Year — High-Yield Savings)</option>
+              <option value="4">Quarterly (4x/Year — Corporate Bonds)</option>
+              <option value="2">Semi-Annually (2x/Year — Treasuries)</option>
+              <option value="1">Annually (1x/Year — Simple Certificates)</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Actions -->
         <div class="calc-quick-actions">
           <button class="btn-calc-secondary" id="copyShareBtn">
             <span>🔗</span>
-            <span>Share</span>
+            <span>Share Link</span>
+          </button>
+          <button class="btn-calc-secondary" id="printDossierBtn" onclick="FinMetrics.generatePrintReport('Compound Interest Growth & Wealth Dossier')">
+            <span>📄</span>
+            <span>Print Dossier</span>
           </button>
           <button class="btn-calc-secondary" id="resetBtn">
             <span>↺</span>

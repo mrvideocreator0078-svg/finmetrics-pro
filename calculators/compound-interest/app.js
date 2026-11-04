@@ -17,6 +17,7 @@
   const rateInput = document.getElementById('rate');
   const rateSlider = document.getElementById('rateSlider');
   const inflationInput = document.getElementById('inflation');
+  const compoundFreqInput = document.getElementById('compoundFreq');
 
   const resEndingBalance = document.getElementById('resEndingBalance');
   const resTotalInterest = document.getElementById('resTotalInterest');
@@ -66,6 +67,9 @@
   bindSliderInputPair(yearsInput, yearsSlider);
   bindSliderInputPair(rateInput, rateSlider, true);
   inflationInput.addEventListener('input', recalculate);
+  if (compoundFreqInput) {
+    compoundFreqInput.addEventListener('change', recalculate);
+  }
   if (scenarioNameInput) {
     scenarioNameInput.addEventListener('input', () => {
       updateChartTitle();
@@ -79,7 +83,7 @@
       years: Number(yearsInput.value) || 10,
       annualRate: Number(rateInput.value) || 8.0,
       inflationRate: Number(inflationInput.value) || 2.5,
-      compoundFreq: 12
+      compoundFreq: Number(compoundFreqInput ? compoundFreqInput.value : 12) || 12
     };
   }
 
@@ -137,7 +141,8 @@
       m: params.monthlyContribution,
       y: params.years,
       r: params.annualRate,
-      inf: params.inflationRate
+      inf: params.inflationRate,
+      cf: params.compoundFreq
     });
   }
 
@@ -520,6 +525,7 @@
   if (urlParams.y) { yearsInput.value = urlParams.y; yearsSlider.value = urlParams.y; }
   if (urlParams.r) { rateInput.value = urlParams.r; rateSlider.value = urlParams.r; }
   if (urlParams.inf) { inflationInput.value = urlParams.inf; }
+  if (urlParams.cf && compoundFreqInput) { compoundFreqInput.value = urlParams.cf; }
 
   // Initial Calculation
   recalculate();

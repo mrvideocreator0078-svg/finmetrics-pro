@@ -29,6 +29,18 @@
       const depositsData = [];
       const interestData = [];
 
+      // Equivalent monthly periodic rate based on compounding frequency
+      let monthlyRate = 0;
+      if (annualRate > 0) {
+        if (compoundFreq === 12) {
+          monthlyRate = annualRate / 12;
+        } else if (compoundFreq > 0) {
+          monthlyRate = Math.pow(1 + annualRate / compoundFreq, compoundFreq / 12) - 1;
+        } else {
+          monthlyRate = annualRate / 12;
+        }
+      }
+
       for (let y = 1; y <= years; y++) {
         let yearStartingBalance = currentBalance;
         let yearDeposits = 0;
@@ -39,8 +51,7 @@
           totalDeposited += monthlyContribution;
           yearDeposits += monthlyContribution;
 
-          // Compound calculation for this step
-          const monthlyRate = annualRate / 12;
+          // Compound interest calculated for this month using exact actuarial rate
           const interest = currentBalance * monthlyRate;
           currentBalance += interest;
           yearInterest += interest;
@@ -196,7 +207,8 @@
         monthsSaved,
         yearsSaved,
         yearlySummary,
-        monthlySchedule: schedule
+        monthlySchedule: schedule,
+        schedule: schedule
       };
     },
 

@@ -157,6 +157,106 @@ a {
   background-color: rgba(11, 17, 32, 0.88);
 }
 
+/* ==========================================================================
+   MARKET BENCHMARK TICKER RIBBON (INSTITUTIONAL RATES)
+   ========================================================================== */
+.market-ticker-ribbon {
+  background: var(--bg-surface-elevated);
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.775rem;
+  padding: 6px 0;
+  position: relative;
+  z-index: 990;
+}
+
+[data-theme="dark"] .market-ticker-ribbon {
+  background: rgba(15, 23, 42, 0.75);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.market-ticker-shell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.market-ticker-shell::-webkit-scrollbar {
+  display: none;
+}
+
+.ticker-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ticker-live-pulse {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  animation: pulse-glow 2s infinite;
+}
+
+.ticker-items-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ticker-bench-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.ticker-bench-btn:hover {
+  background: var(--bg-page);
+  border-color: var(--emerald-500);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.ticker-bench-name {
+  font-weight: 500;
+}
+
+.ticker-bench-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.ticker-bench-val.pos {
+  color: var(--emerald-600);
+}
+
+[data-theme="dark"] .ticker-bench-val.pos {
+  color: var(--emerald-400);
+}
+
 .nav-container {
   display: flex;
   align-items: center;

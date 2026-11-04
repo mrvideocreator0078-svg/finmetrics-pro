@@ -713,24 +713,236 @@
 }
 
 /* ==========================================================================
-   PRINT / PDF STYLESHEET
+   INSTITUTIONAL PRINT / PDF DOSSIER STYLESHEET
    ========================================================================== */
+.print-dossier-header {
+  display: none;
+}
+
 @media print {
+  @page {
+    margin: 1.2cm;
+    size: letter portrait;
+  }
+
   body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
   }
-  .site-header, .site-footer, .calc-inputs-pane, .calc-quick-actions, .table-actions-cluster, .breadcrumb-nav, .adsense-unit, .comparison-toggle-bar {
+
+  /* Hide screen chrome & ads */
+  .site-header,
+  .site-footer,
+  .market-ticker-ribbon,
+  .calc-quick-actions,
+  .table-actions-cluster,
+  .breadcrumb-nav,
+  .adsense-unit,
+  .comparison-toggle-bar,
+  .partner-section-wrap,
+  .preset-pills-bar,
+  .btn-view-toggle,
+  .schedule-view-toggle,
+  .theme-toggle-btn,
+  .range-slider-wrap,
+  .field-help-icon,
+  .calc-title-badge,
+  .calc-action-pill,
+  .btn-calc-secondary,
+  .quick-calc-container,
+  #scenarioName,
+  .toast-container {
     display: none !important;
   }
-  .calc-workbench-grid {
-    grid-template-columns: 1fr !important;
+
+  .shell {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-  .metric-card, .chart-container-card, .schedule-table-card {
-    border: 1px solid #d1d5db !important;
+
+  /* Printable Header */
+  .print-dossier-header {
+    display: block !important;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+
+  .print-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .print-brand-mark {
+    font-size: 16pt;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    display: block;
+  }
+
+  .print-brand-sub {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #059669;
+    text-transform: uppercase;
+  }
+
+  .print-header-meta {
+    font-size: 8pt;
+    color: #475569;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .print-report-title {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 10px 0 12px;
+  }
+
+  .print-params-summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .print-param-item {
+    font-size: 8pt;
+  }
+
+  .print-param-label {
+    display: block;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 7pt;
+    text-transform: uppercase;
+  }
+
+  .print-param-val {
+    display: block;
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 10pt;
+  }
+
+  .print-confidential-bar {
+    font-size: 7pt;
+    color: #64748b;
+    font-style: italic;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+    margin-top: 8px;
+  }
+
+  /* Grid layout for print */
+  .calc-workbench-grid {
+    display: block !important;
+  }
+
+  .calc-inputs-pane {
+    display: none !important;
+  }
+
+  .calc-outputs-pane {
+    width: 100% !important;
+  }
+
+  .primary-metrics-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .metric-card {
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    padding: 12px !important;
     box-shadow: none !important;
     page-break-inside: avoid;
   }
+
+  .metric-val {
+    font-size: 16pt !important;
+    color: #0f172a !important;
+  }
+
+  .chart-container-card {
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    margin-bottom: 16px !important;
+    page-break-inside: avoid;
+  }
+
+  .chart-canvas-wrap {
+    height: 240px !important;
+  }
+
+  .schedule-table-card {
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  .fin-data-table {
+    font-size: 8pt !important;
+  }
+
+  .fin-data-table th,
+  .fin-data-table td {
+    padding: 4px 6px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .exec-summary-wrap,
+  .sensitivity-matrix-wrap {
+    page-break-inside: avoid;
+  }
+}
+
+/* ==========================================================================
+   SCHEDULE VIEW TOGGLE (ANNUAL VS MONTHLY AMORTIZATION)
+   ========================================================================== */
+.schedule-view-toggle {
+  display: inline-flex;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.view-toggle-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.view-toggle-btn.active {
+  background: var(--bg-surface);
+  color: var(--emerald-500);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* ==========================================================================
