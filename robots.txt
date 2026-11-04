@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://finmetrics-pro.vercel.app/sitemap.xml
+Sitemap: https://finmetrics-pro-d1fj.vercel.app/sitemap.xml
 

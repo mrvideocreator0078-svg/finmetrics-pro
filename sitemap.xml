@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://finmetrics-pro.vercel.app/</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/</loc>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/calculators/compound-interest/index.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/calculators/compound-interest/index.html</loc>
     <priority>0.95</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/calculators/mortgage-payoff/index.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/calculators/mortgage-payoff/index.html</loc>
     <priority>0.95</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/calculators/debt-payoff/index.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/calculators/debt-payoff/index.html</loc>
     <priority>0.95</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/calculators/auto-loan-lease/index.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/calculators/auto-loan-lease/index.html</loc>
     <priority>0.90</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/about.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/about.html</loc>
     <priority>0.80</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/methodology.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/methodology.html</loc>
     <priority>0.80</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/disclaimer.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/disclaimer.html</loc>
     <priority>0.70</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/privacy.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/privacy.html</loc>
     <priority>0.70</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/terms.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/terms.html</loc>
     <priority>0.70</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://finmetrics-pro.vercel.app/contact.html</loc>
+    <loc>https://finmetrics-pro-d1fj.vercel.app/contact.html</loc>
     <priority>0.70</priority>
     <changefreq>monthly</changefreq>
   </url>
